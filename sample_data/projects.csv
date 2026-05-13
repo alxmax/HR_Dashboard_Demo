@@ -1,0 +1,16 @@
+project_id,project_name,team_id,owner_emp_id,status,completion_pct,start_date,due_date,kpi_metric,kpi_target,kpi_actual,priority
+P01,API Gateway v2 Migration,T01,E007,in_progress,72,2025-11-01,2026-06-30,latency_p95_ms,250,228,high
+P02,Postgres 16 Upgrade,T01,E003,in_progress,45,2026-01-15,2026-07-31,downtime_minutes,30,12,medium
+P03,Observability Stack Rollout,T01,E006,at_risk,38,2025-12-01,2026-05-31,coverage_pct,90,62,high
+P04,Attrition Risk Model v1,T02,E014,completed,100,2025-09-01,2026-02-28,model_auc,0.82,0.86,high
+P05,Employee Embeddings Pipeline,T02,E010,in_progress,80,2025-12-15,2026-06-15,embedding_count,5000,4180,medium
+P06,Team Recommendation Engine,T02,E009,in_progress,55,2026-01-08,2026-08-31,recall_at_5,0.7,0.68,medium
+P07,Skills Taxonomy Refresh,T02,E013,planned,5,2026-04-01,2026-09-30,skills_mapped,1200,68,low
+P08,Onboarding Flow Redesign,T03,E021,in_progress,68,2025-10-15,2026-05-31,activation_rate,0.65,0.58,high
+P09,Self-Serve Reporting,T03,E016,at_risk,42,2025-11-20,2026-06-30,reports_generated,500,180,medium
+P10,Customer Health Score 2.0,T04,E028,in_progress,75,2025-12-01,2026-05-31,prediction_accuracy,0.8,0.78,high
+P11,Renewal Playbook Automation,T04,E022,completed,100,2025-08-01,2026-02-15,renewal_rate,0.85,0.89,high
+P12,Commission Calculator,T05,E032,in_progress,60,2026-01-05,2026-07-15,calc_errors_pct,1,0.4,medium
+P13,Quarterly Hiring Plan FY26,T06,E037,completed,100,2025-10-01,2026-01-31,plan_accuracy,0.9,0.92,medium
+P14,Compliance Audit Q2,T07,E042,planned,10,2026-04-01,2026-06-30,findings_closed,100,12,high
+P15,Brand Refresh 2026,T08,E046,in_progress,50,2025-11-15,2026-07-31,brand_awareness_pct,45,38,medium

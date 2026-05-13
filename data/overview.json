@@ -1,0 +1,94 @@
+{
+  "attrition_summary": {
+    "features": [
+      "tenure_years",
+      "comp_ratio",
+      "perf_score",
+      "days_since_review",
+      "promotions_count",
+      "training_hours_ytd"
+    ],
+    "model": "IsolationForest",
+    "n_employees": 50,
+    "n_high_risk": 4,
+    "n_low_risk": 32,
+    "n_medium_risk": 14,
+    "random_state": 42
+  },
+  "build_date": "2026-05-13",
+  "compliance_summary": {
+    "n_compliant": 22,
+    "n_employees": 50,
+    "n_expired": 17,
+    "n_expiring": 11,
+    "n_missing_first_aid": 12,
+    "n_overtime": 0,
+    "overtime_threshold_hours": 1800,
+    "reference_today": "2026-05-13",
+    "warn_window_days": 60
+  },
+  "pipeline_stages": [
+    {
+      "outputs": [
+        "employees",
+        "teams",
+        "projects"
+      ],
+      "stage": "ingest_hr"
+    },
+    {
+      "outputs": [
+        "data/kpis.json"
+      ],
+      "stage": "compute_team_metrics"
+    },
+    {
+      "outputs": [
+        "data/ai_attrition.json"
+      ],
+      "stage": "score_attrition_risk"
+    },
+    {
+      "outputs": [
+        "data/ai_recommendations.json"
+      ],
+      "stage": "cluster_team_health"
+    },
+    {
+      "outputs": [
+        "data/compliance.json"
+      ],
+      "stage": "check_compliance"
+    }
+  ],
+  "recommendations_summary": {
+    "distribution": {
+      "at_risk": 1,
+      "steady": 6,
+      "thriving": 1
+    },
+    "features": [
+      "avg_perf_score",
+      "avg_kpi_attainment",
+      "on_track_pct",
+      "avg_completion_pct",
+      "avg_comp_ratio"
+    ],
+    "model": "KMeans",
+    "n_clusters": 3,
+    "n_teams": 8,
+    "random_state": 42
+  },
+  "reference_today": "2026-05-13",
+  "top_line": {
+    "avg_comp_ratio": 1.016,
+    "avg_perf_score": 4.04,
+    "avg_tenure_years": 3.33,
+    "headcount_total": 50,
+    "kpi_attainment_org": 0.705,
+    "projects_on_track_pct": 0.467,
+    "projects_total": 15,
+    "teams_total": 8,
+    "training_hours_ytd_total": 1553
+  }
+}

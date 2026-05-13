@@ -1,0 +1,1715 @@
+{
+  "records": [
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 17,
+          "expiry": "2026-05-30",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -33,
+          "expiry": "2026-04-10",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 185,
+          "expiry": "2026-11-14",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E002",
+      "full_name": "Maria Ionescu",
+      "hours_worked_ytd": 712,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 22,
+          "expiry": "2026-06-04",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -52,
+          "expiry": "2026-03-22",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 140,
+          "expiry": "2026-09-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E004",
+      "full_name": "Ioana Stan",
+      "hours_worked_ytd": 704,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -35,
+          "expiry": "2026-04-08",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -82,
+          "expiry": "2026-02-20",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E008",
+      "full_name": "Diana Lupu",
+      "hours_worked_ytd": 680,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 38,
+          "expiry": "2026-06-20",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -1,
+          "expiry": "2026-05-12",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 240,
+          "expiry": "2027-01-08",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E011",
+      "full_name": "Mihai Sandu",
+      "hours_worked_ytd": 715,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 12,
+          "expiry": "2026-05-25",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -13,
+          "expiry": "2026-04-30",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 197,
+          "expiry": "2026-11-26",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E015",
+      "full_name": "Paul Ene",
+      "hours_worked_ytd": 712,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -21,
+          "expiry": "2026-04-22",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -66,
+          "expiry": "2026-03-08",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E019",
+      "full_name": "Adrian Popescu",
+      "hours_worked_ytd": 672,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -9,
+          "expiry": "2026-05-04",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 36,
+          "expiry": "2026-06-18",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 231,
+          "expiry": "2026-12-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E020",
+      "full_name": "Roxana Mihai",
+      "hours_worked_ytd": 684,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -13,
+          "expiry": "2026-04-30",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 3,
+          "expiry": "2026-05-16",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 148,
+          "expiry": "2026-10-08",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E026",
+      "full_name": "Anca Iordan",
+      "hours_worked_ytd": 664,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -49,
+          "expiry": "2026-03-25",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -90,
+          "expiry": "2026-02-12",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E027",
+      "full_name": "Sergiu Marcu",
+      "hours_worked_ytd": 648,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -31,
+          "expiry": "2026-04-12",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -44,
+          "expiry": "2026-03-30",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E031",
+      "full_name": "Catalin Ursu",
+      "hours_worked_ytd": 668,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T05"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 48,
+          "expiry": "2026-06-30",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -5,
+          "expiry": "2026-05-08",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 262,
+          "expiry": "2027-01-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E034",
+      "full_name": "Dorina Petrescu",
+      "hours_worked_ytd": 696,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -41,
+          "expiry": "2026-04-02",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -76,
+          "expiry": "2026-02-26",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E035",
+      "full_name": "Codrut Visan",
+      "hours_worked_ytd": 660,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -3,
+          "expiry": "2026-05-10",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -17,
+          "expiry": "2026-04-26",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 246,
+          "expiry": "2027-01-14",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E043",
+      "full_name": "Bianca Tomescu",
+      "hours_worked_ytd": 690,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T07"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 40,
+          "expiry": "2026-06-22",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": -9,
+          "expiry": "2026-05-04",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": 170,
+          "expiry": "2026-10-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E047",
+      "full_name": "Razvan Diaconu",
+      "hours_worked_ytd": 696,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T08"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -25,
+          "expiry": "2026-04-18",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -62,
+          "expiry": "2026-03-12",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E048",
+      "full_name": "Cosmin Bardac",
+      "hours_worked_ytd": 672,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T08"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -44,
+          "expiry": "2026-03-30",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -96,
+          "expiry": "2026-02-06",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E049",
+      "full_name": "Ileana Sarbu",
+      "hours_worked_ytd": 656,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T08"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": -56,
+          "expiry": "2026-03-18",
+          "kind": "Periodic medical check",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": -100,
+          "expiry": "2026-02-02",
+          "kind": "Occupational safety",
+          "status": "expired"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E050",
+      "full_name": "Marius Grigorescu",
+      "hours_worked_ytd": 640,
+      "overall_cert_status": "expired",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 60,
+          "expiry": "2026-07-12",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 115,
+          "expiry": "2026-09-05",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 281,
+          "expiry": "2027-02-18",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E001",
+      "full_name": "Andrei Pop",
+      "hours_worked_ytd": 724,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 5,
+          "expiry": "2026-05-18",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 52,
+          "expiry": "2026-07-04",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 303,
+          "expiry": "2027-03-12",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E006",
+      "full_name": "Alexandra Dima",
+      "hours_worked_ytd": 696,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 54,
+          "expiry": "2026-07-06",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 128,
+          "expiry": "2026-09-18",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 321,
+          "expiry": "2027-03-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E017",
+      "full_name": "Tudor Manea",
+      "hours_worked_ytd": 701,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 30,
+          "expiry": "2026-06-12",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 101,
+          "expiry": "2026-08-22",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 155,
+          "expiry": "2026-10-15",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E018",
+      "full_name": "Oana Dragomir",
+      "hours_worked_ytd": 694,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 26,
+          "expiry": "2026-06-08",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 11,
+          "expiry": "2026-05-24",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E024",
+      "full_name": "Daniela Filip",
+      "hours_worked_ytd": 690,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 162,
+          "expiry": "2026-10-22",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 201,
+          "expiry": "2026-11-30",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 348,
+          "expiry": "2027-04-26",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 48,
+          "expiry": "2026-06-30",
+          "kind": "Management training",
+          "status": "expiring"
+        }
+      ],
+      "emp_id": "E028",
+      "full_name": "Carmen Dobre",
+      "hours_worked_ytd": 712,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 2,
+          "expiry": "2026-05-15",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 20,
+          "expiry": "2026-06-02",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 295,
+          "expiry": "2027-03-04",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E030",
+      "full_name": "Mihaela Coman",
+      "hours_worked_ytd": 686,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T05"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 170,
+          "expiry": "2026-10-30",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 207,
+          "expiry": "2026-12-06",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 356,
+          "expiry": "2027-05-04",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 60,
+          "expiry": "2026-07-12",
+          "kind": "Management training",
+          "status": "expiring"
+        }
+      ],
+      "emp_id": "E037",
+      "full_name": "Nicoleta Calin",
+      "hours_worked_ytd": 714,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 52,
+          "expiry": "2026-07-04",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 91,
+          "expiry": "2026-08-12",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 189,
+          "expiry": "2026-11-18",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E039",
+      "full_name": "Cosmin Avram",
+      "hours_worked_ytd": 704,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T07"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 34,
+          "expiry": "2026-06-16",
+          "kind": "Periodic medical check",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 17,
+          "expiry": "2026-05-30",
+          "kind": "Occupational safety",
+          "status": "expiring"
+        },
+        {
+          "days_until_expiry": 271,
+          "expiry": "2027-02-08",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E040",
+      "full_name": "Simona Vlad",
+      "hours_worked_ytd": 698,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T07"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 183,
+          "expiry": "2026-11-12",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 225,
+          "expiry": "2026-12-24",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 374,
+          "expiry": "2027-05-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 52,
+          "expiry": "2026-07-04",
+          "kind": "Management training",
+          "status": "expiring"
+        }
+      ],
+      "emp_id": "E046",
+      "full_name": "Alina Stoica",
+      "hours_worked_ytd": 712,
+      "overall_cert_status": "expiring",
+      "overtime_flag": false,
+      "team_id": "T08"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 99,
+          "expiry": "2026-08-20",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 202,
+          "expiry": "2026-12-01",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E003",
+      "full_name": "Vlad Cristea",
+      "hours_worked_ytd": 690,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 155,
+          "expiry": "2026-10-15",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 179,
+          "expiry": "2026-11-08",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 257,
+          "expiry": "2027-01-25",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E005",
+      "full_name": "Cristian Marin",
+      "hours_worked_ytd": 718,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 132,
+          "expiry": "2026-09-22",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 170,
+          "expiry": "2026-10-30",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 209,
+          "expiry": "2026-12-08",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 94,
+          "expiry": "2026-08-15",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E007",
+      "full_name": "Bogdan Radu",
+      "hours_worked_ytd": 702,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T01"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 175,
+          "expiry": "2026-11-04",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 223,
+          "expiry": "2026-12-22",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 332,
+          "expiry": "2027-04-10",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E009",
+      "full_name": "Razvan Toma",
+      "hours_worked_ytd": 728,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 78,
+          "expiry": "2026-07-30",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 93,
+          "expiry": "2026-08-14",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 162,
+          "expiry": "2026-10-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E010",
+      "full_name": "Elena Voicu",
+      "hours_worked_ytd": 710,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 81,
+          "expiry": "2026-08-02",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 135,
+          "expiry": "2026-09-25",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 205,
+          "expiry": "2026-12-04",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E012",
+      "full_name": "Larisa Neagu",
+      "hours_worked_ytd": 706,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 148,
+          "expiry": "2026-10-08",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 186,
+          "expiry": "2026-11-15",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E013",
+      "full_name": "Stefan Cojocaru",
+      "hours_worked_ytd": 720,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 122,
+          "expiry": "2026-09-12",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 168,
+          "expiry": "2026-10-28",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 267,
+          "expiry": "2027-02-04",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 70,
+          "expiry": "2026-07-22",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E014",
+      "full_name": "Andreea Tudor",
+      "hours_worked_ytd": 698,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T02"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 97,
+          "expiry": "2026-08-18",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 215,
+          "expiry": "2026-12-14",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "First aid",
+          "status": "not_required"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E016",
+      "full_name": "Cristina Barbu",
+      "hours_worked_ytd": 688,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 199,
+          "expiry": "2026-11-28",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 205,
+          "expiry": "2026-12-04",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 367,
+          "expiry": "2027-05-15",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 118,
+          "expiry": "2026-09-08",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E021",
+      "full_name": "Lucian Pavel",
+      "hours_worked_ytd": 716,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T03"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 140,
+          "expiry": "2026-09-30",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 152,
+          "expiry": "2026-10-12",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 175,
+          "expiry": "2026-11-04",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E022",
+      "full_name": "Iulia Constantin",
+      "hours_worked_ytd": 708,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 66,
+          "expiry": "2026-07-18",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 105,
+          "expiry": "2026-08-26",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 285,
+          "expiry": "2027-02-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E023",
+      "full_name": "Vasile Anton",
+      "hours_worked_ytd": 702,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 93,
+          "expiry": "2026-08-14",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 112,
+          "expiry": "2026-09-02",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 250,
+          "expiry": "2027-01-18",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E025",
+      "full_name": "Mircea Lazar",
+      "hours_worked_ytd": 700,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T04"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 89,
+          "expiry": "2026-08-10",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 124,
+          "expiry": "2026-09-14",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 219,
+          "expiry": "2026-12-18",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E029",
+      "full_name": "Florin Stanciu",
+      "hours_worked_ytd": 706,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T05"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 135,
+          "expiry": "2026-09-25",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 181,
+          "expiry": "2026-11-10",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 277,
+          "expiry": "2027-02-14",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 83,
+          "expiry": "2026-08-04",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E032",
+      "full_name": "Raluca Tanase",
+      "hours_worked_ytd": 710,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T05"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 70,
+          "expiry": "2026-07-22",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 109,
+          "expiry": "2026-08-30",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 213,
+          "expiry": "2026-12-12",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E033",
+      "full_name": "Gabriela Munteanu",
+      "hours_worked_ytd": 704,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 118,
+          "expiry": "2026-09-08",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 154,
+          "expiry": "2026-10-14",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 193,
+          "expiry": "2026-11-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E036",
+      "full_name": "Madalina Albu",
+      "hours_worked_ytd": 702,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 105,
+          "expiry": "2026-08-26",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 140,
+          "expiry": "2026-09-30",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 313,
+          "expiry": "2027-03-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 136,
+          "expiry": "2026-09-26",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E038",
+      "full_name": "Sebastian Olaru",
+      "hours_worked_ytd": 708,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T06"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 124,
+          "expiry": "2026-09-14",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 162,
+          "expiry": "2026-10-22",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 231,
+          "expiry": "2026-12-30",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E041",
+      "full_name": "Dan Sorin",
+      "hours_worked_ytd": 706,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T07"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 173,
+          "expiry": "2026-11-02",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 219,
+          "expiry": "2026-12-18",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 330,
+          "expiry": "2027-04-08",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 107,
+          "expiry": "2026-08-28",
+          "kind": "Management training",
+          "status": "valid"
+        }
+      ],
+      "emp_id": "E042",
+      "full_name": "Mihaela Bratu",
+      "hours_worked_ytd": 718,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T07"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 83,
+          "expiry": "2026-08-04",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 138,
+          "expiry": "2026-09-28",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 223,
+          "expiry": "2026-12-22",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E044",
+      "full_name": "Liviu Iancu",
+      "hours_worked_ytd": 700,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T08"
+    },
+    {
+      "certifications": [
+        {
+          "days_until_expiry": 68,
+          "expiry": "2026-07-20",
+          "kind": "Periodic medical check",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 87,
+          "expiry": "2026-08-08",
+          "kind": "Occupational safety",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": 307,
+          "expiry": "2027-03-16",
+          "kind": "First aid",
+          "status": "valid"
+        },
+        {
+          "days_until_expiry": null,
+          "expiry": null,
+          "kind": "Management training",
+          "status": "not_required"
+        }
+      ],
+      "emp_id": "E045",
+      "full_name": "Andrei Cojanu",
+      "hours_worked_ytd": 694,
+      "overall_cert_status": "valid",
+      "overtime_flag": false,
+      "team_id": "T08"
+    }
+  ],
+  "summary": {
+    "n_compliant": 22,
+    "n_employees": 50,
+    "n_expired": 17,
+    "n_expiring": 11,
+    "n_missing_first_aid": 12,
+    "n_overtime": 0,
+    "overtime_threshold_hours": 1800,
+    "reference_today": "2026-05-13",
+    "warn_window_days": 60
+  }
+}

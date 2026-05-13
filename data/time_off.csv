@@ -1,0 +1,11 @@
+intake_id,received_at,sender,emp_id,emp_name,leave_type,date_from,date_to,source,status,review_note
+intake-c0c373065ca9,2026-05-13 09:42,maria.ionescu@company.ro,E002,Maria Ionescu,Medical,2026-05-13,2026-05-17,Gmail API + OCR,parsed,
+intake-3b772d4ef971,2026-05-12 17:08,diana.l@company.ro,E008,Diana Lupu,Medical,2026-05-12,2026-05-22,Gmail API + OCR,parsed,
+intake-8edfb4ebc961,2026-05-12 11:21,a.cojanu@company.ro,E045,Andrei Cojanu,Vacation,2026-05-19,2026-05-26,Gmail API,parsed,
+intake-7c7b125bcbd3,2026-05-11 14:55,u.dorina@external.net,,,Medical,2026-05-09,2026-05-14,Gmail API + OCR,needs_review,Sender 'u.dorina@external.net' not in employee directory.
+intake-291058b52205,2026-05-10 08:33,sergiu.m@company.ro,E027,Sergiu Marcu,Vacation,2026-05-20,2026-05-27,Gmail API,parsed,
+intake-05708daa415d,2026-05-09 16:14,catalin.ursu@company.ro,E031,Catalin Ursu,Medical,2026-05-04,2026-05-08,Gmail API + OCR,parsed,
+intake-84c4aa289684,2026-05-08 10:02,alexandra.dima@company.ro,E006,Alexandra Dima,Training,2026-05-15,2026-05-16,Gmail API,parsed,
+intake-17dd99bfe465,2026-05-07 13:45,ileana.sarbu@company.ro,E049,Ileana Sarbu,Personal,2026-05-07,2026-05-07,Gmail API,parsed,
+intake-9e792c0a1227,2026-05-06 09:18,razvan.diaconu@company.ro,E047,Razvan Diaconu,Medical,2026-05-02,2026-05-05,Gmail API + OCR,parsed,
+intake-b5951c70ebf5,2026-05-05 11:40,iulia.constantin@company.ro,E022,Iulia Constantin,Vacation,2026-05-26,2026-06-06,Gmail API,parsed,

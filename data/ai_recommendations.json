@@ -1,0 +1,166 @@
+{
+  "records": [
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 1.021,
+        "avg_completion_pct": 51.7,
+        "avg_kpi_attainment": 0.667,
+        "avg_perf_score": 4.08,
+        "on_track_pct": 0.333
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T01",
+      "team_name": "Platform Core"
+    },
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 1.025,
+        "avg_completion_pct": 60.0,
+        "avg_kpi_attainment": 0.728,
+        "avg_perf_score": 3.98,
+        "on_track_pct": 0.5
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T02",
+      "team_name": "Data & ML"
+    },
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 1.03,
+        "avg_completion_pct": 55.0,
+        "avg_kpi_attainment": 0.626,
+        "avg_perf_score": 4.17,
+        "on_track_pct": 0.5
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T03",
+      "team_name": "Product Discovery"
+    },
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 0.966,
+        "avg_completion_pct": 87.5,
+        "avg_kpi_attainment": 1.011,
+        "avg_perf_score": 3.89,
+        "on_track_pct": 1.0
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T04",
+      "team_name": "Customer Success"
+    },
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 1.005,
+        "avg_completion_pct": 60.0,
+        "avg_kpi_attainment": 0.4,
+        "avg_perf_score": 3.92,
+        "on_track_pct": 0.0
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T05",
+      "team_name": "Revenue Ops"
+    },
+    {
+      "cluster": "thriving",
+      "cluster_headline": "Protect and replicate",
+      "metrics_used": {
+        "avg_comp_ratio": 1.04,
+        "avg_completion_pct": 100.0,
+        "avg_kpi_attainment": 1.022,
+        "avg_perf_score": 4.17,
+        "on_track_pct": 1.0
+      },
+      "recommended_actions": [
+        "Document playbook for cross-team reuse",
+        "Identify retention risks before competitors do",
+        "Promote top contributor as mentor for adjacent teams"
+      ],
+      "team_id": "T06",
+      "team_name": "People & Culture"
+    },
+    {
+      "cluster": "at_risk",
+      "cluster_headline": "Intervene now",
+      "metrics_used": {
+        "avg_comp_ratio": 1.064,
+        "avg_completion_pct": 10.0,
+        "avg_kpi_attainment": 0.12,
+        "avg_perf_score": 4.18,
+        "on_track_pct": 0.0
+      },
+      "recommended_actions": [
+        "Run skip-level 1:1s with every IC this week",
+        "Re-scope at-risk projects with executive sponsor",
+        "Trigger retention review for top-performers"
+      ],
+      "team_id": "T07",
+      "team_name": "Finance & Legal"
+    },
+    {
+      "cluster": "steady",
+      "cluster_headline": "Unblock and accelerate",
+      "metrics_used": {
+        "avg_comp_ratio": 0.987,
+        "avg_completion_pct": 50.0,
+        "avg_kpi_attainment": 0.844,
+        "avg_perf_score": 3.93,
+        "on_track_pct": 0.0
+      },
+      "recommended_actions": [
+        "Audit blocked projects; reassign owners where appropriate",
+        "Pair with a thriving team for delivery handoff",
+        "Increase mid-cycle KPI check-ins from monthly to biweekly"
+      ],
+      "team_id": "T08",
+      "team_name": "Marketing & Brand"
+    }
+  ],
+  "summary": {
+    "distribution": {
+      "at_risk": 1,
+      "steady": 6,
+      "thriving": 1
+    },
+    "features": [
+      "avg_perf_score",
+      "avg_kpi_attainment",
+      "on_track_pct",
+      "avg_completion_pct",
+      "avg_comp_ratio"
+    ],
+    "model": "KMeans",
+    "n_clusters": 3,
+    "n_teams": 8,
+    "random_state": 42
+  }
+}

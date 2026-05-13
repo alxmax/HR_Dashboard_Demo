@@ -1,0 +1,74 @@
+[
+  {
+    "annual_budget_eur": 1120000,
+    "department": "Engineering",
+    "headcount": 8,
+    "lead_emp_id": "E007",
+    "location": "Bucharest",
+    "team_id": "T01",
+    "team_name": "Platform Core"
+  },
+  {
+    "annual_budget_eur": 1050000,
+    "department": "Engineering",
+    "headcount": 7,
+    "lead_emp_id": "E014",
+    "location": "Remote",
+    "team_id": "T02",
+    "team_name": "Data & ML"
+  },
+  {
+    "annual_budget_eur": 640000,
+    "department": "Product",
+    "headcount": 5,
+    "lead_emp_id": "E021",
+    "location": "Cluj",
+    "team_id": "T03",
+    "team_name": "Product Discovery"
+  },
+  {
+    "annual_budget_eur": 540000,
+    "department": "Operations",
+    "headcount": 6,
+    "lead_emp_id": "E028",
+    "location": "Bucharest",
+    "team_id": "T04",
+    "team_name": "Customer Success"
+  },
+  {
+    "annual_budget_eur": 420000,
+    "department": "Operations",
+    "headcount": 4,
+    "lead_emp_id": "E032",
+    "location": "Remote",
+    "team_id": "T05",
+    "team_name": "Revenue Ops"
+  },
+  {
+    "annual_budget_eur": 360000,
+    "department": "HR",
+    "headcount": 4,
+    "lead_emp_id": "E038",
+    "location": "Bucharest",
+    "team_id": "T06",
+    "team_name": "People & Culture"
+  },
+  {
+    "annual_budget_eur": 580000,
+    "department": "Finance",
+    "headcount": 5,
+    "lead_emp_id": "E042",
+    "location": "Bucharest",
+    "team_id": "T07",
+    "team_name": "Finance & Legal"
+  },
+  {
+    "annual_budget_eur": 520000,
+    "department": "Marketing",
+    "headcount": 6,
+    "lead_emp_id": "E046",
+    "location": "Cluj",
+    "team_id": "T08",
+    "team_name": "Marketing & Brand"
+  }
+]

@@ -1,0 +1,9 @@
+team_id,team_name,department,lead_emp_id,headcount,annual_budget_eur,location
+T01,Platform Core,Engineering,E007,8,1120000,Bucharest
+T02,Data & ML,Engineering,E014,7,1050000,Remote
+T03,Product Discovery,Product,E021,5,640000,Cluj
+T04,Customer Success,Operations,E028,6,540000,Bucharest
+T05,Revenue Ops,Operations,E032,4,420000,Remote
+T06,People & Culture,HR,E038,4,360000,Bucharest
+T07,Finance & Legal,Finance,E042,5,580000,Bucharest
+T08,Marketing & Brand,Marketing,E046,6,520000,Cluj

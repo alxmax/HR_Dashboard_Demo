@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PEOPLE OPS · Terminal Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="dark"] {
+  --bg-0: #0a0b0d;
+  --bg-1: #101114;
+  --bg-2: #14161a;
+  --bg-3: #1a1c20;
+  --line-1: #1e2025;
+  --line-2: #2a2c32;
+  --line-3: #3a3d44;
+  --ink-1: #e8eaee;
+  --ink-2: #a4a8b0;
+  --ink-3: #6c707a;
+  --ink-4: #4a4d54;
+  --gold: #c8973a;
+  --gold-2: #e8b84b;
+  --gold-glow: rgba(232,184,75,0.4);
+  --teal: #2dd4bf;
+  --green: #30d158;
+  --red: #ff453a;
+  --orange: #ff9f0a;
+  --ff-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  --ff-disp: "Rajdhani", "JetBrains Mono", monospace;
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  --bg-0: #d8d4c8;
+  --bg-1: #e8e4d6;
+  --bg-2: #ddd9cb;
+  --bg-3: #cfcbbb;
+  --line-1: #b8b3a2;
+  --line-2: #9e9988;
+  --line-3: #807b6a;
+  --ink-1: #2a2722;
+  --ink-2: #4a4640;
+  --ink-3: #6e6a60;
+  --ink-4: #948f80;
+  --gold: #8c5e15;
+  --gold-2: #a06f1c;
+  --gold-glow: rgba(160,111,28,0.40);
+  --teal: #0d7d72;
+  --green: #15803d;
+  --red: #b91c1c;
+  --orange: #b45309;
+  color-scheme: light;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg-0); color: var(--ink-1); min-height: 100vh; }
+body { font-family: var(--ff-mono); font-size: 12.5px; line-height: 1.5; -webkit-font-smoothing: antialiased; position: relative; overflow-x: hidden; }
+
+/* Background ambient — two slow-drifting radial glows + faint dot grid. */
+body::before {
+  content: ""; position: fixed; inset: -10%; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 35% 25% at 18% 22%, rgba(232,184,75,0.10), transparent 60%),
+    radial-gradient(ellipse 30% 22% at 82% 78%, rgba(45,212,191,0.08), transparent 60%);
+  animation: bgDrift 45s ease-in-out infinite alternate;
+  filter: blur(2px);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(232,184,75,0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 35% 25% at 18% 22%, rgba(140,94,21,0.08), transparent 60%),
+    radial-gradient(ellipse 30% 22% at 82% 78%, rgba(13,125,114,0.06), transparent 60%);
+}
+[data-theme="light"] body::after {
+  background-image: radial-gradient(circle, rgba(140,94,21,0.06) 1px, transparent 1px);
+}
+@keyframes bgDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  50%  { transform: translate3d(36px, -22px, 0) scale(1.05); opacity: 0.75; }
+  100% { transform: translate3d(-18px, 28px, 0) scale(0.98); opacity: 0.92; }
+}
+.topbar, .filter-bar, .layout { position: relative; z-index: 1; }
+
+/* ──────────────── TOPBAR ──────────────── */
+.topbar {
+  height: 44px; background: var(--bg-0); border-bottom: 1px solid var(--line-2);
+  display: flex; align-items: center; padding: 0 16px; gap: 24px;
+  position: sticky; top: 0; z-index: 50;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-hex {
+  width: 22px; height: 22px; background: transparent;
+  border: 1px solid var(--gold); color: var(--gold);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: grid; place-items: center; font-family: var(--ff-disp); font-size: 11px; font-weight: 700;
+  position: relative;
+}
+.brand-hex::before {
+  content:''; position:absolute; inset:2px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: rgba(200,151,58,0.05);
+}
+.brand-name {
+  font-family: var(--ff-disp); font-size: 16px; font-weight: 700;
+  color: var(--ink-1); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.brand-year {
+  font-family: var(--ff-mono); font-size: 9px; color: var(--gold);
+  letter-spacing: 0.12em; padding: 1px 6px; border: 1px solid var(--gold); margin-left: 4px;
+}
+
+.tabs { display: flex; height: 100%; gap: 0; flex: 1; }
+.tab {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 18px; height: 100%;
+  font-family: var(--ff-mono); font-size: 13px; font-weight: 500;
+  color: var(--ink-3); letter-spacing: 0;
+  cursor: pointer; background: transparent; border: none;
+  border-right: 1px solid var(--line-2); position: relative;
+  transition: color 120ms;
+}
+.tab:first-child { border-left: 1px solid var(--line-2); }
+.tab:hover { color: var(--ink-1); }
+.tab .tab-idx { display: none; }
+.tab.active { color: var(--gold); }
+.tab.active .tab-idx { color: var(--gold-2); }
+.tab.active::after {
+  content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background: var(--gold);
+  box-shadow: 0 0 6px var(--gold-glow);
+}
+
+.topbar-right { display: flex; align-items: center; gap: 14px; font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3); }
+
+.hdr-btn {
+  background: transparent; border: 1px solid var(--line-2); color: var(--ink-2);
+  padding: 5px 12px; font-family: var(--ff-mono); font-size: 12px; cursor: pointer;
+  transition: background 140ms, border-color 140ms, color 140ms, transform 80ms;
+  display: inline-flex; align-items: center; gap: 5px; user-select: none;
+}
+.hdr-btn:hover {
+  background: rgba(232,184,75,0.10); border-color: var(--gold); color: var(--gold-2);
+}
+.hdr-btn:active {
+  background: var(--gold); border-color: var(--gold); color: var(--bg-0);
+  transform: translateY(1px);
+}
+.lang-cur { color: var(--gold-2); font-weight: 700; }
+.lang-sep { color: var(--ink-4); }
+.lang-other { color: var(--ink-4); }
+.hdr-btn:active .lang-cur,
+.hdr-btn:active .lang-other,
+.hdr-btn:active .lang-sep { color: var(--bg-0); }
+.status-pulse { display: flex; align-items: center; gap: 6px; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; box-shadow: 0 0 6px rgba(48,209,88,0.6); }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.build-tag { color: var(--gold); font-weight: 500; }
+
+/* ──────────────── FILTER BAR ──────────────── */
+.filter-bar {
+  display: flex; align-items: center; gap: 12px; padding: 8px 16px;
+  background: var(--bg-1); border-bottom: 1px solid var(--line-1);
+  flex-wrap: wrap;
+}
+.filter-group { display: flex; align-items: center; gap: 4px; }
+.filter-label {
+  font-size: 11.5px; color: var(--ink-3); font-weight: 500;
+  padding-right: 8px; border-right: 1px solid var(--line-2); margin-right: 4px;
+}
+.filter-pill {
+  font-family: var(--ff-mono); font-size: 11.5px; font-weight: 500;
+  color: var(--ink-2);
+  padding: 4px 10px; border: 1px solid var(--line-2); background: transparent;
+  cursor: pointer; transition: all 120ms;
+}
+.filter-pill:hover { color: var(--ink-1); border-color: var(--ink-4); }
+.filter-pill.active { color: var(--gold); border-color: var(--gold); background: rgba(200,151,58,0.06); }
+.filter-divider { width: 1px; height: 18px; background: var(--line-2); margin: 0 4px; }
+
+/* ──────────────── LAYOUT ──────────────── */
+.layout { display: flex; min-height: calc(100vh - 92px); }
+.main { flex: 1; padding: 22px 28px 60px; min-width: 0; }
+.sidebar {
+  width: 240px; flex-shrink: 0; background: var(--bg-1);
+  border-left: 1px solid var(--line-2); padding: 22px 18px 32px;
+}
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* ──────────────── SECTION HEADERS ──────────────── */
+.section-head {
+  font-family: var(--ff-mono); font-size: 14px; color: var(--ink-1); font-weight: 500;
+  margin: 22px 0 14px; padding-bottom: 0;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.section-head:first-of-type { margin-top: 4px; }
+.section-head .bracket { display: none; }
+.section-head .meta { color: var(--ink-3); font-size: 11.5px; font-weight: 400; }
+
+/* ──────────────── KPI ROW ──────────────── */
+.kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 18px; }
+.kpi {
+  position: relative; padding: 16px 18px;
+  background: var(--bg-1); border: 1px solid var(--line-1);
+}
+.kpi::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: var(--gold); opacity: 0.35;
+}
+.kpi-label {
+  font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--ff-disp); font-size: 28px; font-weight: 700;
+  line-height: 1; letter-spacing: 0.02em; color: var(--ink-1);
+}
+.kpi-value.gold { color: var(--gold-2); }
+.kpi-value.teal { color: var(--teal); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.red { color: var(--red); }
+.kpi-sub {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3);
+  margin-top: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+.delta-up { color: var(--green); }
+.delta-dn { color: var(--red); }
+
+/* ──────────────── PANELS ROW ──────────────── */
+.panel-row { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 12px; margin-bottom: 18px; }
+.panel {
+  background: var(--bg-1); border: 1px solid var(--line-1); padding: 18px 20px;
+  display: flex; flex-direction: column; min-height: 200px;
+}
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--ff-mono); font-size: 13px; color: var(--ink-1); font-weight: 500;
+  margin-bottom: 14px;
+}
+.ai-badge {
+  font-family: var(--ff-mono); font-size: 10.5px; font-weight: 500;
+  padding: 2px 7px; border: 1px solid rgba(45,212,191,0.3);
+  background: rgba(45,212,191,0.10); color: var(--teal);
+}
+
+/* Gauge panel */
+.gauge-wrap { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
+.gauge-stack { position: relative; width: 130px; height: 130px; }
+.gauge-svg { width: 130px; height: 130px; display: block; }
+.gauge-track { fill: none; stroke: var(--line-2); stroke-width: 8; }
+.gauge-fill { fill: none; stroke: var(--gold); stroke-width: 8; stroke-linecap: butt; transform: rotate(-90deg); transform-origin: center; transition: stroke-dasharray 600ms; }
+.gauge-center {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--ff-disp); font-size: 30px; font-weight: 700;
+  color: var(--gold-2); letter-spacing: 0.02em;
+}
+.gauge-label {
+  font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3);
+  text-align: center;
+}
+
+/* Risk distribution panel */
+.risk-dist { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.risk-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 10px; border: 1px solid; cursor: pointer; transition: background 100ms;
+}
+.risk-row:hover { background: var(--bg-2); }
+.risk-row .left { display: flex; align-items: center; gap: 8px; }
+.risk-row .dot { width: 7px; height: 7px; border-radius: 50%; }
+.risk-row .lbl {
+  font-family: var(--ff-mono); font-size: 12px; font-weight: 600;
+}
+.risk-row .val {
+  font-family: var(--ff-disp); font-size: 20px; font-weight: 700;
+}
+.risk-high { color: var(--red); border-color: rgba(255,69,58,0.3); background: rgba(255,69,58,0.04); }
+.risk-high .dot { background: var(--red); box-shadow: 0 0 6px rgba(255,69,58,0.7); }
+.risk-med  { color: var(--orange); border-color: rgba(255,159,10,0.3); background: rgba(255,159,10,0.04); }
+.risk-med .dot { background: var(--orange); box-shadow: 0 0 6px rgba(255,159,10,0.7); }
+.risk-low  { color: var(--green); border-color: rgba(48,209,88,0.3); background: rgba(48,209,88,0.04); }
+.risk-low .dot { background: var(--green); box-shadow: 0 0 6px rgba(48,209,88,0.7); }
+.panel-foot {
+  margin-top: auto; padding-top: 10px; border-top: 1px dotted var(--line-2);
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3);
+}
+.panel-foot .output {
+  color: var(--teal); border: 1px solid rgba(45,212,191,0.25); padding: 1px 5px;
+  background: rgba(45,212,191,0.06);
+}
+
+/* Team bars panel */
+.team-bars { display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.team-bar {
+  display: grid; grid-template-columns: 100px 1fr 44px; gap: 10px; align-items: center;
+  cursor: pointer; padding: 2px 0;
+}
+.team-bar:hover .tb-name { color: var(--gold); }
+.tb-name {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-2);
+  letter-spacing: 0.04em; transition: color 120ms;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bar-track { height: 3px; background: var(--bg-3); position: relative; }
+.bar-fill { height: 100%; position: absolute; top: 0; left: 0; transition: width 600ms ease; }
+.tb-val {
+  font-family: var(--ff-disp); font-size: 14px; font-weight: 700;
+  text-align: right; letter-spacing: 0.02em;
+}
+
+/* ──────────────── DATA TABLE ──────────────── */
+.table-wrap {
+  background: var(--bg-1); border: 1px solid var(--line-1);
+}
+.table-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--line-2);
+}
+table.data {
+  width: 100%; border-collapse: collapse; font-family: var(--ff-mono); font-size: 11px;
+}
+table.data th {
+  font-size: 11.5px; font-weight: 500; color: var(--ink-3);
+  text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line-2);
+  background: var(--bg-2);
+}
+table.data th.num { text-align: right; }
+table.data td {
+  padding: 9px 14px; border-bottom: 1px solid var(--line-1);
+  color: var(--ink-1); font-size: 12.5px;
+}
+table.data td.num { text-align: right; }
+table.data tbody tr { cursor: pointer; transition: background 100ms; }
+table.data tbody tr:hover { background: rgba(255,255,255,0.02); }
+table.data .muted { color: var(--ink-3); }
+table.data .strong { font-weight: 600; }
+table.data .role { color: var(--ink-3); font-size: 10.5px; }
+
+/* Risk pill in table */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px; border-radius: 2px;
+  font-family: var(--ff-mono); font-size: 11px; font-weight: 500;
+  border: 1px solid;
+}
+.pill.high { color: var(--red); border-color: rgba(255,69,58,0.3); background: rgba(255,69,58,0.06); }
+.pill.med  { color: var(--orange); border-color: rgba(255,159,10,0.3); background: rgba(255,159,10,0.06); }
+.pill.low  { color: var(--green); border-color: rgba(48,209,88,0.3); background: rgba(48,209,88,0.06); }
+.pill.thriving { color: var(--green); border-color: rgba(48,209,88,0.3); background: rgba(48,209,88,0.06); }
+.pill.steady { color: var(--gold-2); border-color: rgba(232,184,75,0.3); background: rgba(232,184,75,0.06); }
+.pill.at_risk { color: var(--red); border-color: rgba(255,69,58,0.3); background: rgba(255,69,58,0.06); }
+
+/* ──────────────── SIDEBAR ──────────────── */
+.sb-section { margin-bottom: 18px; }
+.sb-head {
+  font-family: var(--ff-mono); font-size: 12px; color: var(--ink-2); font-weight: 500;
+  padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 8px;
+}
+.sb-head .bracket { display: none; }
+.sb-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 0; font-family: var(--ff-mono); font-size: 11.5px;
+}
+.sb-lbl { color: var(--ink-3); }
+.sb-val {
+  font-family: var(--ff-disp); font-size: 14px; font-weight: 600;
+  color: var(--ink-1); letter-spacing: 0.02em;
+}
+.sb-val.gold { color: var(--gold-2); }
+.sb-val.green { color: var(--green); }
+.sb-val.red { color: var(--red); }
+
+/* Calendar grid */
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+  margin-top: 4px;
+}
+.cal-cell {
+  aspect-ratio: 1; background: var(--bg-3);
+  display: grid; place-items: center;
+  font-family: var(--ff-mono); font-size: 8.5px;
+  color: var(--ink-3); cursor: pointer; transition: opacity 100ms;
+}
+.cal-cell:hover { opacity: 0.7; }
+.cal-cell.g1 { background: rgba(48,209,88,0.18); color: var(--green); }
+.cal-cell.g2 { background: rgba(48,209,88,0.32); color: #ffffff; }
+.cal-cell.g3 { background: rgba(48,209,88,0.48); color: #ffffff; }
+.cal-cell.r1 { background: rgba(255,69,58,0.18); color: var(--red); }
+.cal-cell.r2 { background: rgba(255,69,58,0.32); color: #ffffff; }
+.cal-cell.r3 { background: rgba(255,69,58,0.48); color: #ffffff; }
+.cal-cell.empty { background: transparent; cursor: default; }
+.cal-foot {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3);
+  margin-top: 6px; display: flex; justify-content: space-between;
+}
+
+/* AI insights */
+.ai-card {
+  border-left: 2px solid var(--teal); padding: 7px 10px;
+  background: rgba(45,212,191,0.04); margin-bottom: 6px;
+  font-family: var(--ff-mono); font-size: 10px; line-height: 1.5; color: var(--ink-2);
+}
+.ai-card .ai-tag {
+  font-size: 10.5px; color: var(--teal); margin-bottom: 4px; font-weight: 600;
+}
+
+/* ──────────────── DRAWER ──────────────── */
+.dw-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90;
+  opacity: 0; pointer-events: none; transition: opacity 200ms; }
+.dw-ov.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; height: 100vh; width: 440px; max-width: 92vw;
+  background: var(--bg-1); border-left: 1px solid var(--gold); z-index: 100;
+  transform: translateX(100%); transition: transform 220ms cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+}
+.drawer.open { transform: translateX(0); }
+.dw-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 16px 20px; border-bottom: 1px solid var(--line-2);
+}
+.dw-title {
+  font-family: var(--ff-disp); font-size: 20px; font-weight: 700;
+  color: var(--gold-2); letter-spacing: 0.01em;
+}
+.dw-sub { font-family: var(--ff-mono); font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+.dw-close { width: 28px; height: 28px; background: transparent; border: 1px solid var(--line-2);
+  color: var(--ink-2); cursor: pointer; font-size: 16px; line-height: 1;
+  display: grid; place-items: center; transition: all 120ms; }
+.dw-close:hover { border-color: var(--gold); color: var(--gold); }
+.dw-body { flex: 1; overflow-y: auto; padding: 14px 20px 20px; }
+.dw-section {
+  font-family: var(--ff-mono); font-size: 12px; color: var(--ink-2); font-weight: 500;
+  margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--line-2);
+}
+.dw-section:first-child { margin-top: 0; }
+.dw-item {
+  padding: 9px 11px; background: var(--bg-2); border: 1px solid var(--line-1);
+  margin-bottom: 5px; font-family: var(--ff-mono); font-size: 10.5px;
+}
+.dw-item .ih { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
+.dw-item .nm { color: var(--ink-1); font-weight: 600; }
+.dw-item .mt { color: var(--ink-3); font-size: 9.5px; }
+.dw-item .bd { color: var(--ink-2); font-size: 10px; }
+.dw-kv { display: flex; justify-content: space-between; padding: 4px 0;
+  border-bottom: 1px dotted var(--line-1); font-family: var(--ff-mono); font-size: 10.5px; }
+.dw-kv:last-child { border-bottom: none; }
+.dw-kv .k { color: var(--ink-3); letter-spacing: 0.06em; }
+.dw-kv .v { color: var(--ink-1); }
+.dw-signal { display: inline-block; font-size: 9px; padding: 2px 6px; margin: 2px 3px 0 0;
+  border: 1px solid var(--line-2); color: var(--ink-2); letter-spacing: 0.06em; }
+
+/* Responsive */
+@media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } .panel-row { grid-template-columns: 1fr; } }
+@media (max-width: 880px)  { .sidebar { display: none; } .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<!-- ──────────────── TOPBAR ──────────────── -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-hex">P</div>
+    <div class="brand-name">People Ops</div>
+    <div class="brand-year">2026</div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="overview" data-i18n="tab.overview">Overview</button>
+    <button class="tab" data-tab="employees" data-i18n="tab.people">People</button>
+    <button class="tab" data-tab="teams" data-i18n="tab.teams">Teams</button>
+    <button class="tab" data-tab="inbox" data-i18n="tab.inbox">Inbox &amp; Automation</button>
+    <button class="tab" data-tab="legend" data-i18n="tab.legend">Legend</button>
+  </nav>
+  <div class="topbar-right">
+    <div class="status-pulse"><span class="live-dot"></span><span data-i18n="status.running">Pipeline running</span></div>
+    <div><span data-i18n="status.build">Build</span> <span class="build-tag">2026.05.14</span></div>
+    <button id="langToggle" class="hdr-btn" title="Switch language">
+      <span id="langCur" class="lang-cur">EN</span><span class="lang-sep">/</span><span id="langOther" class="lang-other">RO</span>
+    </button>
+    <button id="themeToggle" class="hdr-btn" title="Toggle light/dark">☾ Dark</button>
+  </div>
+</header>
+
+<!-- ──────────────── FILTER BAR ──────────────── -->
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label" data-i18n="filter.dept">Department</span>
+    <button class="filter-pill active" data-filter="dept" data-value="all" data-i18n="filter.all">All</button>
+    <button class="filter-pill" data-filter="dept" data-value="Engineering" data-i18n="dept.engineering">Engineering</button>
+    <button class="filter-pill" data-filter="dept" data-value="Product" data-i18n="dept.product">Product</button>
+    <button class="filter-pill" data-filter="dept" data-value="Operations" data-i18n="dept.operations">Operations</button>
+    <button class="filter-pill" data-filter="dept" data-value="HR" data-i18n="dept.hr">HR</button>
+    <button class="filter-pill" data-filter="dept" data-value="Finance" data-i18n="dept.finance">Finance</button>
+    <button class="filter-pill" data-filter="dept" data-value="Marketing" data-i18n="dept.marketing">Marketing</button>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group">
+    <span class="filter-label" data-i18n="filter.risk">Retention risk</span>
+    <button class="filter-pill active" data-filter="risk" data-value="all" data-i18n="filter.all">All</button>
+    <button class="filter-pill" data-filter="risk" data-value="high" data-i18n="risk.high">High</button>
+    <button class="filter-pill" data-filter="risk" data-value="medium" data-i18n="risk.medium">Medium</button>
+    <button class="filter-pill" data-filter="risk" data-value="low" data-i18n="risk.low">Low</button>
+  </div>
+</div>
+
+<div class="layout">
+  <main class="main">
+
+    <!-- ──────────────── TAB 1: OVERVIEW ──────────────── -->
+    <section class="view active" id="view-overview">
+
+      <div class="section-head" data-i18n="sec.glance">This month at a glance</div>
+      <div class="kpi-row" id="kpiRow"></div>
+
+      <div class="panel-row">
+        <div class="panel">
+          <div class="panel-head"><span data-i18n="panel.on_target">On target</span><span class="ai-badge" data-i18n="badge.live">Live</span></div>
+          <div class="gauge-wrap">
+            <div class="gauge-stack">
+              <svg class="gauge-svg" viewBox="0 0 140 140">
+                <circle class="gauge-track" cx="70" cy="70" r="56"></circle>
+                <circle class="gauge-fill" cx="70" cy="70" r="56" id="gaugeFill" stroke-dasharray="0 360"></circle>
+              </svg>
+              <div class="gauge-center" id="gaugeVal">0%</div>
+            </div>
+            <div class="gauge-label" data-i18n="gauge.label">KPI attainment across the organization</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><span data-i18n="panel.retention">Retention risk</span><span class="ai-badge" data-i18n="badge.smart">Smart insight</span></div>
+          <div class="risk-dist" id="riskDist"></div>
+          <div class="panel-foot"><span data-i18n="foot.computed_by">Computed by</span> <span class="output">score_attrition_risk.py</span> · IsolationForest</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><span data-i18n="panel.bench">Bench risk</span><span class="ai-badge" data-i18n="badge.cross">Cross-check</span></div>
+          <div class="risk-dist" id="benchDist"></div>
+          <div class="panel-foot"><span data-i18n="foot.cross_checked">Cross-checked against project roster + timesheets</span></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-head"><span data-i18n="panel.team_perf">How teams are performing</span></div>
+        <div class="team-bars" id="teamBars"></div>
+      </div>
+
+      <div class="section-head"><span data-i18n="sec.people">People</span> <span class="meta" id="peopleCount">· 50</span></div>
+      <div class="table-wrap">
+        <table class="data" id="empTable">
+          <thead><tr>
+            <th>ID</th><th>Name</th><th>Role</th><th>Team</th>
+            <th class="num">Tenure</th><th class="num">Performance</th><th class="num">Comp ratio</th><th>Retention</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ──────────────── TAB 2: PEOPLE ──────────────── -->
+    <section class="view" id="view-employees">
+      <div class="section-head"><span data-i18n="sec.everyone">Everyone</span> <span class="meta" id="empFullCount">· 50</span></div>
+      <div class="table-wrap">
+        <table class="data" id="empTableFull">
+          <thead><tr>
+            <th>ID</th><th>Name</th><th>Role</th><th>Team</th><th>Department</th>
+            <th class="num">Tenure</th><th class="num">Performance</th><th class="num">Comp ratio</th>
+            <th class="num">Hours YTD</th><th>Retention</th><th>Next step</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ──────────────── TAB 3: TEAMS ──────────────── -->
+    <section class="view" id="view-teams">
+      <div class="section-head"><span data-i18n="sec.all_teams">All teams</span> <span class="meta">· 8</span></div>
+      <div class="kpi-row" id="teamGrid" style="grid-template-columns:repeat(4,1fr);"></div>
+
+      <div class="section-head" data-i18n="sec.kpi_by_team">KPI attainment by team</div>
+      <div class="panel">
+        <div class="team-bars" id="teamBarsFull"></div>
+      </div>
+    </section>
+
+    <!-- ──────────────── TAB 4: INBOX & AUTOMATION ──────────────── -->
+    <section class="view" id="view-inbox">
+
+      <div class="panel" style="margin-bottom:14px">
+        <div class="panel-head">
+          <span>Email automation <span class="meta" style="color:var(--ink-3);font-weight:400">· how leave requests reach this dashboard</span></span>
+          <span class="ai-badge">Active</span>
+        </div>
+        <div id="flowDiagram" style="display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:8px 0 4px"></div>
+        <div class="panel-foot">
+          Polls Gmail/Outlook via API every 5 minutes · parses attachment · matches sender to employee · writes to <span class="output">data/time_off.csv</span> · dashboard reads the CSV on next pipeline run
+        </div>
+      </div>
+
+      <div class="kpi-row" id="inboxKpis" style="grid-template-columns:repeat(4,1fr);"></div>
+
+      <div class="section-head" data-i18n="sec.intake">Recent intake</div>
+      <div class="table-wrap">
+        <table class="data" id="intakeTable">
+          <thead><tr>
+            <th>Received</th><th>Sender</th><th>Type</th><th>Employee</th><th>Dates</th><th>Source</th><th>Status</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="section-head" style="margin-top:18px" data-i18n="sec.review">Needs your review</div>
+      <div id="reviewList"></div>
+
+      <div class="section-head" style="margin-top:18px" data-i18n="sec.missing_logs">People with missing time logs this week</div>
+      <div class="table-wrap">
+        <table class="data" id="missingTable">
+          <thead><tr>
+            <th>ID</th><th>Name</th><th>Team</th><th class="num">Expected</th><th class="num">Logged</th><th>Likely cause</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ──────────────── TAB 5: LEGEND ──────────────── -->
+    <section class="view" id="view-legend">
+      <div class="section-head" data-i18n="sec.legend">Legend &mdash; what each term means</div>
+      <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="legend.intro">
+        Quick reference for every metric, label and AI signal used in this dashboard. Click anything in another tab to see where the value comes from.
+      </div>
+      <div id="legendBody"></div>
+    </section>
+
+  </main>
+
+  <!-- ──────────────── SIDEBAR ──────────────── -->
+  <aside class="sidebar">
+
+    <div class="sb-section">
+      <div class="sb-head" data-i18n="sb.snapshot">Snapshot</div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.headcount">Headcount</span><span class="sb-val">50</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.teams">Teams</span><span class="sb-val">8</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.projects">Projects</span><span class="sb-val">15</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.avg_perf">Avg. performance</span><span class="sb-val gold">4.04</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.attrition">Attrition watch</span><span class="sb-val red">8%</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.expired">Expired certs</span><span class="sb-val red">17</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.expiring">Expiring soon</span><span class="sb-val gold">11</span></div>
+      <div class="sb-row"><span class="sb-lbl" data-i18n="sb.compliant">Compliant</span><span class="sb-val green">22</span></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-head" data-i18n="sb.activity">30-day activity</div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-foot">
+        <span style="color:var(--green)">▲ <span data-i18n="legend.pos">positive</span></span>
+        <span style="color:var(--red)">▼ <span data-i18n="legend.neg">negative</span></span>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-head" data-i18n="sb.suggestions">Suggestions for this week</div>
+      <div class="ai-card">
+        <div class="ai-tag" data-i18n="tag.retention">Retention</div>
+        <span data-i18n="ins.retention">4 high-risk employees concentrated in Platform Core. Schedule 1:1s before end of week.</span>
+      </div>
+      <div class="ai-card">
+        <div class="ai-tag" data-i18n="tag.compliance">Compliance</div>
+        <span data-i18n="ins.compliance">17 medical / safety certificates expired. Renewals required before next project assignment.</span>
+      </div>
+      <div class="ai-card">
+        <div class="ai-tag" data-i18n="tag.teams">Teams</div>
+        <span data-i18n="ins.teams">Finance &amp; Legal clustered as at-risk. KPI attainment 58% vs org average 70%.</span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ──────────────── DRAWER ──────────────── -->
+<div class="dw-ov" id="dwOv"></div>
+<aside class="drawer" id="drawer">
+  <header class="dw-head">
+    <div>
+      <div class="dw-title" id="dwTitle"></div>
+      <div class="dw-sub" id="dwSub"></div>
+    </div>
+    <button class="dw-close" id="dwClose">×</button>
+  </header>
+  <div class="dw-body" id="dwBody"></div>
+</aside>
+
+<script>
+// ════════════════════════════ DATA ════════════════════════════
+const EMPLOYEES = [
+  {id:"E001",name:"Andrei Pop",role:"Senior Backend Eng",team:"T01",dept:"Engineering",tenure:4.2,perf:4.3,comp:1.05,hours:724,risk:"low",score:0.12,signals:["review fresh","training high"]},
+  {id:"E002",name:"Maria Ionescu",role:"Backend Eng",team:"T01",dept:"Engineering",tenure:1.9,perf:3.9,comp:0.92,hours:712,risk:"low",score:0.16,signals:["comp below median","tenure short"]},
+  {id:"E003",name:"Vlad Cristea",role:"Staff Eng",team:"T01",dept:"Engineering",tenure:5.7,perf:4.6,comp:1.18,hours:690,risk:"low",score:0.09,signals:["tenure long","perf high"]},
+  {id:"E004",name:"Ioana Stan",role:"Backend Eng",team:"T01",dept:"Engineering",tenure:1.3,perf:3.5,comp:0.88,hours:704,risk:"medium",score:0.52,signals:["perf low","comp low"]},
+  {id:"E005",name:"Cristian Marin",role:"DevOps Eng",team:"T01",dept:"Engineering",tenure:2.7,perf:4.1,comp:1.02,hours:718,risk:"low",score:0.21,signals:["training high"]},
+  {id:"E006",name:"Alexandra Dima",role:"Senior SRE",team:"T01",dept:"Engineering",tenure:4.5,perf:4.4,comp:1.08,hours:696,risk:"low",score:0.11,signals:["perf high"]},
+  {id:"E007",name:"Bogdan Radu",role:"Eng Manager",team:"T01",dept:"Engineering",tenure:7.1,perf:4.7,comp:1.22,hours:702,risk:"low",score:0.08,signals:["tenure long","perf high"]},
+  {id:"E008",name:"Diana Lupu",role:"Junior Backend",team:"T01",dept:"Engineering",tenure:0.3,perf:3.1,comp:0.82,hours:680,risk:"high",score:0.88,signals:["tenure very short","perf low","comp low"]},
+  {id:"E009",name:"Razvan Toma",role:"ML Eng",team:"T02",dept:"Engineering",tenure:3.0,perf:4.2,comp:1.10,hours:728,risk:"low",score:0.19,signals:["training high"]},
+  {id:"E010",name:"Elena Voicu",role:"Senior Data Eng",team:"T02",dept:"Engineering",tenure:4.8,perf:4.5,comp:1.12,hours:710,risk:"low",score:0.10,signals:["perf high"]},
+  {id:"E011",name:"Mihai Sandu",role:"Data Eng",team:"T02",dept:"Engineering",tenure:1.7,perf:3.8,comp:0.94,hours:715,risk:"medium",score:0.48,signals:["tenure short"]},
+  {id:"E012",name:"Larisa Neagu",role:"ML Eng",team:"T02",dept:"Engineering",tenure:1.1,perf:3.7,comp:0.96,hours:706,risk:"medium",score:0.55,signals:["tenure short","perf low"]},
+  {id:"E013",name:"Stefan Cojocaru",role:"Data Scientist",team:"T02",dept:"Engineering",tenure:3.4,perf:4.0,comp:1.06,hours:720,risk:"low",score:0.23,signals:["training high"]},
+  {id:"E014",name:"Andreea Tudor",role:"Data & ML Lead",team:"T02",dept:"Engineering",tenure:7.2,perf:4.6,comp:1.20,hours:698,risk:"low",score:0.07,signals:["tenure long"]},
+  {id:"E015",name:"Paul Ene",role:"ML Eng",team:"T02",dept:"Engineering",tenure:2.2,perf:4.0,comp:0.98,hours:712,risk:"low",score:0.28,signals:["training high"]},
+  {id:"E016",name:"Cristina Barbu",role:"Product Manager",team:"T03",dept:"Product",tenure:3.9,perf:4.2,comp:1.04,hours:688,risk:"low",score:0.18,signals:["perf high"]},
+  {id:"E017",name:"Tudor Manea",role:"Senior Designer",team:"T03",dept:"Product",tenure:4.7,perf:4.5,comp:1.08,hours:701,risk:"low",score:0.13,signals:["perf high"]},
+  {id:"E018",name:"Oana Dragomir",role:"UX Researcher",team:"T03",dept:"Product",tenure:2.6,perf:4.1,comp:0.96,hours:694,risk:"low",score:0.24,signals:["training high"]},
+  {id:"E019",name:"Adrian Popescu",role:"Designer",team:"T03",dept:"Product",tenure:0.9,perf:3.6,comp:0.90,hours:672,risk:"medium",score:0.61,signals:["tenure short","perf low","comp low"]},
+  {id:"E020",name:"Roxana Mihai",role:"Product Analyst",team:"T03",dept:"Product",tenure:1.5,perf:3.8,comp:0.92,hours:684,risk:"medium",score:0.49,signals:["tenure short"]},
+  {id:"E021",name:"Lucian Pavel",role:"Head of Product",team:"T03",dept:"Product",tenure:8.6,perf:4.8,comp:1.28,hours:716,risk:"low",score:0.05,signals:["tenure very long","perf very high"]},
+  {id:"E022",name:"Iulia Constantin",role:"Senior CSM",team:"T04",dept:"Operations",tenure:5.1,perf:4.4,comp:1.04,hours:708,risk:"low",score:0.14,signals:["perf high"]},
+  {id:"E023",name:"Vasile Anton",role:"CS Manager",team:"T04",dept:"Operations",tenure:4.1,perf:4.0,comp:0.98,hours:702,risk:"low",score:0.27,signals:[]},
+  {id:"E024",name:"Daniela Filip",role:"CS Engineer",team:"T04",dept:"Operations",tenure:1.8,perf:3.7,comp:0.94,hours:690,risk:"medium",score:0.51,signals:["tenure short","perf low"]},
+  {id:"E025",name:"Mircea Lazar",role:"CSM",team:"T04",dept:"Operations",tenure:3.6,perf:3.9,comp:0.94,hours:700,risk:"medium",score:0.42,signals:["comp below median"]},
+  {id:"E026",name:"Anca Iordan",role:"Onboarding Spec",team:"T04",dept:"Operations",tenure:0.7,perf:3.4,comp:0.88,hours:664,risk:"high",score:0.79,signals:["tenure very short","perf low","comp low"]},
+  {id:"E027",name:"Sergiu Marcu",role:"Junior CSM",team:"T04",dept:"Operations",tenure:0.2,perf:3.2,comp:0.84,hours:648,risk:"high",score:0.86,signals:["tenure very short","perf low","comp very low"]},
+  {id:"E028",name:"Carmen Dobre",role:"CS Team Lead",team:"T04",dept:"Operations",tenure:6.0,perf:4.6,comp:1.14,hours:712,risk:"low",score:0.08,signals:["tenure long","perf high"]},
+  {id:"E029",name:"Florin Stanciu",role:"RevOps",team:"T05",dept:"Operations",tenure:3.1,perf:4.0,comp:1.00,hours:706,risk:"low",score:0.25,signals:[]},
+  {id:"E030",name:"Mihaela Coman",role:"RevOps Analyst",team:"T05",dept:"Operations",tenure:1.4,perf:3.7,comp:0.92,hours:686,risk:"medium",score:0.56,signals:["tenure short","perf low"]},
+  {id:"E031",name:"Catalin Ursu",role:"Sales Ops",team:"T05",dept:"Operations",tenure:0.7,perf:3.5,comp:0.94,hours:668,risk:"medium",score:0.64,signals:["tenure short","perf low"]},
+  {id:"E032",name:"Raluca Tanase",role:"RevOps Lead",team:"T05",dept:"Operations",tenure:4.6,perf:4.5,comp:1.16,hours:710,risk:"low",score:0.11,signals:["perf high"]},
+  {id:"E033",name:"Gabriela Munteanu",role:"HRBP",team:"T06",dept:"HR",tenure:4.2,perf:4.2,comp:1.02,hours:704,risk:"low",score:0.18,signals:["training high"]},
+  {id:"E034",name:"Dorina Petrescu",role:"Recruiter",team:"T06",dept:"HR",tenure:2.0,perf:3.9,comp:0.94,hours:696,risk:"medium",score:0.45,signals:["comp below median"]},
+  {id:"E035",name:"Codrut Visan",role:"People Ops",team:"T06",dept:"HR",tenure:0.5,perf:3.4,comp:0.88,hours:660,risk:"high",score:0.81,signals:["tenure very short","perf low","comp low"]},
+  {id:"E036",name:"Madalina Albu",role:"Senior Recruiter",team:"T06",dept:"HR",tenure:5.0,perf:4.3,comp:1.00,hours:702,risk:"low",score:0.16,signals:["training high"]},
+  {id:"E037",name:"Nicoleta Calin",role:"CPO",team:"T06",dept:"HR",tenure:5.7,perf:4.7,comp:1.24,hours:714,risk:"low",score:0.06,signals:["tenure long","perf very high"]},
+  {id:"E038",name:"Sebastian Olaru",role:"HR Lead",team:"T06",dept:"HR",tenure:6.4,perf:4.5,comp:1.16,hours:708,risk:"low",score:0.09,signals:["tenure long"]},
+  {id:"E039",name:"Cosmin Avram",role:"Senior Accountant",team:"T07",dept:"Finance",tenure:5.1,perf:4.2,comp:1.04,hours:704,risk:"low",score:0.17,signals:["tenure long"]},
+  {id:"E040",name:"Simona Vlad",role:"Finance Analyst",team:"T07",dept:"Finance",tenure:2.8,perf:3.9,comp:0.96,hours:698,risk:"medium",score:0.41,signals:[]},
+  {id:"E041",name:"Dan Sorin",role:"Legal Counsel",team:"T07",dept:"Finance",tenure:4.0,perf:4.4,comp:1.12,hours:706,risk:"low",score:0.15,signals:["perf high"]},
+  {id:"E042",name:"Mihaela Bratu",role:"Head of Finance",team:"T07",dept:"Finance",tenure:8.4,perf:4.7,comp:1.26,hours:718,risk:"low",score:0.04,signals:["tenure very long","perf very high"]},
+  {id:"E043",name:"Bianca Tomescu",role:"Tax Specialist",team:"T07",dept:"Finance",tenure:1.3,perf:3.7,comp:0.94,hours:690,risk:"medium",score:0.54,signals:["tenure short","perf low"]},
+  {id:"E044",name:"Liviu Iancu",role:"Marketing Manager",team:"T08",dept:"Marketing",tenure:3.7,perf:4.1,comp:1.02,hours:700,risk:"low",score:0.22,signals:["training high"]},
+  {id:"E045",name:"Andrei Cojanu",role:"Content Lead",team:"T08",dept:"Marketing",tenure:2.5,perf:4.0,comp:0.96,hours:694,risk:"low",score:0.30,signals:[]},
+  {id:"E046",name:"Alina Stoica",role:"CMO",team:"T08",dept:"Marketing",tenure:6.8,perf:4.8,comp:1.24,hours:712,risk:"low",score:0.05,signals:["tenure long","perf very high"]},
+  {id:"E047",name:"Razvan Diaconu",role:"Performance Mktr",team:"T08",dept:"Marketing",tenure:1.8,perf:3.8,comp:0.92,hours:696,risk:"medium",score:0.47,signals:["tenure short"]},
+  {id:"E048",name:"Cosmin Bardac",role:"Brand Designer",team:"T08",dept:"Marketing",tenure:1.0,perf:3.6,comp:0.92,hours:672,risk:"medium",score:0.58,signals:["tenure short","perf low"]},
+  {id:"E049",name:"Ileana Sarbu",role:"Mktg Analyst",team:"T08",dept:"Marketing",tenure:0.3,perf:3.3,comp:0.86,hours:656,risk:"high",score:0.84,signals:["tenure very short","perf low","comp low"]},
+  {id:"E050",name:"Marius Grigorescu",role:"Junior ML",team:"T02",dept:"Engineering",tenure:0.2,perf:3.0,comp:0.84,hours:640,risk:"high",score:0.91,signals:["tenure very short","perf very low","comp very low"]},
+];
+
+const TEAMS = [
+  {id:"T01",name:"Platform Core",dept:"Engineering",headcount:8,avg_perf:4.08,attainment:0.67,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+  {id:"T02",name:"Data & ML",dept:"Engineering",headcount:8,avg_perf:3.98,attainment:0.73,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+  {id:"T03",name:"Product Discovery",dept:"Product",headcount:6,avg_perf:4.13,attainment:0.71,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+  {id:"T04",name:"Customer Success",dept:"Operations",headcount:7,avg_perf:3.97,attainment:0.69,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+  {id:"T05",name:"Revenue Ops",dept:"Operations",headcount:4,avg_perf:3.92,attainment:0.66,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+  {id:"T06",name:"People & Culture",dept:"HR",headcount:6,avg_perf:4.32,attainment:0.92,cluster:"thriving",headline:"Protect and replicate",actions:["Document playbook for reuse","Identify retention risks early","Promote top contributor as mentor"]},
+  {id:"T07",name:"Finance & Legal",dept:"Finance",headcount:5,avg_perf:4.18,attainment:0.58,cluster:"at_risk",headline:"Intervene now",actions:["Run skip-level 1:1s this week","Re-scope at-risk projects","Trigger retention review"]},
+  {id:"T08",name:"Marketing & Brand",dept:"Marketing",headcount:6,avg_perf:4.10,attainment:0.74,cluster:"steady",headline:"Unblock and accelerate",actions:["Audit blocked projects","Pair with thriving team","Biweekly KPI check-ins"]},
+];
+
+const AI_ATTRITION = { model:"IsolationForest", n_estimators:200, random_state:42, n_employees:50, n_high:4, n_medium:14, n_low:32 };
+const AI_TEAMS = { model:"KMeans", k:3, random_state:42, n_teams:8, n_thriving:1, n_steady:6, n_at_risk:1 };
+const TOPLINE = { headcount:50, teams:8, projects:15, avg_perf:4.04, avg_tenure:3.33, kpi_attainment:0.70, projects_on_track:7, training_hours_total:1553, compliant:22, expired:17, expiring:11 };
+
+// ════════════════════════════ BENCH STATUS ════════════════════════════
+// Per-employee project allocation status: 'unassigned' (no project), 'rolling_off_30d', 'rolling_off_60d', 'assigned'.
+// Computed at pipeline time by cross-referencing timesheets + project roster.
+const BENCH_BY_EMP = {
+  "E004":{status:"rolling_off_30d",project:"API Gateway v2",ends:"2026-06-08",note:"No follow-up project in pipeline"},
+  "E008":{status:"unassigned",project:null,ends:null,note:"Off project since 2026-05-02; on medical leave through 2026-05-22"},
+  "E011":{status:"rolling_off_60d",project:"Postgres 16 upgrade",ends:"2026-07-10",note:"Considered for ML platform extension"},
+  "E020":{status:"rolling_off_30d",project:"Self-serve reporting",ends:"2026-06-04",note:"Skills match upcoming pricing model project"},
+  "E024":{status:"rolling_off_60d",project:"Customer Health Score",ends:"2026-07-01",note:"Currently full-time on the project"},
+  "E026":{status:"unassigned",project:null,ends:null,note:"Onboarding queue empty since 2026-04-22"},
+  "E027":{status:"unassigned",project:null,ends:null,note:"Junior CSM — no active project this cycle"},
+  "E031":{status:"rolling_off_30d",project:"Commission calculator",ends:"2026-06-15",note:"Sales pipeline ramps in July — likely reassignment"},
+  "E035":{status:"rolling_off_60d",project:"Quarterly hiring plan",ends:"2026-07-22",note:"Will move to onboarding redesign"},
+  "E043":{status:"rolling_off_30d",project:"Tax filing Q2",ends:"2026-06-30",note:"Q3 filings start mid-July"},
+  "E049":{status:"unassigned",project:null,ends:null,note:"Mktg analyst — no active project assigned"},
+  "E050":{status:"unassigned",project:null,ends:null,note:"Junior ML — awaiting platform extension start"},
+};
+const BENCH_COUNTS = (function(){
+  const c = {unassigned:0, rolling_off_30d:0, rolling_off_60d:0, assigned:0};
+  EMPLOYEES.forEach(e => {
+    const s = (BENCH_BY_EMP[e.id] || {}).status || "assigned";
+    c[s] = (c[s] || 0) + 1;
+  });
+  return c;
+})();
+
+// 30-day calendar — synthetic daily attainment percentages
+const CALENDAR = [
+  null,null,1,2,3,2,1,
+  -1,1,3,2,3,1,-1,
+  1,2,3,3,2,1,1,
+  -2,-1,1,2,3,2,1,
+  3,2
+];
+
+// ════════════════════════════ I18N ════════════════════════════
+const I18N = {
+  en: {
+    "tab.overview":"Overview","tab.people":"People","tab.teams":"Teams","tab.inbox":"Inbox & Automation",
+    "status.running":"Pipeline running","status.build":"Build",
+    "filter.dept":"Department","filter.risk":"Retention risk","filter.range":"Time range","filter.all":"All",
+    "dept.engineering":"Engineering","dept.product":"Product","dept.operations":"Operations","dept.hr":"HR","dept.finance":"Finance","dept.marketing":"Marketing",
+    "risk.high":"High","risk.medium":"Medium","risk.low":"Low",
+    "range.30":"30 days","range.60":"60 days","range.90":"90 days",
+    "sec.glance":"This month at a glance","sec.people":"People","sec.everyone":"Everyone","sec.all_teams":"All teams",
+    "sec.kpi_by_team":"KPI attainment by team","sec.intake":"Recent intake","sec.review":"Needs your review","sec.missing_logs":"People with missing time logs this week",
+    "panel.on_target":"On target","panel.retention":"Retention risk","panel.team_perf":"How teams are performing",
+    "badge.live":"Live","badge.smart":"Smart insight","badge.active":"Active",
+    "gauge.label":"KPI attainment across the organization",
+    "foot.computed_by":"Computed by",
+    "sb.snapshot":"Snapshot","sb.headcount":"Headcount","sb.teams":"Teams","sb.projects":"Projects",
+    "sb.avg_perf":"Avg. performance","sb.attrition":"Attrition watch","sb.expired":"Expired certs",
+    "sb.expiring":"Expiring soon","sb.compliant":"Compliant",
+    "sb.activity":"30-day activity","sb.suggestions":"Suggestions for this week",
+    "legend.pos":"positive","legend.neg":"negative",
+    "tag.retention":"Retention","tag.compliance":"Compliance","tag.teams":"Teams",
+    "ins.retention":"4 high-risk employees concentrated in Platform Core. Schedule 1:1s before end of week.",
+    "ins.compliance":"17 medical / safety certificates expired. Renewals required before next project assignment.",
+    "ins.teams":"Finance & Legal clustered as at-risk. KPI attainment 58% vs org average 70%.",
+    // KPI tile labels
+    "kpi.headcount":"Headcount","kpi.avg_perf":"Avg. performance","kpi.at_risk":"At risk",
+    "kpi.on_target":"On target","kpi.expired":"Expired certs","kpi.training":"Training hours",
+    "kpi.sub_total":"of {n} total","kpi.sub_perf":"scale 1–5","kpi.sub_atrisk":"need a 1:1 this week",
+    "kpi.sub_target":"{a}/{b} projects","kpi.sub_certs":"medical / safety","kpi.sub_training":"year to date",
+    // Inbox KPIs
+    "ikpi.parsed":"Parsed automatically","ikpi.review":"Need your review","ikpi.on_leave":"On leave this week","ikpi.missing":"Missing time logs",
+    "ikpi.sub_parsed":"last 14 days","ikpi.sub_review":"ambiguous parses","ikpi.sub_leave":"cross-checked with timesheets","ikpi.sub_missing":"reviewed against leave records",
+    // Inbox flow steps
+    "flow.1.h":"Inbox","flow.1.s":"Gmail / Outlook API, polled every 5 minutes",
+    "flow.2.h":"Parser","flow.2.s":"parse_email.py — regex + OCR for attachments",
+    "flow.3.h":"CSV store","flow.3.s":"data/time_off.csv — append with audit trail",
+    "flow.4.h":"Dashboard","flow.4.s":"This view + cross-check with timesheets",
+    "panel.email_title":"Email automation","panel.email_sub":"how leave requests reach this dashboard",
+    "panel.email_foot":"Polls inbox via API every 5 minutes · parses attachment · matches sender to employee · writes to time_off.csv",
+    // Table headers
+    "th.id":"ID","th.name":"Name","th.role":"Role","th.team":"Team","th.dept":"Department",
+    "th.tenure":"Tenure","th.perf":"Performance","th.comp":"Comp ratio","th.hours":"Hours YTD",
+    "th.risk":"Retention","th.next":"Next step","th.received":"Received","th.sender":"Sender",
+    "th.type":"Type","th.employee":"Employee","th.dates":"Dates","th.source":"Source","th.status":"Status",
+    "th.expected":"Expected","th.logged":"Logged","th.cause":"Likely cause","th.signal":"Top signal",
+    // Status labels
+    "stat.ingested":"Ingested","stat.review":"Needs review","stat.intervene":"Intervene","stat.monitor":"Monitor","stat.stable":"Stable",
+    // Dist labels
+    "dist.high":"High","dist.medium":"Medium","dist.low":"Low",
+    "team.thriving":"Thriving","team.steady":"Steady","team.at_risk":"At risk",
+    // Legend
+    "tab.legend":"Legend",
+    "sec.legend":"Legend — what each term means",
+    "legend.intro":"Quick reference for every metric, label and AI signal used in this dashboard. Useful when handing the report to a stakeholder who hasn't seen it before.",
+    "lg.topic.people":"People metrics",
+    "lg.topic.team":"Team health",
+    "lg.topic.comp":"Compliance & labor law",
+    "lg.topic.ai":"AI signals & models",
+    "lg.topic.auto":"Email automation",
+    "lg.t.perf":"Performance score","lg.d.perf":"Manager-given rating on a 1-5 scale, refreshed each review cycle. Anything below 3.5 typically triggers a development conversation.","lg.w.perf":"People tab · Performance column",
+    "lg.t.comp":"Comp ratio","lg.d.comp":"Actual salary divided by the market midpoint for the role. 1.00 means at-market; below 0.90 means under-paid for the role.","lg.w.comp":"People tab · Comp ratio column",
+    "lg.t.tenure":"Tenure","lg.d.tenure":"Years since the employee joined the company.","lg.w.tenure":"People tab · Tenure column",
+    "lg.t.retention":"Retention risk","lg.d.retention":"Composite anomaly score from the AI module — combines short tenure, low comp ratio, stale performance review, and weak training engagement into a single rank.","lg.w.retention":"Overview · Retention risk panel; People tab · Retention column",
+    "lg.t.cluster":"Team cluster","lg.d.cluster":"AI groups the 8 teams into three health buckets based on KPI attainment, on-track project rate and average performance. Each cluster gets a recommended action playbook.","lg.w.cluster":"Teams tab · cluster pill on each team card",
+    "lg.t.attain":"KPI attainment","lg.d.attain":"Percentage of the team's project KPIs hit so far this quarter. 100% means every project is on track.","lg.w.attain":"Overview · On target gauge; Teams tab · bar per team",
+    "lg.t.ontrack":"On track","lg.d.ontrack":"A project counts as on track when it has both an active status and KPI attainment ≥ 85%.","lg.w.ontrack":"Overview · KPI card 'On target'",
+    "lg.t.medcheck":"Periodic medical check","lg.d.medcheck":"Mandatory medical examination required by Romanian labor law for most roles. Validity varies by job type — most expire annually.","lg.w.medcheck":"Sidebar · Expired / Expiring counters",
+    "lg.t.ssm":"Occupational safety training","lg.d.ssm":"Protecția muncii — workplace safety induction and refresher courses. Required before a person can be assigned to any active project.","lg.w.ssm":"Compliance signal in Inbox tab",
+    "lg.t.firstaid":"First aid certification","lg.d.firstaid":"Not required for every role, but tracked for designated first responders within each office.","lg.w.firstaid":"Sidebar · Expired counter",
+    "lg.t.mgmttr":"Management training","lg.d.mgmttr":"Mandatory for anyone holding a Lead, Head, or Manager title. Renews every 24 months.","lg.w.mgmttr":"Internal compliance dataset",
+    "lg.t.laborcap":"Labor-law overtime cap","lg.d.laborcap":"Romanian labor law caps weekly overtime; the dashboard flags anyone projected to exceed 1800 hours year-to-date.","lg.w.laborcap":"Compliance KPI · Over labor cap",
+    "lg.t.isoforest":"IsolationForest (retention model)","lg.d.isoforest":"Unsupervised anomaly-detection algorithm from scikit-learn. Learns the 'normal' pattern of an employee profile and rates anyone who deviates as a retention concern. Fixed random seed → same input always produces the same score.","lg.w.isoforest":"Overview · Retention risk panel · Smart insight badge",
+    "lg.t.kmeans":"KMeans (team clustering)","lg.d.kmeans":"Groups the teams into 3 clusters (thriving / steady / at-risk) based on their KPI metrics. Each cluster is mapped to a recommended action playbook.","lg.w.kmeans":"Teams tab · cluster pill on each card",
+    "lg.t.score":"Anomaly score","lg.d.score":"A number between 0 and 1. Higher means the employee profile looks more unusual relative to peers — not necessarily 'bad', but worth a conversation.","lg.w.score":"Drawer · AI · Retention signal section",
+    "lg.t.signals":"Top signals","lg.d.signals":"The two or three features that pushed an employee's score upward — e.g. 'tenure very short', 'comp below median'. Useful for framing the 1:1 conversation.","lg.w.signals":"Drawer when you click on an at-risk employee",
+    "lg.t.intake":"Email intake","lg.d.intake":"Each leave request that lands in the inbox becomes one row, identified by a hash of the message-id so re-processing the same email never duplicates the record.","lg.w.intake":"Inbox tab · Recent intake table",
+    "lg.t.review":"Needs review","lg.d.review":"The parser couldn't auto-confirm a value — usually an unknown sender domain or a date range that conflicts with an existing leave. Surfaces here for an HR person to resolve.","lg.w.review":"Inbox tab · Needs your review section",
+    "lg.t.idem":"Idempotent intake","lg.d.idem":"Running the email pipeline twice produces the same CSV — duplicates are detected via the message-id hash and skipped. Safe to re-run any time.","lg.w.idem":"Pipeline log — '0 new, N duplicate'",
+    "lg.t.audit":"Audit trail","lg.d.audit":"Every successful intake appends a JSON line to time_off_audit.jsonl with the ingest timestamp and full payload. Used for compliance audits.","lg.w.audit":"data/time_off_audit.jsonl",
+    "lg.t.missing":"Missing time logs","lg.d.missing":"People whose total logged hours this week fall below 80% of expected, after subtracting recorded leave. The dashboard suggests a likely cause for each.","lg.w.missing":"Inbox tab · Missing time logs table",
+    // Where shown labels
+    "lg.where":"Where it appears:",
+    // Bench
+    "panel.bench":"Bench risk","badge.cross":"Cross-check",
+    "foot.cross_checked":"Cross-checked against project roster + timesheets",
+    "bench.unassigned":"Unassigned","bench.rolling_30":"Rolling off ≤ 30 days","bench.rolling_60":"Rolling off ≤ 60 days",
+    "bench.people":"people","bench.ends":"ends","bench.no_project":"No active project",
+    "lg.t.bench":"Bench risk","lg.d.bench":"People with no current project assignment, or whose project ends within 30–60 days. Helps Resourcing plan reassignments before someone sits idle.","lg.w.bench":"Overview · Bench risk panel",
+  },
+  ro: {
+    "tab.overview":"Sumar","tab.people":"Oameni","tab.teams":"Echipe","tab.inbox":"Inbox & Automatizare",
+    "status.running":"Pipeline activ","status.build":"Build",
+    "filter.dept":"Departament","filter.risk":"Risc plecare","filter.range":"Interval","filter.all":"Toate",
+    "dept.engineering":"Inginerie","dept.product":"Produs","dept.operations":"Operațiuni","dept.hr":"HR","dept.finance":"Financiar","dept.marketing":"Marketing",
+    "risk.high":"Ridicat","risk.medium":"Mediu","risk.low":"Scăzut",
+    "range.30":"30 zile","range.60":"60 zile","range.90":"90 zile",
+    "sec.glance":"Pe scurt, luna asta","sec.people":"Oameni","sec.everyone":"Toți angajații","sec.all_teams":"Toate echipele",
+    "sec.kpi_by_team":"Realizare obiective pe echipă","sec.intake":"Emailuri recente","sec.review":"Necesită verificare manuală","sec.missing_logs":"Persoane fără pontaj săptămâna asta",
+    "panel.on_target":"În țintă","panel.retention":"Risc plecare","panel.team_perf":"Cum se descurcă echipele",
+    "badge.live":"Live","badge.smart":"Sugestie AI","badge.active":"Activ",
+    "gauge.label":"Realizare KPI la nivel de organizație",
+    "foot.computed_by":"Calculat de",
+    "sb.snapshot":"Sumar","sb.headcount":"Angajați","sb.teams":"Echipe","sb.projects":"Proiecte",
+    "sb.avg_perf":"Performanță medie","sb.attrition":"Risc retenție","sb.expired":"Certif. expirate",
+    "sb.expiring":"Expiră curând","sb.compliant":"Conformi",
+    "sb.activity":"Activitate 30 zile","sb.suggestions":"Sugestii pentru săptămâna asta",
+    "legend.pos":"pozitiv","legend.neg":"negativ",
+    "tag.retention":"Retenție","tag.compliance":"Conformitate","tag.teams":"Echipe",
+    "ins.retention":"4 angajați cu risc ridicat de plecare, concentrați în Platform Core. Programează 1:1 până vineri.",
+    "ins.compliance":"17 certificări medicale/SSM expirate. Reînnoirea e necesară înainte de noua repartizare pe proiect.",
+    "ins.teams":"Finance & Legal e clusterizat ca echipă în pericol. Realizare KPI 58% vs media org. 70%.",
+    "kpi.headcount":"Angajați","kpi.avg_perf":"Performanță medie","kpi.at_risk":"În risc",
+    "kpi.on_target":"În țintă","kpi.expired":"Certif. expirate","kpi.training":"Ore training",
+    "kpi.sub_total":"din {n} total","kpi.sub_perf":"scala 1–5","kpi.sub_atrisk":"necesită 1:1 săpt. asta",
+    "kpi.sub_target":"{a}/{b} proiecte","kpi.sub_certs":"medical / SSM","kpi.sub_training":"de la începutul anului",
+    "ikpi.parsed":"Procesate automat","ikpi.review":"Necesită verificare","ikpi.on_leave":"În concediu săpt. asta","ikpi.missing":"Fără pontaj",
+    "ikpi.sub_parsed":"ultimele 14 zile","ikpi.sub_review":"parse-uri ambigue","ikpi.sub_leave":"verificate cu pontaje","ikpi.sub_missing":"comparate cu concediile",
+    "flow.1.h":"Inbox","flow.1.s":"Gmail / Outlook API, interogat la 5 minute",
+    "flow.2.h":"Parser","flow.2.s":"parse_email.py — regex + OCR pe atașamente",
+    "flow.3.h":"CSV","flow.3.s":"data/time_off.csv — append cu pista de audit",
+    "flow.4.h":"Dashboard","flow.4.s":"Acest view + cross-check cu pontajele",
+    "panel.email_title":"Automatizare email","panel.email_sub":"cum ajung cererile de concediu în dashboard",
+    "panel.email_foot":"Interoghează inboxul la 5 minute · parsează atașamentul · potrivește expeditorul cu un angajat · scrie în time_off.csv",
+    "th.id":"ID","th.name":"Nume","th.role":"Rol","th.team":"Echipă","th.dept":"Departament",
+    "th.tenure":"Vechime","th.perf":"Performanță","th.comp":"Raport salariu","th.hours":"Ore YTD",
+    "th.risk":"Risc plecare","th.next":"Următorul pas","th.received":"Primit","th.sender":"Expeditor",
+    "th.type":"Tip","th.employee":"Angajat","th.dates":"Date","th.source":"Sursă","th.status":"Status",
+    "th.expected":"Așteptat","th.logged":"Pontat","th.cause":"Cauză probabilă","th.signal":"Semnal principal",
+    "stat.ingested":"Procesat","stat.review":"De verificat","stat.intervene":"Intervenție","stat.monitor":"Monitorizare","stat.stable":"Stabil",
+    "dist.high":"Ridicat","dist.medium":"Mediu","dist.low":"Scăzut",
+    "team.thriving":"În creștere","team.steady":"Stabil","team.at_risk":"În pericol",
+    // Legend
+    "tab.legend":"Legendă",
+    "sec.legend":"Legendă — ce înseamnă fiecare termen",
+    "legend.intro":"Referință rapidă pentru fiecare metrică, etichetă și semnal AI folosit în dashboard. Util când trimiți raportul unui coleg care nu l-a mai văzut.",
+    "lg.topic.people":"Metrici de oameni",
+    "lg.topic.team":"Sănătatea echipei",
+    "lg.topic.comp":"Conformitate & legea muncii",
+    "lg.topic.ai":"Semnale AI & modele",
+    "lg.topic.auto":"Automatizare email",
+    "lg.t.perf":"Scor de performanță","lg.d.perf":"Evaluarea managerului pe o scală de la 1 la 5, reînnoită la fiecare ciclu de review. Sub 3.5 de obicei declanșează o discuție de dezvoltare.","lg.w.perf":"Tab Oameni · coloana Performanță",
+    "lg.t.comp":"Raport salariu","lg.d.comp":"Salariul efectiv împărțit la mediana pieței pentru rolul respectiv. 1.00 = la piață; sub 0.90 = sub-plătit pentru rol.","lg.w.comp":"Tab Oameni · coloana Raport salariu",
+    "lg.t.tenure":"Vechime","lg.d.tenure":"Ani de la angajare.","lg.w.tenure":"Tab Oameni · coloana Vechime",
+    "lg.t.retention":"Risc plecare","lg.d.retention":"Scor de anomalie compus de modulul AI — combină vechimea scurtă, salariul sub piață, review-ul vechi și implicarea slabă în training într-un singur clasament.","lg.w.retention":"Sumar · panou Risc plecare; Tab Oameni · coloana Risc plecare",
+    "lg.t.cluster":"Cluster echipă","lg.d.cluster":"AI grupează cele 8 echipe în trei niveluri de sănătate, pe baza realizării KPI, ratei de proiecte la timp și performanței medii. Fiecare cluster vine cu un set de acțiuni recomandate.","lg.w.cluster":"Tab Echipe · pill-ul cluster pe fiecare card",
+    "lg.t.attain":"Realizare KPI","lg.d.attain":"Procentul de KPI-uri de proiect atinse de echipă în acest trimestru. 100% = toate proiectele în țintă.","lg.w.attain":"Sumar · gauge În țintă; Tab Echipe · bara pe fiecare echipă",
+    "lg.t.ontrack":"În țintă","lg.d.ontrack":"Un proiect e considerat în țintă când are status activ ȘI realizare KPI ≥ 85%.","lg.w.ontrack":"Sumar · KPI 'În țintă'",
+    "lg.t.medcheck":"Control medical periodic","lg.d.medcheck":"Examinare medicală obligatorie prin legea muncii pentru majoritatea rolurilor. Valabilitatea variază — cele mai multe expiră anual.","lg.w.medcheck":"Sidebar · contoarele Certif. expirate / Expiră curând",
+    "lg.t.ssm":"Protecția muncii (SSM)","lg.d.ssm":"Instruire SSM — induction și recurrent. Obligatorie înainte de orice asignare pe proiect activ.","lg.w.ssm":"Semnal conformitate în tab-ul Inbox",
+    "lg.t.firstaid":"Prim ajutor","lg.d.firstaid":"Nu e obligatorie pentru toate rolurile, dar se urmărește pentru personalul desemnat din fiecare birou.","lg.w.firstaid":"Sidebar · contor Certif. expirate",
+    "lg.t.mgmttr":"Training de management","lg.d.mgmttr":"Obligatoriu pentru oricine are titlu de Lead, Head sau Manager. Se reînnoiește la 24 de luni.","lg.w.mgmttr":"Set de date intern de conformitate",
+    "lg.t.laborcap":"Plafon ore peste program","lg.d.laborcap":"Codul muncii limitează orele suplimentare săptămânale; dashboard-ul semnalează pe oricine se proiectează să depășească 1800 ore YTD.","lg.w.laborcap":"KPI Conformitate · Peste limita legală",
+    "lg.t.isoforest":"IsolationForest (modelul de retenție)","lg.d.isoforest":"Algoritm nesupervizat de detecție a anomaliilor din scikit-learn. Învață tiparul 'normal' al unui profil de angajat și marchează ca îngrijorare oricine deviază. Seed fix → același input produce mereu același scor.","lg.w.isoforest":"Sumar · panou Risc plecare · badge AI",
+    "lg.t.kmeans":"KMeans (clusterizare echipe)","lg.d.kmeans":"Grupează echipele în 3 clustere (în creștere / stabil / în pericol) pe baza metricilor KPI. Fiecare cluster e mapat la un playbook de acțiuni recomandate.","lg.w.kmeans":"Tab Echipe · pill-ul cluster pe fiecare card",
+    "lg.t.score":"Scor de anomalie","lg.d.score":"Un număr între 0 și 1. Mai mare = profil mai neobișnuit față de colegi — nu neapărat 'rău', dar merită o discuție.","lg.w.score":"Drawer · secțiunea AI · Semnal de retenție",
+    "lg.t.signals":"Semnale principale","lg.d.signals":"Cei doi-trei factori care au împins scorul angajatului în sus — ex. 'vechime foarte scurtă', 'salariu sub mediană'. Util pentru încadrarea conversației de 1:1.","lg.w.signals":"Drawer-ul când dai click pe un angajat în risc",
+    "lg.t.intake":"Intrare email","lg.d.intake":"Fiecare cerere de concediu care ajunge în inbox devine un rând, identificat prin hash-ul message-id-ului, astfel încât reprocesarea aceluiași email nu duplichează niciodată înregistrarea.","lg.w.intake":"Tab Inbox · tabelul Emailuri recente",
+    "lg.t.review":"Necesită verificare","lg.d.review":"Parser-ul nu a putut auto-confirma o valoare — de obicei un sender domain necunoscut sau o perioadă care intră în conflict cu un concediu existent. Apare aici pentru un om din HR să rezolve.","lg.w.review":"Tab Inbox · secțiunea Necesită verificare",
+    "lg.t.idem":"Idempotentă","lg.d.idem":"Rularea pipeline-ului de email de două ori produce același CSV — duplicatele sunt detectate prin hash-ul message-id și sărite. Poate fi re-rulat oricând fără efecte.","lg.w.idem":"Log pipeline — '0 noi, N duplicate'",
+    "lg.t.audit":"Pista de audit","lg.d.audit":"Fiecare intrare procesată adaugă o linie JSON în time_off_audit.jsonl cu timestamp și payload complet. Folosit pentru audituri de conformitate.","lg.w.audit":"data/time_off_audit.jsonl",
+    "lg.t.missing":"Pontaje lipsă","lg.d.missing":"Persoane ale căror ore săptămânale logate sunt sub 80% din așteptat, după ce se scad concediile înregistrate. Dashboard-ul sugerează o cauză probabilă pentru fiecare.","lg.w.missing":"Tab Inbox · tabelul Pontaje lipsă",
+    "lg.where":"Unde apare:",
+    // Bench
+    "panel.bench":"Risc bench","badge.cross":"Cross-check",
+    "foot.cross_checked":"Verificat cu rosterul de proiecte + pontaje",
+    "bench.unassigned":"Fără proiect","bench.rolling_30":"Termină proiectul ≤ 30 zile","bench.rolling_60":"Termină proiectul ≤ 60 zile",
+    "bench.people":"persoane","bench.ends":"se termină","bench.no_project":"Fără proiect activ",
+    "lg.t.bench":"Risc bench","lg.d.bench":"Persoane fără proiect activ sau al căror proiect se termină în 30–60 de zile. Ajută echipa de resourcing să planifice reasignările înainte ca cineva să stea fără sarcină.","lg.w.bench":"Sumar · panou Risc bench",
+  },
+};
+let LANG = localStorage.getItem("pa_lang") || "en";
+function t(key, vars) {
+  let s = (I18N[LANG] || I18N.en)[key] || I18N.en[key] || key;
+  if (vars) Object.keys(vars).forEach(k => s = s.replace(`{${k}}`, vars[k]));
+  return s;
+}
+function applyI18n() {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.textContent = t(el.getAttribute("data-i18n"));
+  });
+  document.documentElement.setAttribute("lang", LANG);
+  const cur = document.getElementById("langCur"), other = document.getElementById("langOther");
+  if (cur) cur.textContent = LANG.toUpperCase();
+  if (other) other.textContent = LANG === "en" ? "RO" : "EN";
+}
+
+// ════════════════════════════ STATE ════════════════════════════
+let state = { tab: "overview", dept: "all", risk: "all", range: "60" };
+
+// ════════════════════════════ HELPERS ════════════════════════════
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+const pct = (n) => `${Math.round(n*100)}%`;
+const teamName = (tid) => (TEAMS.find(t => t.id === tid) || {}).name || tid;
+
+function filteredEmployees() {
+  return EMPLOYEES.filter(e =>
+    (state.dept === "all" || e.dept === state.dept) &&
+    (state.risk === "all" || e.risk === state.risk)
+  );
+}
+
+// ════════════════════════════ KPI ROW ════════════════════════════
+function renderKpiRow() {
+  const emps = filteredEmployees();
+  const avgPerf = emps.length ? (emps.reduce((s,e)=>s+e.perf,0)/emps.length) : 0;
+  const high = emps.filter(e=>e.risk==="high").length;
+  const kpis = [
+    { label:t("kpi.headcount"), val: emps.length, color:"", sub:t("kpi.sub_total",{n:EMPLOYEES.length}), drill: { kind:"all", title:`${t("kpi.headcount")} · ${emps.length}`, sub:"" } },
+    { label:t("kpi.avg_perf"), val: avgPerf.toFixed(2), color:"gold", sub:t("kpi.sub_perf"), drill: null },
+    { label:t("kpi.at_risk"), val: high, color: high > 0 ? "red" : "", sub:t("kpi.sub_atrisk"), drill: { kind:"risk", value:"high", title:`${t("kpi.at_risk")} · ${high}`, sub:"" } },
+    { label:t("kpi.on_target"), val: pct(TOPLINE.kpi_attainment), color:"green", sub:t("kpi.sub_target",{a:TOPLINE.projects_on_track,b:TOPLINE.projects}), drill:null },
+    { label:t("kpi.expired"), val: TOPLINE.expired, color:"red", sub:t("kpi.sub_certs"), drill:null },
+    { label:t("kpi.training"), val: TOPLINE.training_hours_total, color:"teal", sub:t("kpi.sub_training"), drill:null },
+  ];
+  const html = kpis.map((k, i) => `
+    <div class="kpi" ${k.drill ? `data-drill-kpi="${i}"` : ""} ${k.drill ? "style='cursor:pointer'" : ""}>
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value ${k.color}">${k.val}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join("");
+  $("#kpiRow").innerHTML = html;
+  $$('[data-drill-kpi]').forEach(el => el.addEventListener("click", () => {
+    const k = kpis[+el.dataset.drillKpi];
+    if (!k.drill) return;
+    if (k.drill.kind === "all") drillEmployees(filteredEmployees(), k.drill.title, k.drill.sub);
+    if (k.drill.kind === "risk") drillEmployees(EMPLOYEES.filter(e => e.risk === k.drill.value), k.drill.title, k.drill.sub);
+  }));
+  $("#peopleCount").textContent = `· ${emps.length}`;
+}
+
+// ════════════════════════════ GAUGE ════════════════════════════
+function renderGauge() {
+  const v = TOPLINE.kpi_attainment;
+  const R = 56;
+  const C = 2 * Math.PI * R;
+  const fill = $("#gaugeFill");
+  const val = $("#gaugeVal");
+  if (!fill || !val) return;
+  // Force a reflow before setting dasharray so the CSS transition actually fires.
+  requestAnimationFrame(() => {
+    fill.setAttribute("stroke-dasharray", `${C * v} ${C}`);
+    val.textContent = pct(v);
+  });
+}
+
+// ════════════════════════════ RISK DIST ════════════════════════════
+function renderRiskDist(target = "#riskDist") {
+  const a = AI_ATTRITION;
+  const rows = [
+    { cls:"risk-high", lbl:t("dist.high"), val:a.n_high, risk:"high" },
+    { cls:"risk-med",  lbl:t("dist.medium"), val:a.n_medium, risk:"medium" },
+    { cls:"risk-low",  lbl:t("dist.low"), val:a.n_low, risk:"low" },
+  ];
+  $(target).innerHTML = rows.map(r => `
+    <div class="risk-row ${r.cls}" data-risk="${r.risk}">
+      <div class="left"><span class="dot"></span><span class="lbl">${r.lbl}</span></div>
+      <div class="val">${r.val}</div>
+    </div>`).join("");
+  $$(`${target} .risk-row`).forEach(el => el.addEventListener("click", () => {
+    const list = EMPLOYEES.filter(e => e.risk === el.dataset.risk);
+    drillEmployees(list, `${el.dataset.risk.toUpperCase()} risk · ${list.length}`, "IsolationForest signal");
+  }));
+}
+
+// ════════════════════════════ BENCH DIST ════════════════════════════
+function renderBenchDist() {
+  const c = BENCH_COUNTS;
+  const rows = [
+    { cls:"risk-high", lbl:t("bench.unassigned"), val:c.unassigned || 0, status:"unassigned" },
+    { cls:"risk-med",  lbl:t("bench.rolling_30"), val:c.rolling_off_30d || 0, status:"rolling_off_30d" },
+    { cls:"risk-low",  lbl:t("bench.rolling_60"), val:c.rolling_off_60d || 0, status:"rolling_off_60d" },
+  ];
+  $("#benchDist").innerHTML = rows.map(r => `
+    <div class="risk-row ${r.cls}" data-bench="${r.status}">
+      <div class="left"><span class="dot"></span><span class="lbl">${r.lbl}</span></div>
+      <div class="val">${r.val}</div>
+    </div>`).join("");
+  $$('#benchDist .risk-row').forEach(el => el.addEventListener("click", () => {
+    const status = el.dataset.bench;
+    const list = EMPLOYEES.filter(e => ((BENCH_BY_EMP[e.id] || {}).status || "assigned") === status);
+    drillBench(list, t("bench."+(status==="unassigned"?"unassigned":status==="rolling_off_30d"?"rolling_30":"rolling_60")), `${list.length} ${t("bench.people")}`);
+  }));
+}
+
+function drillBench(list, title, sub) {
+  const html = `
+    <div class="dw-section">${list.length} ${t("bench.people")}</div>
+    ${list.map(e => {
+      const b = BENCH_BY_EMP[e.id] || {};
+      const cls = b.status === "unassigned" ? "high" : b.status === "rolling_off_30d" ? "med" : "low";
+      const projectInfo = b.project ? `${b.project} · ${t("bench.ends")} ${b.ends}` : `<span style="color:var(--orange)">${t("bench.no_project")}</span>`;
+      return `
+        <div class="dw-item" data-emp="${e.id}" style="cursor:pointer">
+          <div class="ih">
+            <span class="nm">${e.name}</span>
+            <span class="pill ${cls}">${t("bench."+(b.status==="unassigned"?"unassigned":b.status==="rolling_off_30d"?"rolling_30":"rolling_60"))}</span>
+          </div>
+          <div class="mt">${e.id} · ${e.role} · ${teamName(e.team)}</div>
+          <div class="bd" style="margin-top:6px;color:var(--ink-2)">${projectInfo}</div>
+          ${b.note ? `<div class="bd" style="margin-top:4px;font-style:italic;color:var(--ink-3)">${b.note}</div>` : ""}
+        </div>`;
+    }).join("")}
+  `;
+  openDrawer(title, sub, html);
+  $$('#dwBody [data-emp]').forEach(el => el.addEventListener("click", () => drillEmployee(el.dataset.emp)));
+}
+
+// ════════════════════════════ TEAM HEALTH DIST ════════════════════════════
+function renderTeamDist(target = "#aiTeamDist") {
+  const a = AI_TEAMS;
+  const rows = [
+    { cls:"risk-low",  lbl:"Thriving", val:a.n_thriving, cluster:"thriving" },
+    { cls:"risk-med",  lbl:"Steady", val:a.n_steady, cluster:"steady" },
+    { cls:"risk-high", lbl:"At risk", val:a.n_at_risk, cluster:"at_risk" },
+  ];
+  $(target).innerHTML = rows.map(r => `
+    <div class="risk-row ${r.cls}" data-cluster="${r.cluster}">
+      <div class="left"><span class="dot"></span><span class="lbl">${r.lbl}</span></div>
+      <div class="val">${r.val}</div>
+    </div>`).join("");
+  $$(`${target} .risk-row`).forEach(el => el.addEventListener("click", () => {
+    const list = TEAMS.filter(t => t.cluster === el.dataset.cluster);
+    drillTeams(list, `${el.dataset.cluster.replace("_"," ").toUpperCase()} · ${list.length}`, "KMeans k=3 cluster");
+  }));
+}
+
+// ════════════════════════════ TEAM BARS ════════════════════════════
+function renderTeamBars(target = "#teamBars") {
+  const sorted = [...TEAMS].sort((a,b) => b.attainment - a.attainment);
+  $(target).innerHTML = sorted.map(t => {
+    const color = t.attainment >= 0.85 ? "var(--green)" :
+                  t.attainment >= 0.65 ? "var(--gold-2)" : "var(--red)";
+    return `
+      <div class="team-bar" data-team="${t.id}">
+        <div class="tb-name">${t.name}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct(t.attainment)};background:${color}"></div></div>
+        <div class="tb-val" style="color:${color}">${pct(t.attainment)}</div>
+      </div>`;
+  }).join("");
+  $$(`${target} .team-bar`).forEach(el => el.addEventListener("click", () => {
+    drillTeam(el.dataset.team);
+  }));
+}
+
+// ════════════════════════════ EMPLOYEE TABLE ════════════════════════════
+function renderEmpTable(target = "#empTable tbody", full = false) {
+  const emps = [...filteredEmployees()].sort((a,b) => b.score - a.score);
+  $(target).innerHTML = emps.map(e => {
+    const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
+    if (full) {
+      const status = e.score > 0.6 ? "INTERVENE" : e.score > 0.35 ? "WATCH" : "OK";
+      const statusColor = e.score > 0.6 ? "var(--red)" : e.score > 0.35 ? "var(--orange)" : "var(--green)";
+      return `<tr data-emp="${e.id}">
+        <td class="muted">${e.id}</td>
+        <td class="strong">${e.name}</td>
+        <td class="role">${e.role}</td>
+        <td>${teamName(e.team)}</td>
+        <td class="muted">${e.dept}</td>
+        <td class="num">${e.tenure.toFixed(1)}</td>
+        <td class="num">${e.perf.toFixed(2)}</td>
+        <td class="num">${e.comp.toFixed(2)}</td>
+        <td class="num">${e.hours}h</td>
+        <td><span class="pill ${riskClass}">${e.risk}</span></td>
+        <td style="color:${statusColor};font-size:9.5px;letter-spacing:.12em">${status}</td>
+      </tr>`;
+    }
+    return `<tr data-emp="${e.id}">
+      <td class="muted">${e.id}</td>
+      <td class="strong">${e.name}</td>
+      <td class="role">${e.role}</td>
+      <td>${teamName(e.team)}</td>
+      <td class="num">${e.tenure.toFixed(1)}</td>
+      <td class="num">${e.perf.toFixed(2)}</td>
+      <td class="num">${e.comp.toFixed(2)}</td>
+      <td><span class="pill ${riskClass}">${e.risk}</span></td>
+    </tr>`;
+  }).join("");
+  $$(`${target.split(" ")[0]} tbody tr`).forEach(el => el.addEventListener("click", () => {
+    drillEmployee(el.dataset.emp);
+  }));
+  if (full) $("#empFullCount").textContent = `· ${emps.length}`;
+}
+
+// ════════════════════════════ TEAM GRID ════════════════════════════
+function renderTeamGrid() {
+  $("#teamGrid").innerHTML = TEAMS.map(t => `
+    <div class="kpi" data-team="${t.id}" style="cursor:pointer">
+      <div class="kpi-label">${t.dept.toUpperCase()}</div>
+      <div class="kpi-value ${t.cluster === "thriving" ? "green" : t.cluster === "at_risk" ? "red" : "gold"}">${t.name}</div>
+      <div class="kpi-sub">${t.headcount} PEOPLE · ${pct(t.attainment)} ON TARGET · <span style="color:${t.cluster==="thriving"?"var(--green)":t.cluster==="at_risk"?"var(--red)":"var(--gold-2)"}">${t.cluster.replace("_"," ")}</span></div>
+    </div>`).join("");
+  $$('#teamGrid [data-team]').forEach(el => el.addEventListener("click", () => drillTeam(el.dataset.team)));
+}
+
+// ════════════════════════════ INBOX TAB ════════════════════════════
+const INTAKE = [
+  { id:"M-2026-014", received:"2026-05-13 09:42", sender:"maria.ionescu@company.ro", type:"Medical leave", emp:"E002", emp_name:"Maria Ionescu", from:"2026-05-13", to:"2026-05-17", source:"Gmail API", status:"parsed" },
+  { id:"M-2026-013", received:"2026-05-12 17:08", sender:"diana.l@company.ro", type:"Medical leave", emp:"E008", emp_name:"Diana Lupu", from:"2026-05-12", to:"2026-05-22", source:"Gmail API + OCR", status:"parsed" },
+  { id:"M-2026-012", received:"2026-05-12 11:21", sender:"a.cojanu@company.ro", type:"Vacation", emp:"E045", emp_name:"Andrei Cojanu", from:"2026-05-19", to:"2026-05-26", source:"Gmail API", status:"parsed" },
+  { id:"M-2026-011", received:"2026-05-11 14:55", sender:"u.dorina@external.net", type:"Medical leave", emp:null, emp_name:"(unmatched sender)", from:"2026-05-09", to:"2026-05-14", source:"Gmail API + OCR", status:"needs_review", review_note:"Sender domain not in employee directory — likely Dorina Petrescu (E034)?" },
+  { id:"M-2026-010", received:"2026-05-10 08:33", sender:"sergiu.m@company.ro", type:"Vacation", emp:"E027", emp_name:"Sergiu Marcu", from:"2026-05-20", to:"2026-05-27", source:"Gmail API", status:"parsed" },
+  { id:"M-2026-009", received:"2026-05-09 16:14", sender:"catalin.ursu@company.ro", type:"Medical leave", emp:"E031", emp_name:"Catalin Ursu", from:"2026-05-04", to:"2026-05-08", source:"Gmail API + OCR", status:"needs_review", review_note:"Date range overlaps an already-recorded leave for E031 (2026-05-05 → 2026-05-12)" },
+  { id:"M-2026-008", received:"2026-05-08 10:02", sender:"alexandra.d@company.ro", type:"Training", emp:"E006", emp_name:"Alexandra Dima", from:"2026-05-15", to:"2026-05-16", source:"Gmail API", status:"parsed" },
+  { id:"M-2026-007", received:"2026-05-07 13:45", sender:"ileana.s@company.ro", type:"Personal", emp:"E049", emp_name:"Ileana Sarbu", from:"2026-05-07", to:"2026-05-07", source:"Gmail API", status:"parsed" },
+  { id:"M-2026-006", received:"2026-05-06 09:18", sender:"r.diaconu@company.ro", type:"Medical leave", emp:"E047", emp_name:"Razvan Diaconu", from:"2026-05-02", to:"2026-05-05", source:"Gmail API + OCR", status:"parsed" },
+  { id:"M-2026-005", received:"2026-05-05 11:40", sender:"i.constantin@company.ro", type:"Vacation", emp:"E022", emp_name:"Iulia Constantin", from:"2026-05-26", to:"2026-06-06", source:"Gmail API", status:"parsed" },
+];
+
+const MISSING_LOGS = [
+  { emp:"E031", reason:"On medical leave 2026-05-05 → 2026-05-12 (already recorded) — no follow-up needed", expected:40, logged:0 },
+  { emp:"E027", reason:"No timesheet entry; not on leave per inbox", expected:40, logged:0 },
+  { emp:"E035", reason:"Partial timesheet — missing 2 days, no leave email matched", expected:40, logged:24 },
+  { emp:"E049", reason:"One-day personal leave logged but Friday timesheet missing", expected:40, logged:32 },
+  { emp:"E050", reason:"No entry; flagged for follow-up", expected:40, logged:0 },
+];
+
+function renderInbox() {
+  // Flow diagram
+  const flowSteps = [
+    { n:1, h:t("flow.1.h"), s:t("flow.1.s") },
+    { n:2, h:t("flow.2.h"), s:t("flow.2.s") },
+    { n:3, h:t("flow.3.h"), s:t("flow.3.s") },
+    { n:4, h:t("flow.4.h"), s:t("flow.4.s") },
+  ];
+  const stepCss = "flex:1;min-width:170px;background:var(--bg-2);border:1px solid var(--line-1);padding:14px 16px;display:flex;flex-direction:column;gap:4px;position:relative";
+  const arrowCss = "display:flex;align-items:center;color:var(--gold);font-size:18px;opacity:.55;padding:0 4px";
+  $("#flowDiagram").innerHTML = flowSteps.map((s, i) => `
+    <div style="${stepCss}">
+      <div style="font-family:var(--ff-disp);font-size:14px;font-weight:700;color:var(--gold-2);letter-spacing:.02em">${s.n}. ${s.h}</div>
+      <div style="font-size:11.5px;color:var(--ink-3);line-height:1.5">${s.s}</div>
+    </div>
+    ${i < flowSteps.length - 1 ? `<div style="${arrowCss}">→</div>` : ""}
+  `).join("");
+
+  // KPI tiles
+  const parsed = INTAKE.filter(x => x.status === "parsed").length;
+  const review = INTAKE.filter(x => x.status === "needs_review").length;
+  const onLeave = INTAKE.filter(x => {
+    const today = new Date("2026-05-14");
+    return new Date(x.from) <= today && new Date(x.to) >= today && x.status === "parsed";
+  }).length;
+  const inboxKpis = [
+    { label:t("ikpi.parsed"), val:parsed, color:"green", sub:t("ikpi.sub_parsed") },
+    { label:t("ikpi.review"), val:review, color: review > 0 ? "red" : "", sub:t("ikpi.sub_review") },
+    { label:t("ikpi.on_leave"), val:onLeave, color:"gold", sub:t("ikpi.sub_leave") },
+    { label:t("ikpi.missing"), val:MISSING_LOGS.length, color:"red", sub:t("ikpi.sub_missing") },
+  ];
+  $("#inboxKpis").innerHTML = inboxKpis.map(k => `
+    <div class="kpi">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value ${k.color}">${k.val}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join("");
+
+  // Intake table
+  $("#intakeTable tbody").innerHTML = INTAKE.map(r => {
+    const statusColor = r.status === "parsed" ? "var(--green)" : "var(--orange)";
+    const statusLabel = r.status === "parsed" ? t("stat.ingested") : t("stat.review");
+    const empCell = r.emp
+      ? `<span class="strong">${r.emp_name}</span> <span class="muted">${r.emp}</span>`
+      : `<span style="color:var(--orange)">${r.emp_name}</span>`;
+    return `<tr data-intake="${r.id}">
+      <td class="muted">${r.received}</td>
+      <td>${r.sender}</td>
+      <td>${r.type}</td>
+      <td>${empCell}</td>
+      <td class="muted">${r.from} → ${r.to}</td>
+      <td class="muted" style="font-size:11px">${r.source}</td>
+      <td><span class="pill" style="color:${statusColor};border-color:${statusColor}55;background:${statusColor}10">${statusLabel}</span></td>
+    </tr>`;
+  }).join("");
+  $$('#intakeTable tbody tr').forEach(el => el.addEventListener("click", () => {
+    const item = INTAKE.find(x => x.id === el.dataset.intake);
+    drillIntake(item);
+  }));
+
+  // Review list
+  const reviews = INTAKE.filter(x => x.status === "needs_review");
+  $("#reviewList").innerHTML = reviews.length === 0
+    ? `<div style="color:var(--ink-3);padding:8px 0;font-size:12.5px">Nothing waiting for your review.</div>`
+    : reviews.map(r => `
+        <div class="panel" style="margin-bottom:8px;min-height:auto;padding:14px 16px;border-left:2px solid var(--orange);cursor:pointer" data-review="${r.id}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div>
+              <div style="font-weight:600;color:var(--ink-1);font-size:13px;margin-bottom:4px">${r.type} — ${r.from} → ${r.to}</div>
+              <div style="color:var(--ink-3);font-size:11.5px;margin-bottom:6px">From <code style="background:var(--bg-2);padding:1px 5px;color:var(--ink-2)">${r.sender}</code></div>
+              <div style="color:var(--ink-2);font-size:12px;line-height:1.55">${r.review_note}</div>
+            </div>
+            <span class="pill" style="color:var(--orange);border-color:rgba(217,134,11,.4);background:rgba(217,134,11,.08)">Needs review</span>
+          </div>
+        </div>
+      `).join("");
+  $$('#reviewList [data-review]').forEach(el => el.addEventListener("click", () => {
+    const item = INTAKE.find(x => x.id === el.dataset.review);
+    drillIntake(item);
+  }));
+
+  // Missing time logs
+  $("#missingTable tbody").innerHTML = MISSING_LOGS.map(m => {
+    const e = EMPLOYEES.find(x => x.id === m.emp);
+    if (!e) return "";
+    const pct = m.expected ? Math.round((m.logged / m.expected) * 100) : 0;
+    const color = pct === 0 ? "var(--red)" : pct < 80 ? "var(--orange)" : "var(--green)";
+    return `<tr data-emp="${e.id}">
+      <td class="muted">${e.id}</td>
+      <td class="strong">${e.name}</td>
+      <td>${teamName(e.team)}</td>
+      <td class="num">${m.expected}h</td>
+      <td class="num" style="color:${color}">${m.logged}h</td>
+      <td style="font-size:11.5px;color:var(--ink-2)">${m.reason}</td>
+    </tr>`;
+  }).join("");
+  $$('#missingTable tbody tr').forEach(el => el.addEventListener("click", () => drillEmployee(el.dataset.emp)));
+}
+
+function drillIntake(item) {
+  if (!item) return;
+  const html = `
+    <div class="dw-section">Email metadata</div>
+    <div class="dw-kv"><span class="k">Intake ID</span><span class="v">${item.id}</span></div>
+    <div class="dw-kv"><span class="k">Received</span><span class="v">${item.received}</span></div>
+    <div class="dw-kv"><span class="k">Sender</span><span class="v">${item.sender}</span></div>
+    <div class="dw-kv"><span class="k">Source</span><span class="v">${item.source}</span></div>
+
+    <div class="dw-section">Parsed values</div>
+    <div class="dw-kv"><span class="k">Type</span><span class="v">${item.type}</span></div>
+    <div class="dw-kv"><span class="k">Employee</span><span class="v">${item.emp ? `${item.emp_name} (${item.emp})` : `<span style="color:var(--orange)">unmatched</span>`}</span></div>
+    <div class="dw-kv"><span class="k">From</span><span class="v">${item.from}</span></div>
+    <div class="dw-kv"><span class="k">To</span><span class="v">${item.to}</span></div>
+
+    ${item.status === "needs_review" ? `
+      <div class="dw-section">Why this needs review</div>
+      <div class="dw-item no-click" style="border-left:2px solid var(--orange)"><div class="bd">${item.review_note}</div></div>
+    ` : `
+      <div class="dw-section">Pipeline outcome</div>
+      <div class="dw-item no-click" style="border-left:2px solid var(--green)">
+        <div class="bd">Written to <code style="background:var(--bg-2);padding:1px 5px;color:var(--teal)">data/time_off.csv</code> · cross-referenced with timesheets · no conflicts found.</div>
+      </div>
+    `}
+  `;
+  openDrawer(item.type, `${item.id}`, html);
+}
+
+// ════════════════════════════ CALENDAR ════════════════════════════
+function renderCalendar() {
+  const map = { "-3":"r3", "-2":"r2", "-1":"r1", "1":"g1", "2":"g2", "3":"g3" };
+  $("#calGrid").innerHTML = CALENDAR.map((v, i) => {
+    if (v === null) return `<div class="cal-cell empty"></div>`;
+    const cls = map[String(v)] || "";
+    return `<div class="cal-cell ${cls}">${(i % 7) === 0 ? "M" : (i % 7) === 6 ? "S" : ""}</div>`;
+  }).join("");
+}
+
+// ════════════════════════════ DRAWER ════════════════════════════
+function openDrawer(title, sub, html) {
+  $("#dwTitle").textContent = title;
+  $("#dwSub").textContent = sub || "";
+  $("#dwBody").innerHTML = html;
+  $("#drawer").classList.add("open");
+  $("#dwOv").classList.add("open");
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("open");
+  $("#dwOv").classList.remove("open");
+}
+$("#dwClose").addEventListener("click", closeDrawer);
+$("#dwOv").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+function drillEmployees(list, title, sub) {
+  const html = `
+    <div class="dw-section">[ ${list.length} EMPLOYEES ]</div>
+    ${list.map(e => {
+      const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
+      return `
+        <div class="dw-item" data-emp="${e.id}" style="cursor:pointer">
+          <div class="ih">
+            <span class="nm">${e.name}</span>
+            <span class="pill ${riskClass}">${e.risk} · ${e.score.toFixed(2)}</span>
+          </div>
+          <div class="mt">${e.id} · ${e.role} · ${teamName(e.team)}</div>
+        </div>`;
+    }).join("")}
+  `;
+  openDrawer(title, sub, html);
+  $$('#dwBody [data-emp]').forEach(el => el.addEventListener("click", () => drillEmployee(el.dataset.emp)));
+}
+
+function drillEmployee(id) {
+  const e = EMPLOYEES.find(x => x.id === id);
+  if (!e) return;
+  const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
+  const status = e.score > 0.6 ? "INTERVENE THIS WEEK" : e.score > 0.35 ? "MONITOR" : "STABLE";
+  const html = `
+    <div class="dw-section">[ PROFILE ]</div>
+    <div class="dw-kv"><span class="k">ID</span><span class="v">${e.id}</span></div>
+    <div class="dw-kv"><span class="k">ROLE</span><span class="v">${e.role}</span></div>
+    <div class="dw-kv"><span class="k">TEAM</span><span class="v">${teamName(e.team)}</span></div>
+    <div class="dw-kv"><span class="k">DEPT</span><span class="v">${e.dept}</span></div>
+    <div class="dw-kv"><span class="k">TENURE</span><span class="v">${e.tenure.toFixed(1)} years</span></div>
+    <div class="dw-kv"><span class="k">PERF SCORE</span><span class="v">${e.perf.toFixed(2)} / 5</span></div>
+    <div class="dw-kv"><span class="k">COMP RATIO</span><span class="v">${e.comp.toFixed(2)}</span></div>
+    <div class="dw-kv"><span class="k">HOURS YTD</span><span class="v">${e.hours} h</span></div>
+
+    <div class="dw-section">[ AI · RETENTION SIGNAL ]</div>
+    <div class="dw-kv"><span class="k">RISK</span><span class="v"><span class="pill ${riskClass}">${e.risk}</span></span></div>
+    <div class="dw-kv"><span class="k">ANOMALY SCORE</span><span class="v">${e.score.toFixed(2)}</span></div>
+    <div class="dw-kv"><span class="k">RECOMMENDED</span><span class="v" style="color:${e.score > 0.6 ? "var(--red)" : e.score > 0.35 ? "var(--orange)" : "var(--green)"}">${status}</span></div>
+
+    <div class="dw-section">[ TOP SIGNALS · N=${e.signals.length} ]</div>
+    ${e.signals.length ? e.signals.map(s => `<span class="dw-signal">${s}</span>`).join("") : '<div style="color:var(--ink-3);font-size:11px">No anomalous signals</div>'}
+  `;
+  openDrawer(e.name, `${e.id} · ${e.role}`, html);
+}
+
+function drillTeam(teamId) {
+  const t = TEAMS.find(x => x.id === teamId);
+  if (!t) return;
+  const members = EMPLOYEES.filter(e => e.team === teamId);
+  const html = `
+    <div class="dw-section">[ TEAM METRICS ]</div>
+    <div class="dw-kv"><span class="k">DEPARTMENT</span><span class="v">${t.dept}</span></div>
+    <div class="dw-kv"><span class="k">HEADCOUNT</span><span class="v">${t.headcount}</span></div>
+    <div class="dw-kv"><span class="k">AVG PERF</span><span class="v">${t.avg_perf.toFixed(2)}</span></div>
+    <div class="dw-kv"><span class="k">KPI ATTAINMENT</span><span class="v">${pct(t.attainment)}</span></div>
+    <div class="dw-kv"><span class="k">CLUSTER</span><span class="v"><span class="pill ${t.cluster}">${t.cluster.replace("_"," ")}</span></span></div>
+
+    <div class="dw-section">[ AI · RECOMMENDATION ]</div>
+    <div style="color:var(--gold-2);font-family:var(--ff-disp);font-size:14px;letter-spacing:0.04em;margin-bottom:6px">${t.headline.toUpperCase()}</div>
+    ${t.actions.map(a => `<div class="dw-item no-click"><div class="bd">→ ${a}</div></div>`).join("")}
+
+    <div class="dw-section">[ MEMBERS · N=${members.length} ]</div>
+    ${members.map(e => {
+      const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
+      return `
+        <div class="dw-item" data-emp="${e.id}" style="cursor:pointer">
+          <div class="ih">
+            <span class="nm">${e.name}</span>
+            <span class="pill ${riskClass}">${e.risk}</span>
+          </div>
+          <div class="mt">${e.id} · ${e.role}</div>
+        </div>`;
+    }).join("")}
+  `;
+  openDrawer(t.name, `${t.id} · ${t.dept}`, html);
+  $$('#dwBody [data-emp]').forEach(el => el.addEventListener("click", () => drillEmployee(el.dataset.emp)));
+}
+
+function drillTeams(list, title, sub) {
+  const html = `
+    <div class="dw-section">[ ${list.length} TEAMS ]</div>
+    ${list.map(t => `
+      <div class="dw-item" data-team="${t.id}" style="cursor:pointer">
+        <div class="ih">
+          <span class="nm">${t.name}</span>
+          <span class="pill ${t.cluster}">${t.cluster.replace("_"," ")}</span>
+        </div>
+        <div class="mt">${t.id} · ${t.dept} · ${t.headcount} people · ${pct(t.attainment)}</div>
+      </div>`).join("")}
+  `;
+  openDrawer(title, sub, html);
+  $$('#dwBody [data-team]').forEach(el => el.addEventListener("click", () => drillTeam(el.dataset.team)));
+}
+
+// ════════════════════════════ TAB SWITCHING ════════════════════════════
+$$('.tab').forEach(btn => btn.addEventListener("click", () => {
+  state.tab = btn.dataset.tab;
+  $$('.tab').forEach(t => t.classList.toggle("active", t === btn));
+  $$('.view').forEach(v => v.classList.toggle("active", v.id === `view-${state.tab}`));
+}));
+
+// ════════════════════════════ FILTERS ════════════════════════════
+$$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
+  const f = btn.dataset.filter;
+  const v = btn.dataset.value;
+  state[f] = v;
+  $$(`.filter-pill[data-filter="${f}"]`).forEach(p => p.classList.toggle("active", p === btn));
+  renderKpiRow();
+  renderEmpTable("#empTable tbody", false);
+  renderEmpTable("#empTableFull tbody", true);
+}));
+
+// ════════════════════════════ THEME TOGGLE ════════════════════════════
+(function(){
+  const root = document.documentElement;
+  const btn = document.getElementById("themeToggle");
+  const saved = localStorage.getItem("pa_theme");
+  if (saved) root.setAttribute("data-theme", saved);
+  function setLabel() {
+    const th = root.getAttribute("data-theme") || "dark";
+    btn.textContent = th === "dark" ? "☾ Dark" : "☀ Light";
+  }
+  setLabel();
+  btn.addEventListener("click", function () {
+    const cur = root.getAttribute("data-theme") || "dark";
+    const next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem("pa_theme", next);
+    setLabel();
+  });
+})();
+
+// ════════════════════════════ LANG TOGGLE ════════════════════════════
+function renderLegend() {
+  const groups = [
+    { topic:"lg.topic.people", terms:["perf","comp","tenure","retention","bench"] },
+    { topic:"lg.topic.team", terms:["cluster","attain","ontrack"] },
+    { topic:"lg.topic.comp", terms:["medcheck","ssm","firstaid","mgmttr","laborcap"] },
+    { topic:"lg.topic.ai", terms:["isoforest","kmeans","score","signals"] },
+    { topic:"lg.topic.auto", terms:["intake","review","idem","audit","missing"] },
+  ];
+  const groupCss = "margin-bottom:32px";
+  const headCss = "font-family:var(--ff-mono);font-size:13px;color:var(--gold-2);font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line-2)";
+  const gridCss = "display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px";
+  const cardCss = "background:var(--bg-1);border:1px solid var(--line-1);padding:14px 16px;position:relative";
+  const accentCss = "position:absolute;top:0;left:0;width:24px;height:2px;background:var(--gold);opacity:.5";
+  const termCss = "font-family:var(--ff-disp);font-size:16px;font-weight:700;color:var(--ink-1);letter-spacing:.01em;margin-bottom:6px";
+  const defCss = "font-size:12.5px;color:var(--ink-2);line-height:1.6;margin-bottom:10px";
+  const whereCss = "font-size:11px;color:var(--ink-3);padding-top:8px;border-top:1px dotted var(--line-2);font-family:var(--ff-mono)";
+  const whereLblCss = "color:var(--teal);font-weight:600";
+
+  const html = groups.map(g => `
+    <div style="${groupCss}">
+      <div style="${headCss}">${t(g.topic)}</div>
+      <div style="${gridCss}">
+        ${g.terms.map(k => `
+          <div style="${cardCss}">
+            <div style="${accentCss}"></div>
+            <div style="${termCss}">${t("lg.t."+k)}</div>
+            <div style="${defCss}">${t("lg.d."+k)}</div>
+            <div style="${whereCss}"><span style="${whereLblCss}">${t("lg.where")}</span> ${t("lg.w."+k)}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+  $("#legendBody").innerHTML = html;
+}
+
+function renderAll() {
+  renderKpiRow();
+  renderGauge();
+  renderRiskDist("#riskDist");
+  renderBenchDist();
+  renderTeamBars("#teamBars");
+  renderTeamBars("#teamBarsFull");
+  renderEmpTable("#empTable tbody", false);
+  renderEmpTable("#empTableFull tbody", true);
+  renderTeamGrid();
+  renderCalendar();
+  renderInbox();
+  renderLegend();
+}
+(function(){
+  const btn = document.getElementById("langToggle");
+  btn.addEventListener("click", function () {
+    LANG = LANG === "en" ? "ro" : "en";
+    localStorage.setItem("pa_lang", LANG);
+    applyI18n();
+    renderAll();
+  });
+})();
+
+// ════════════════════════════ INITIAL RENDER ════════════════════════════
+applyI18n();
+renderAll();
+</script>
+</body>
+</html>
