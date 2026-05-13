@@ -481,6 +481,11 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 .seg:hover { color: var(--ink-1); border-color: var(--ink-4); }
 .seg.active { background: var(--gold); border-color: var(--gold); color: var(--bg-0); font-weight: 700; }
 .settings-org { font-family: var(--ff-mono); font-size: 12.5px; color: var(--gold-2); padding: 6px 0; }
+.settings-input { padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--line-2);
+  color: var(--ink-1); font-family: var(--ff-mono); font-size: 12px; outline: none;
+  transition: border-color 120ms; }
+.settings-input:focus { border-color: var(--gold); }
+.settings-hint { font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
 .settings-foot { margin-top: 18px; padding-top: 12px; border-top: 1px dotted var(--line-2);
   font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
 
@@ -773,9 +778,19 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
         <button class="seg" data-set-theme="dark">☾ <span data-i18n="settings.dark">Dark</span></button>
       </div>
     </div>
-    <div class="settings-row" style="border-bottom:none">
+    <div class="settings-row">
       <label class="settings-label" data-i18n="settings.org">Organization</label>
       <div class="settings-org" id="settingsOrg">—</div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label" for="settingsEmail" data-i18n="settings.email">HR inbox email (Gmail/Outlook)</label>
+      <input id="settingsEmail" class="settings-input" type="email" placeholder="hr@company.ro" autocomplete="off" />
+      <div class="settings-hint" data-i18n="settings.email_hint">Used by scripts/ingest_emails.py to identify which inbox to poll for leave requests.</div>
+    </div>
+    <div class="settings-row" style="border-bottom:none">
+      <label class="settings-label" for="settingsApi" data-i18n="settings.api">Microsoft Graph endpoint</label>
+      <input id="settingsApi" class="settings-input" type="text" placeholder="https://graph.microsoft.com/v1.0/users/{cal}/calendarView" autocomplete="off" />
+      <div class="settings-hint" data-i18n="settings.api_hint">Calendar sync endpoint. Leave blank to keep the demo mock provider.</div>
     </div>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line-2)">
       <button id="settingsReset" class="hdr-btn" style="width:100%" data-i18n="settings.reset">Reset to organization defaults</button>
@@ -910,6 +925,21 @@ const CALENDAR_DAYS = [
   {iso_date:"2026-05-26",weekday:"Tue",n_events:4,intensity:3,primary_category:"leave"},
   {iso_date:"2026-05-27",weekday:"Wed",n_events:3,intensity:2,primary_category:"leave"},
 ];
+// Per-employee upcoming meetings — also synced from Microsoft Graph
+// (real implementation: /users/{user}/calendar/events filtered by attendee).
+const MEETINGS_BY_EMP = {
+  "E001":[{when:"2026-05-15 10:00",title:"Backend platform sync",organizer:"E007"},{when:"2026-05-16 14:30",title:"API design review",organizer:"E003"}],
+  "E002":[{when:"2026-05-15 11:00",title:"Onboarding checkpoint",organizer:"E034"}],
+  "E003":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-19 10:00",title:"Code review with Vlad",organizer:"E007"}],
+  "E007":[{when:"2026-05-14 11:00",title:"Q2 review kick-off",organizer:"E037"},{when:"2026-05-18 09:30",title:"Engineering 1:1s (skip-level)",organizer:"E021"}],
+  "E008":[{when:"2026-05-15 09:00",title:"Onboarding day 1",organizer:"E034"},{when:"2026-05-18 14:00",title:"Buddy session — Andrei",organizer:"E001"}],
+  "E014":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-25 10:00",title:"Hiring panel — DS lead",organizer:"E037"}],
+  "E021":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-25 11:00",title:"All-hands prep",organizer:"E046"}],
+  "E037":[{when:"2026-05-14 11:00",title:"Q2 review kick-off",organizer:"E037"},{when:"2026-05-20 13:00",title:"Compensation review",organizer:"E042"},{when:"2026-05-26 10:00",title:"Performance calibration",organizer:"E037"}],
+  "E042":[{when:"2026-05-20 13:00",title:"Compensation review — Q2",organizer:"E042"},{when:"2026-05-22 09:00",title:"Finance close",organizer:"E039"}],
+  "E046":[{when:"2026-05-14 11:00",title:"All-hands · May",organizer:"E046"},{when:"2026-05-25 11:00",title:"All-hands — Q2 results preview",organizer:"E046"}],
+};
+
 const CALENDAR_EVENTS_BY_DAY = {
   "2026-05-14":[{title:"All-hands · May",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Q2 review kick-off",category:"review",organizer:"nicoleta.calin@company.ro",attendees:12}],
   "2026-05-15":[{title:"Manager training — feedback skills",category:"training",organizer:"madalina.albu@company.ro",attendees:8},{title:"Onboarding day 1 — new hires",category:"onboarding",organizer:"dorina.petrescu@company.ro",attendees:3}],
@@ -1144,6 +1174,13 @@ const I18N = {
     "settings.light":"Luminos","settings.dark":"Întunecat",
     "settings.reset":"Resetează la setările organizației",
     "settings.note":"Alegerile tale sunt stocate local în acest browser și supraviețuiesc rerulărilor pipeline-ului. Butonul 'Resetează' aduce înapoi valorile din data/settings.json.",
+    "settings.email":"Email HR (Gmail/Outlook)",
+    "settings.email_hint":"Folosit de scripts/ingest_emails.py pentru a identifica inboxul de polled pentru cererile de concediu.",
+    "settings.api":"Endpoint Microsoft Graph",
+    "settings.api_hint":"Endpoint sincronizare calendar. Lasă gol pentru a păstra mock-ul demo.",
+    "emp.upcoming_meetings":"Întâlniri viitoare",
+    "emp.organizer":"Organizator",
+    "emp.no_meetings":"Nu există întâlniri sincronizate pentru acest coleg.",
     // Bench
     "panel.bench":"Risc bench","badge.cross":"Cross-check",
     "foot.cross_checked":"Verificat cu rosterul de proiecte + pontaje",
@@ -1612,6 +1649,17 @@ function drillEmployee(id) {
   if (!e) return;
   const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
   const status = e.score > 0.6 ? "INTERVENE THIS WEEK" : e.score > 0.35 ? "MONITOR" : "STABLE";
+  const meetings = MEETINGS_BY_EMP[e.id] || [];
+  const meetingsHtml = meetings.length === 0
+    ? `<div style="color:var(--ink-3);font-size:11.5px;padding:6px 0">${t("emp.no_meetings")}</div>`
+    : meetings.map(m => {
+        const org = EMPLOYEES.find(x => x.id === m.organizer);
+        const orgName = org ? org.name : m.organizer;
+        return `<div class="dw-item no-click" style="padding:8px 11px">
+          <div class="ih"><span class="nm" style="font-size:12.5px">${m.title}</span><span class="mt">${m.when}</span></div>
+          <div class="mt" style="font-size:10px">${t("emp.organizer")}: ${orgName}</div>
+        </div>`;
+      }).join("");
   const html = `
     <div class="dw-section">[ PROFILE ]</div>
     <div class="dw-kv"><span class="k">ID</span><span class="v">${e.id}</span></div>
@@ -1630,6 +1678,9 @@ function drillEmployee(id) {
 
     <div class="dw-section">[ TOP SIGNALS · N=${e.signals.length} ]</div>
     ${e.signals.length ? e.signals.map(s => `<span class="dw-signal">${s}</span>`).join("") : '<div style="color:var(--ink-3);font-size:11px">No anomalous signals</div>'}
+
+    <div class="dw-section">${t("emp.upcoming_meetings")} · ${meetings.length}</div>
+    ${meetingsHtml}
   `;
   openDrawer(e.name, `${e.id} · ${e.role}`, html);
 }
@@ -1750,7 +1801,16 @@ $$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
     document.querySelectorAll("[data-set-theme]").forEach(b =>
       b.classList.toggle("active", b.dataset.setTheme === th));
     document.getElementById("settingsOrg").textContent = SETTINGS_DEFAULTS.org;
+    document.getElementById("settingsEmail").value = localStorage.getItem("pa_email") || "";
+    document.getElementById("settingsApi").value = localStorage.getItem("pa_api") || "";
   }
+
+  document.getElementById("settingsEmail").addEventListener("input", e => {
+    localStorage.setItem("pa_email", e.target.value);
+  });
+  document.getElementById("settingsApi").addEventListener("input", e => {
+    localStorage.setItem("pa_api", e.target.value);
+  });
 
   document.querySelectorAll("[data-set-lang]").forEach(b => b.addEventListener("click", () => {
     LANG = b.dataset.setLang;
@@ -1768,6 +1828,8 @@ $$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
   document.getElementById("settingsReset").addEventListener("click", () => {
     localStorage.removeItem("pa_lang");
     localStorage.removeItem("pa_theme");
+    localStorage.removeItem("pa_email");
+    localStorage.removeItem("pa_api");
     LANG = SETTINGS_DEFAULTS.language;
     document.documentElement.setAttribute("data-theme", SETTINGS_DEFAULTS.theme);
     window._setThemeLabel && window._setThemeLabel();
