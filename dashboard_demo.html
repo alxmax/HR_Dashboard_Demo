@@ -684,7 +684,9 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 
     <!-- ──────────────── TAB 5: ARCHITECTURE ──────────────── -->
     <section class="view" id="view-architecture">
-      <div class="section-head" data-i18n="sec.architecture">How this dashboard is built</div>
+      <div class="section-head"><span data-i18n="sec.architecture">How this dashboard is built</span>
+        <a href="arhitectura.html" target="_blank" style="margin-left:auto;font-family:var(--ff-mono);font-size:11.5px;color:var(--gold-2);text-decoration:none;padding:4px 10px;border:1px solid var(--gold);" data-i18n="arch.open_full">→ Full architecture page</a>
+      </div>
       <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="arch.intro">
         One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.
       </div>
@@ -1021,6 +1023,7 @@ const I18N = {
     // Architecture
     "tab.architecture":"Architecture","sec.architecture":"How this dashboard is built",
     "arch.intro":"One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.",
+    "arch.open_full":"→ Full architecture page",
     "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"APIs","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
     "arch.kind.layer":"LAYER","arch.kind.service":"SERVICE","arch.kind.integration":"INTEGRATION","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
     "arch.d.frontend":"Single self-contained HTML with vanilla CSS + JS. No framework, no build step. Inlines all data + i18n; works under file:// double-click. Drill-down drawer on every metric.",
@@ -1126,6 +1129,7 @@ const I18N = {
     // Architecture
     "tab.architecture":"Arhitectură","sec.architecture":"Cum e construit dashboard-ul",
     "arch.intro":"Hartă de arhitectură pe o pagină. Fiecare strat al sistemului, ce face, ce fișiere îl implementează. Click pe un bloc pentru detalii.",
+    "arch.open_full":"→ Pagina completă de arhitectură",
     "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"API-uri","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
     "arch.kind.layer":"STRAT","arch.kind.service":"SERVICIU","arch.kind.integration":"INTEGRARE","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
     "arch.d.frontend":"Un singur fișier HTML self-contained cu vanilla CSS + JS. Fără framework, fără build step. Inline pe date + i18n; funcționează la dublu-click sub file://. Drawer de drill-down pe fiecare metrică.",

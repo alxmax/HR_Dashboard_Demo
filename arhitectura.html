@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ro" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arhitectură / Architecture — People Ops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"] {
+  --bg-0: #d8d4c8;
+  --bg-1: #e8e4d6;
+  --bg-2: #ddd9cb;
+  --bg-3: #cfcbbb;
+  --line-1: #b8b3a2;
+  --line-2: #9e9988;
+  --ink-1: #2a2722;
+  --ink-2: #4a4640;
+  --ink-3: #6e6a60;
+  --ink-4: #948f80;
+  --gold: #8c5e15;
+  --gold-2: #a06f1c;
+  --gold-glow: rgba(160,111,28,0.40);
+  --teal: #0d7d72;
+  --green: #15803d;
+  --red: #b91c1c;
+  --orange: #b45309;
+  --purple: #6d28d9;
+  --ff-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --ff-disp: "Rajdhani", "JetBrains Mono", monospace;
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg-0: #0a0b0d; --bg-1: #101114; --bg-2: #14161a; --bg-3: #1a1c20;
+  --line-1: #1e2025; --line-2: #2a2c32;
+  --ink-1: #e8eaee; --ink-2: #a4a8b0; --ink-3: #6c707a; --ink-4: #4a4d54;
+  --gold: #c8973a; --gold-2: #e8b84b; --gold-glow: rgba(232,184,75,0.4);
+  --teal: #2dd4bf; --green: #30d158; --red: #ff453a; --orange: #ff9f0a; --purple: #a78bfa;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg-0); color: var(--ink-1); min-height: 100vh; }
+body { font-family: var(--ff-mono); font-size: 13px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+.page { max-width: 920px; margin: 0 auto; padding: 30px 32px 60px; }
+
+.lang-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line-2); margin-bottom: 22px; }
+.lang-tabs button { padding: 10px 22px; background: transparent; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: var(--ff-mono); font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; transition: all 120ms; display: inline-flex; align-items: center; gap: 6px; }
+.lang-tabs button:hover { color: var(--ink-1); background: rgba(160,111,28,0.05); }
+.lang-tabs button.active { color: var(--gold-2); border-bottom-color: var(--gold); font-weight: 700; }
+.lang-tabs .flag { font-family: var(--ff-disp); font-size: 12px; color: var(--ink-4); letter-spacing: 0.10em; }
+.lang-tabs button.active .flag { color: var(--gold); }
+.lang-tabs .spacer { flex: 1; }
+.lang-tabs .actions { display: flex; gap: 8px; padding: 6px 0; align-items: center; }
+.btn { font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-2); background: var(--bg-1); border: 1px solid var(--line-2); padding: 6px 12px; cursor: pointer; text-decoration: none; transition: all 120ms; }
+.btn:hover { background: rgba(160,111,28,0.10); border-color: var(--gold); color: var(--gold-2); }
+.btn:active { background: var(--gold); border-color: var(--gold); color: var(--bg-0); }
+
+.lang-section { display: none; }
+.lang-section.active { display: block; }
+
+.head { padding-bottom: 18px; border-bottom: 2px solid var(--gold); margin-bottom: 8px; }
+.head h1 { font-family: var(--ff-disp); font-size: 32px; font-weight: 700; color: var(--ink-1); letter-spacing: 0.01em; line-height: 1.1; }
+.head .sub { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+
+.lead { font-size: 14px; color: var(--ink-2); margin: 22px 0 28px; max-width: 68ch; line-height: 1.65; }
+
+h2 { font-family: var(--ff-disp); font-size: 22px; font-weight: 700; color: var(--gold-2); letter-spacing: 0.02em; margin: 32px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); }
+h3 { font-family: var(--ff-disp); font-size: 16px; font-weight: 700; color: var(--ink-1); letter-spacing: 0.02em; margin-bottom: 6px; }
+p { color: var(--ink-2); margin-bottom: 10px; }
+ul { list-style: none; padding: 0; }
+li { padding: 4px 0 4px 18px; position: relative; color: var(--ink-2); }
+li::before { content: "›"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+code { font-family: var(--ff-mono); font-size: 12px; background: var(--bg-3); color: var(--teal); padding: 1px 6px; border: 1px solid var(--line-1); }
+
+.flow { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; margin: 18px 0 24px; padding: 18px; background: var(--bg-1); border: 1px solid var(--line-1); }
+.flow-step { flex: 1; min-width: 130px; padding: 12px 14px; background: var(--bg-2); border-left: 3px solid var(--gold); position: relative; }
+.flow-step .n { font-family: var(--ff-mono); font-size: 9px; color: var(--gold); letter-spacing: 0.14em; margin-bottom: 4px; }
+.flow-step .name { font-family: var(--ff-disp); font-size: 13px; font-weight: 700; color: var(--ink-1); margin-bottom: 3px; letter-spacing: 0.02em; }
+.flow-step .what { font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+.flow-arrow { display: flex; align-items: center; color: var(--gold); font-size: 16px; opacity: 0.6; }
+
+.stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 14px; margin: 14px 0 28px; }
+.stage { background: var(--bg-1); border: 1px solid var(--line-1); padding: 16px 18px; position: relative; }
+.stage::before { content: ""; position: absolute; top: 0; left: 0; width: 30px; height: 2px; background: var(--gold); opacity: 0.5; }
+.stage .tag { display: inline-block; font-family: var(--ff-mono); font-size: 9.5px; color: var(--gold); letter-spacing: 0.14em; margin-bottom: 4px; }
+.stage h3 { margin-bottom: 6px; }
+.stage .files { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 1px dotted var(--line-2); }
+.stage .files code { font-size: 10.5px; }
+.stage .note { font-size: 11.5px; color: var(--ink-3); font-style: italic; margin-top: 8px; }
+.stage pre { background:var(--bg-2);padding:10px 12px;border:1px solid var(--line-1);font-size:11px;color:var(--ink-2);margin:8px 0;overflow-x:auto; font-family: var(--ff-mono); }
+
+.pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 14px 0 28px; }
+.pillar { padding: 14px 16px; background: var(--bg-1); border: 1px solid var(--line-1); border-left: 3px solid var(--teal); }
+.pillar h3 { color: var(--teal); font-size: 14px; }
+.pillar p { font-size: 12px; line-height: 1.6; margin: 0; }
+
+.mcp { padding: 18px; background: var(--bg-1); border: 1px solid var(--line-1); margin: 14px 0 28px; }
+.mcp h3 { color: var(--purple); margin-bottom: 8px; }
+.mcp ul { margin-top: 10px; }
+.mcp .schema { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.mcp .schema > div { padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--line-1); }
+.mcp .schema .lbl { font-family: var(--ff-mono); font-size: 9.5px; color: var(--purple); letter-spacing: 0.14em; margin-bottom: 6px; }
+.mcp .schema code { font-size: 11px; color: var(--ink-2); background: transparent; border: none; padding: 0; display: block; line-height: 1.7; }
+
+footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line-2); font-size: 11px; color: var(--ink-3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+footer a { color: var(--gold-2); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+
+@media print {
+  body { background: #fff; font-size: 11.5px; }
+  .page { max-width: none; padding: 18px; }
+  .lang-tabs { display: none; }
+  .lang-section { display: block !important; }
+  .lang-section:not(.active) { display: none !important; }
+  .stage, .pillar, .mcp, .flow { page-break-inside: avoid; box-shadow: none; }
+  h2 { page-break-after: avoid; }
+  code { background: #f0f0f0; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <nav class="lang-tabs">
+    <button class="lang-btn" data-lang="ro"><span class="flag">RO</span><span>Română</span></button>
+    <button class="lang-btn" data-lang="en"><span class="flag">EN</span><span>English</span></button>
+    <div class="spacer"></div>
+    <div class="actions">
+      <a class="btn" href="dashboard_demo.html">← <span data-lang-text-ro="Înapoi la dashboard" data-lang-text-en="Back to dashboard">Înapoi la dashboard</span></a>
+      <button class="btn" onclick="window.print()"><span data-lang-text-ro="Tipărește" data-lang-text-en="Print">Tipărește</span></button>
+      <button class="btn" id="themeBtn">☾ <span data-lang-text-ro="Întunecat" data-lang-text-en="Dark">Întunecat</span></button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════ ROMANIAN ════════════════════════════ -->
+  <section class="lang-section" data-lang-section="ro">
+
+    <header class="head">
+      <h1>Arhitectură · Workflow automatizat</h1>
+      <div class="sub">Cum funcționează pipeline-ul HR de la inbox la dashboard, end-to-end</div>
+    </header>
+
+    <p class="lead">
+      Aplicația automatizează patru pași HR care în mod normal consumă cel mai mult timp:
+      procesarea cererilor de concediu, sincronizarea calendarului partajat, calculul scorurilor
+      de retenție pe persoană și verificarea expirării certificatelor. Fiecare strat e o componentă
+      Python independentă, conectate de un singur orchestrator. Dashboard-ul HTML și un server MCP
+      expun rezultatul către utilizatorii umani și, respectiv, către orice LLM conectat.
+    </p>
+
+    <h2>Fluxul, pe scurt</h2>
+    <div class="flow">
+      <div class="flow-step"><div class="n">01 · INPUT</div><div class="name">Inboxuri + CSV</div><div class="what">Gmail/Outlook · Microsoft Graph · 3 CSV-uri sample_data/</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">02 · PARSE</div><div class="name">Ingest layer</div><div class="what">scripts/ingest_*.py — pandas + regex + OCR-ready</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">03 · COMPUTE</div><div class="name">Metrici + AI</div><div class="what">Per-team rollup · IsolationForest · KMeans · cert checker</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">04 · STORE</div><div class="name">JSON + CSV</div><div class="what">data/*.json · data/time_off.csv · data/time_off_audit.jsonl</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">05 · SERVE</div><div class="name">UI + MCP</div><div class="what">dashboard_demo.html · scripts/mcp_server.py</div></div>
+    </div>
+
+    <h2>Etapele automatizării</h2>
+    <div class="stages">
+
+      <article class="stage">
+        <span class="tag">EMAIL · GMAIL / OUTLOOK</span>
+        <h3>Ingestia cererilor de concediu</h3>
+        <p>Un job rulează la 5 minute, citește inboxul prin API, identifică emailurile cu cereri de concediu (medical, vacanță, training, personal). Pentru fiecare email matched:</p>
+        <ul>
+          <li>extrage tipul prin regex pe subiect + corp (cuvinte-cheie RO + EN)</li>
+          <li>extrage perioada (de la → până la) din text + atașament OCR-ready</li>
+          <li>matched expeditorul la un angajat din director</li>
+          <li>scrie un rând în <code>data/time_off.csv</code> + audit log JSONL</li>
+        </ul>
+        <p class="note">Idempotent — cheia primară e SHA-1 pe <code>message-id</code>, re-rulările nu dublează niciodată un email.</p>
+        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code><code>data/time_off_audit.jsonl</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">CALENDAR · MICROSOFT GRAPH</span>
+        <h3>Sincronizarea calendarului partajat</h3>
+        <p>Sincronizează fereastra de 14 zile din calendarul HR partajat (training, all-hands, review cycles, concedii înregistrate). Pentru fiecare zi:</p>
+        <ul>
+          <li>numără evenimentele și clasifică categoria dominantă</li>
+          <li>calculează intensitatea (0–3) pentru heatmap-ul din sidebar</li>
+          <li>extinde evenimentele multi-day (ex: concediu de 5 zile) în ocurențe per zi</li>
+        </ul>
+        <p class="note">Provider pattern: <code>MockGraphProvider</code> pentru demo, <code>GraphCalendarProvider</code> documentat pentru OAuth + endpoint real.</p>
+        <div class="files"><code>scripts/sync_calendar.py</code><code>data/calendar.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">AI · MODEL DE ANOMALIE</span>
+        <h3>Scor de risc de plecare</h3>
+        <p>IsolationForest nesupervizat antrenat pe 6 feature-uri inginerie: vechime, raport salariu vs piață, scor de performanță, zile de la ultimul review, număr de promovări, ore de training YTD.</p>
+        <ul>
+          <li>scor normalizat în <code>[0, 1]</code> per angajat</li>
+          <li>etichetă <code>low / medium / high</code> derivată din praguri</li>
+          <li>top trei semnale (z-score) pentru încadrarea conversației 1:1</li>
+        </ul>
+        <p class="note">Determinist via <code>random_state=42</code> și <code>contamination=0.2</code>.</p>
+        <div class="files"><code>scripts/score_attrition_risk.py</code><code>data/ai_attrition.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">AI · CLUSTERIZARE</span>
+        <h3>Sănătatea echipei</h3>
+        <p>KMeans cu k=3 peste 5 metrici de echipă: scor mediu de performanță, realizare KPI, procent de proiecte la timp, completare medie a proiectelor, raport mediu de salariu.</p>
+        <ul>
+          <li>etichete: <strong>Thriving · Steady · At-risk</strong></li>
+          <li>fiecare cluster mapat la un playbook concret de acțiuni</li>
+          <li>numirea clusterelor se face pe centroid (nu hard-coded)</li>
+        </ul>
+        <div class="files"><code>scripts/cluster_team_health.py</code><code>data/ai_recommendations.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">CONFORMITATE · LEGEA MUNCII RO</span>
+        <h3>Verificarea certificărilor</h3>
+        <p>Citește datele de expirare pentru patru tipuri de certificări obligatorii și marchează ceea ce expiră în fereastra de avertizare:</p>
+        <ul>
+          <li>control medical periodic · protecția muncii (SSM) · prim ajutor · training management (pentru lead-uri)</li>
+          <li>flag separat pentru ore peste plafonul legal (1800h YTD)</li>
+          <li>output ordonat după urgență: expirate &gt; expiră &lt; 60 zile &gt; valide</li>
+        </ul>
+        <div class="files"><code>scripts/check_compliance.py</code><code>data/compliance.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">ORCHESTRATOR · O SINGURĂ COMANDĂ</span>
+        <h3>Build people analytics</h3>
+        <p>Un orchestrator Python rulează toate cele 7 etape în ordine și emite 8 artefacte JSON + 1 CSV deterministe:</p>
+        <pre>python scripts/build_people_analytics.py</pre>
+        <p class="note">Două rulări consecutive din stare curată produc <code>diff</code> exit 0 pe <code>data/</code> — toate semințele aleatorii sunt fixe, JSON-ul scris cu <code>sort_keys=True</code>.</p>
+        <div class="files"><code>scripts/build_people_analytics.py</code><code>scripts/ingest_hr.py</code><code>data/overview.json</code></div>
+      </article>
+
+    </div>
+
+    <h2>Ce face workflow-ul să fie production-ready</h2>
+    <div class="pillars">
+      <div class="pillar"><h3>Determinism</h3><p>Aceleași input-uri produc același output — byte-identic. Fiecare model sklearn folosește <code>random_state=42</code>, fiecare JSON e scris cu <code>sort_keys=True</code>.</p></div>
+      <div class="pillar"><h3>Idempotență</h3><p>Job-ul de email se poate rula de oricâte ori — duplicatele sunt detectate prin hash pe <code>message-id</code> și sărite. Sigur pentru re-rulări automate.</p></div>
+      <div class="pillar"><h3>Pista de audit</h3><p>Fiecare email procesat lasă o linie JSON în <code>data/time_off_audit.jsonl</code> cu timestamp + payload complet — util pentru audituri legale.</p></div>
+      <div class="pillar"><h3>Protocol-first</h3><p>Integrările (Gmail, Microsoft Graph) sunt definite ca <code>Protocol</code> Python — mock-uri pentru demo, swap într-o linie pentru producție. Zero coupling cu un provider anume.</p></div>
+    </div>
+
+    <h2>Layer LLM · Server MCP</h2>
+    <div class="mcp">
+      <h3>Model Context Protocol — expunere către LLM-uri</h3>
+      <p>
+        Stub-ul din <code>scripts/mcp_server.py</code> publică datele dashboard-ului ca <strong>6 resurse</strong>
+        + <strong>4 tool-uri</strong> conform standardului <a href="https://modelcontextprotocol.io" target="_blank" style="color:var(--teal)">MCP</a>.
+        Un client compatibil (Claude Desktop, agent runtime intern, etc.) se conectează și poate interoga
+        direct cu schema corectă — fără să re-implementeze stratul de date.
+      </p>
+      <div class="schema">
+        <div>
+          <div class="lbl">RESURSE EXPUSE</div>
+          <code>hr://employees</code>
+          <code>hr://attrition</code>
+          <code>hr://teams</code>
+          <code>hr://compliance</code>
+          <code>hr://calendar</code>
+          <code>hr://inbox</code>
+        </div>
+        <div>
+          <div class="lbl">TOOL-URI APELABILE</div>
+          <code>hr.who_is_at_risk(threshold, team_id?)</code>
+          <code>hr.team_health(team_id)</code>
+          <code>hr.compliance_gaps(within_days, cert_type?)</code>
+          <code>hr.upcoming_calendar(days, category?)</code>
+        </div>
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:var(--ink-3)">
+        Astfel, întrebarea „Cine ar trebui programat la 1:1 săptămâna asta?" devine o invocare structurată
+        <code>hr.who_is_at_risk(threshold=0.65)</code> — răspuns garantat în schema documentată, nu prompt-engineering peste un CSV brut.
+      </p>
+    </div>
+
+    <h2>Unde să cauți</h2>
+    <ul style="background:var(--bg-1);border:1px solid var(--line-1);padding:14px 18px 14px 32px">
+      <li><strong>Date de intrare</strong> — <code>sample_data/{employees,teams,projects}.csv</code></li>
+      <li><strong>Pipeline-ul Python</strong> — <code>scripts/build_people_analytics.py</code> (orchestrator) + 7 module</li>
+      <li><strong>Artefactele generate</strong> — <code>data/*.json</code> (8 fișiere) + <code>data/time_off.csv</code></li>
+      <li><strong>Dashboard-ul</strong> — <code>dashboard_demo.html</code> (self-contained, dublu-click)</li>
+      <li><strong>Documentația de arhitectură</strong> — această pagină + <code>README.md</code> + <code>CLAUDE.md</code></li>
+    </ul>
+
+  </section>
+
+  <!-- ════════════════════════════ ENGLISH ════════════════════════════ -->
+  <section class="lang-section" data-lang-section="en">
+
+    <header class="head">
+      <h1>Architecture · Automated workflow</h1>
+      <div class="sub">How the HR pipeline runs end-to-end, from inbox to dashboard</div>
+    </header>
+
+    <p class="lead">
+      The application automates four HR steps that normally consume the most time:
+      processing leave requests, syncing the shared calendar, computing per-person retention
+      risk scores, and checking certification expiry. Each layer is an independent Python
+      component, glued together by a single orchestrator. The HTML dashboard and an MCP
+      server expose the result to human users and any connected LLM, respectively.
+    </p>
+
+    <h2>The flow at a glance</h2>
+    <div class="flow">
+      <div class="flow-step"><div class="n">01 · INPUT</div><div class="name">Inboxes + CSV</div><div class="what">Gmail/Outlook · Microsoft Graph · 3 CSVs in sample_data/</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">02 · PARSE</div><div class="name">Ingest layer</div><div class="what">scripts/ingest_*.py — pandas + regex + OCR-ready</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">03 · COMPUTE</div><div class="name">Metrics + AI</div><div class="what">Per-team rollup · IsolationForest · KMeans · cert checker</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">04 · STORE</div><div class="name">JSON + CSV</div><div class="what">data/*.json · data/time_off.csv · data/time_off_audit.jsonl</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">05 · SERVE</div><div class="name">UI + MCP</div><div class="what">dashboard_demo.html · scripts/mcp_server.py</div></div>
+    </div>
+
+    <h2>Automation stages</h2>
+    <div class="stages">
+
+      <article class="stage">
+        <span class="tag">EMAIL · GMAIL / OUTLOOK</span>
+        <h3>Leave-request inbox ingestion</h3>
+        <p>A job runs every 5 minutes, reads the inbox via API, and identifies leave-request emails (medical, vacation, training, personal). For each matched email it:</p>
+        <ul>
+          <li>extracts the type via regex on subject + body (RO + EN keywords)</li>
+          <li>extracts the date range from the body text + OCR-ready attachment</li>
+          <li>matches the sender to an employee in the directory</li>
+          <li>writes a row to <code>data/time_off.csv</code> + JSONL audit log</li>
+        </ul>
+        <p class="note">Idempotent — primary key is a SHA-1 of the <code>message-id</code>; re-runs never duplicate an email.</p>
+        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code><code>data/time_off_audit.jsonl</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">CALENDAR · MICROSOFT GRAPH</span>
+        <h3>Shared calendar sync</h3>
+        <p>Syncs a 14-day window from the shared HR calendar (training, all-hands, review cycles, recorded leave). For each day it:</p>
+        <ul>
+          <li>counts events and classifies the dominant category</li>
+          <li>computes intensity (0–3) for the sidebar heatmap</li>
+          <li>expands multi-day events (e.g. 5-day leave) into per-day occurrences</li>
+        </ul>
+        <p class="note">Provider pattern: <code>MockGraphProvider</code> for the demo, <code>GraphCalendarProvider</code> documented for OAuth + real endpoint.</p>
+        <div class="files"><code>scripts/sync_calendar.py</code><code>data/calendar.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">AI · ANOMALY MODEL</span>
+        <h3>Retention-risk scoring</h3>
+        <p>Unsupervised IsolationForest trained on 6 engineered features: tenure, comp ratio vs market, performance score, days since last review, promotion count, training hours YTD.</p>
+        <ul>
+          <li>score normalized in <code>[0, 1]</code> per employee</li>
+          <li>label <code>low / medium / high</code> derived from thresholds</li>
+          <li>top three signals (z-score) for framing the 1:1 conversation</li>
+        </ul>
+        <p class="note">Deterministic via <code>random_state=42</code> and <code>contamination=0.2</code>.</p>
+        <div class="files"><code>scripts/score_attrition_risk.py</code><code>data/ai_attrition.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">AI · CLUSTERING</span>
+        <h3>Team health</h3>
+        <p>KMeans with k=3 over 5 team-level metrics: average performance score, KPI attainment, on-track project rate, average completion, average comp ratio.</p>
+        <ul>
+          <li>labels: <strong>Thriving · Steady · At-risk</strong></li>
+          <li>each cluster maps to a concrete recommended-action playbook</li>
+          <li>cluster naming derives from centroid magnitude (not hard-coded)</li>
+        </ul>
+        <div class="files"><code>scripts/cluster_team_health.py</code><code>data/ai_recommendations.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">COMPLIANCE · LABOR LAW</span>
+        <h3>Certification check</h3>
+        <p>Reads expiry dates for four mandatory certification types and flags anything expiring within the warning window:</p>
+        <ul>
+          <li>periodic medical check · occupational safety (SSM) · first aid · management training (for leads)</li>
+          <li>separate flag for hours over the legal cap (1800h YTD)</li>
+          <li>output ordered by urgency: expired &gt; expiring &lt; 60 days &gt; valid</li>
+        </ul>
+        <div class="files"><code>scripts/check_compliance.py</code><code>data/compliance.json</code></div>
+      </article>
+
+      <article class="stage">
+        <span class="tag">ORCHESTRATOR · ONE COMMAND</span>
+        <h3>Build people analytics</h3>
+        <p>A Python orchestrator runs all 7 stages in order and emits 8 deterministic JSON artifacts + 1 CSV:</p>
+        <pre>python scripts/build_people_analytics.py</pre>
+        <p class="note">Two consecutive runs from a clean state produce a <code>diff</code> exit 0 on <code>data/</code> — all random seeds are fixed, JSON written with <code>sort_keys=True</code>.</p>
+        <div class="files"><code>scripts/build_people_analytics.py</code><code>scripts/ingest_hr.py</code><code>data/overview.json</code></div>
+      </article>
+
+    </div>
+
+    <h2>What makes the workflow production-ready</h2>
+    <div class="pillars">
+      <div class="pillar"><h3>Determinism</h3><p>The same inputs produce the same output — byte-identical. Every sklearn model uses <code>random_state=42</code>, every JSON is written with <code>sort_keys=True</code>.</p></div>
+      <div class="pillar"><h3>Idempotency</h3><p>The email job can run any number of times — duplicates are detected by message-id hash and skipped. Safe for automated re-runs.</p></div>
+      <div class="pillar"><h3>Audit trail</h3><p>Every processed email appends a JSON line to <code>data/time_off_audit.jsonl</code> with timestamp + full payload — useful for legal audits.</p></div>
+      <div class="pillar"><h3>Protocol-first</h3><p>Integrations (Gmail, Microsoft Graph) are defined as Python <code>Protocol</code> abstractions — mocks for the demo, one-line swap for production. Zero coupling to any specific provider.</p></div>
+    </div>
+
+    <h2>LLM layer · MCP server</h2>
+    <div class="mcp">
+      <h3>Model Context Protocol — exposing data to LLMs</h3>
+      <p>
+        The stub at <code>scripts/mcp_server.py</code> publishes the dashboard's data as <strong>6 resources</strong>
+        + <strong>4 tools</strong> following the <a href="https://modelcontextprotocol.io" target="_blank" style="color:var(--teal)">MCP</a> standard.
+        A compatible client (Claude Desktop, internal agent runtime, etc.) connects and can query directly with the right schema —
+        without re-implementing the data layer.
+      </p>
+      <div class="schema">
+        <div>
+          <div class="lbl">EXPOSED RESOURCES</div>
+          <code>hr://employees</code>
+          <code>hr://attrition</code>
+          <code>hr://teams</code>
+          <code>hr://compliance</code>
+          <code>hr://calendar</code>
+          <code>hr://inbox</code>
+        </div>
+        <div>
+          <div class="lbl">CALLABLE TOOLS</div>
+          <code>hr.who_is_at_risk(threshold, team_id?)</code>
+          <code>hr.team_health(team_id)</code>
+          <code>hr.compliance_gaps(within_days, cert_type?)</code>
+          <code>hr.upcoming_calendar(days, category?)</code>
+        </div>
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:var(--ink-3)">
+        That way, the question "Who should I schedule a 1:1 with this week?" becomes a structured call to
+        <code>hr.who_is_at_risk(threshold=0.65)</code> — guaranteed answer in the documented schema, not prompt-engineering over a raw CSV.
+      </p>
+    </div>
+
+    <h2>Where to look</h2>
+    <ul style="background:var(--bg-1);border:1px solid var(--line-1);padding:14px 18px 14px 32px">
+      <li><strong>Input data</strong> — <code>sample_data/{employees,teams,projects}.csv</code></li>
+      <li><strong>Python pipeline</strong> — <code>scripts/build_people_analytics.py</code> (orchestrator) + 7 modules</li>
+      <li><strong>Generated artifacts</strong> — <code>data/*.json</code> (8 files) + <code>data/time_off.csv</code></li>
+      <li><strong>Dashboard</strong> — <code>dashboard_demo.html</code> (self-contained, double-click)</li>
+      <li><strong>Architecture docs</strong> — this page + <code>README.md</code> + <code>CLAUDE.md</code></li>
+    </ul>
+
+  </section>
+
+  <footer>
+    <div data-lang-text-ro="Demo HR analytics · workflow reproductibil · python scripts/build_people_analytics.py"
+         data-lang-text-en="HR analytics demo · reproducible workflow · python scripts/build_people_analytics.py">
+      Demo HR analytics · workflow reproductibil · python scripts/build_people_analytics.py
+    </div>
+    <div><a href="dashboard_demo.html"><span data-lang-text-ro="→ dashboard interactiv" data-lang-text-en="→ interactive dashboard">→ dashboard interactiv</span></a></div>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  // Theme toggle
+  const root = document.documentElement;
+  const btn = document.getElementById("themeBtn");
+  const savedTheme = localStorage.getItem("pa_theme");
+  if (savedTheme) root.setAttribute("data-theme", savedTheme);
+  function setThemeLabel(){
+    const t = root.getAttribute("data-theme") || "light";
+    const lbl = btn.querySelector("[data-lang-text-ro]");
+    const isDark = t === "dark";
+    btn.innerHTML = (isDark ? "☀ " : "☾ ") + `<span data-lang-text-ro="${isDark ? "Luminos" : "Întunecat"}" data-lang-text-en="${isDark ? "Light" : "Dark"}">${LANG === "ro" ? (isDark ? "Luminos" : "Întunecat") : (isDark ? "Light" : "Dark")}</span>`;
+  }
+  btn.addEventListener("click", () => {
+    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem("pa_theme", next);
+    setThemeLabel();
+  });
+
+  // Language tabs
+  let LANG = localStorage.getItem("pa_lang") || "ro";
+  function applyLang(lang) {
+    LANG = lang;
+    localStorage.setItem("pa_lang", lang);
+    document.documentElement.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+    document.querySelectorAll("[data-lang-section]").forEach(s => s.classList.toggle("active", s.dataset.langSection === lang));
+    document.querySelectorAll(`[data-lang-text-${lang}]`).forEach(el => {
+      el.textContent = el.getAttribute(`data-lang-text-${lang}`);
+    });
+    setThemeLabel();
+  }
+  document.querySelectorAll(".lang-btn").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+  applyLang(LANG);
+})();
+</script>
+</body>
+</html>
