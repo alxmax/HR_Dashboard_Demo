@@ -74,12 +74,25 @@ li { padding: 4px 0 4px 18px; position: relative; color: var(--ink-2); }
 li::before { content: "›"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
 code { font-family: var(--ff-mono); font-size: 12px; background: var(--bg-3); color: var(--teal); padding: 1px 6px; border: 1px solid var(--line-1); }
 
-.flow { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; margin: 18px 0 24px; padding: 18px; background: var(--bg-1); border: 1px solid var(--line-1); }
-.flow-step { flex: 1; min-width: 130px; padding: 12px 14px; background: var(--bg-2); border-left: 3px solid var(--gold); position: relative; }
-.flow-step .n { font-family: var(--ff-mono); font-size: 9px; color: var(--gold); letter-spacing: 0.14em; margin-bottom: 4px; }
-.flow-step .name { font-family: var(--ff-disp); font-size: 13px; font-weight: 700; color: var(--ink-1); margin-bottom: 3px; letter-spacing: 0.02em; }
-.flow-step .what { font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
-.flow-arrow { display: flex; align-items: center; color: var(--gold); font-size: 16px; opacity: 0.6; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0 32px; position: relative; }
+.flow-step { padding: 18px 18px 16px; background: var(--bg-1); border: 1px solid var(--line-1); border-top: 3px solid var(--accent, var(--gold)); position: relative; display: flex; flex-direction: column; gap: 6px; }
+.flow-step.input   { --accent: var(--teal);   background: linear-gradient(180deg, rgba(13,125,114,0.04), transparent 70%); }
+.flow-step.parse   { --accent: var(--gold);   background: linear-gradient(180deg, rgba(160,111,28,0.05), transparent 70%); }
+.flow-step.ai      { --accent: var(--purple); background: linear-gradient(180deg, rgba(109,40,217,0.05), transparent 70%); }
+.flow-step.output  { --accent: var(--green);  background: linear-gradient(180deg, rgba(21,128,61,0.05), transparent 70%); }
+.flow-step .icon { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+.flow-step .n { font-family: var(--ff-mono); font-size: 9.5px; color: var(--accent); letter-spacing: 0.16em; }
+.flow-step .name { font-family: var(--ff-disp); font-size: 17px; font-weight: 700; color: var(--ink-1); letter-spacing: 0.02em; }
+.flow-step .what { font-size: 11.5px; color: var(--ink-2); line-height: 1.55; margin-top: 2px; }
+.flow-step ul.examples { margin-top: 8px; padding-top: 8px; border-top: 1px dotted var(--line-2); list-style: none; padding-left: 0; }
+.flow-step ul.examples li { padding: 2px 0 2px 14px; font-size: 10.5px; color: var(--ink-3); }
+.flow-step ul.examples li::before { content: "·"; color: var(--accent); position: absolute; left: 0; font-size: 14px; line-height: 1; }
+.flow-step::after { content: "→"; position: absolute; right: -12px; top: 50%; transform: translateY(-50%); color: var(--ink-4); font-size: 18px; font-weight: 700; z-index: 2; background: var(--bg-0); padding: 2px 4px; }
+.flow-step:last-child::after { display: none; }
+@media (max-width: 820px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow-step::after { content: "↓"; right: 50%; top: auto; bottom: -16px; transform: translateX(50%); }
+}
 
 .stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 14px; margin: 14px 0 28px; }
 .stage { background: var(--bg-1); border: 1px solid var(--line-1); padding: 16px 18px; position: relative; }
@@ -90,6 +103,19 @@ code { font-family: var(--ff-mono); font-size: 12px; background: var(--bg-3); co
 .stage .files code { font-size: 10.5px; }
 .stage .note { font-size: 11.5px; color: var(--ink-3); font-style: italic; margin-top: 8px; }
 .stage pre { background:var(--bg-2);padding:10px 12px;border:1px solid var(--line-1);font-size:11px;color:var(--ink-2);margin:8px 0;overflow-x:auto; font-family: var(--ff-mono); }
+
+/* Mini per-stage flow diagram */
+.mini-diagram { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 12px 0 4px; padding: 12px 10px; background: var(--bg-2); border: 1px solid var(--line-1); }
+.mini-diagram .node { padding: 6px 11px; border: 1px solid; font-family: var(--ff-mono); font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; background: var(--bg-1); }
+.mini-diagram .node .ico { font-size: 13px; }
+.mini-diagram .node.in    { color: var(--teal);   border-color: var(--teal); }
+.mini-diagram .node.proc  { color: var(--gold);   border-color: var(--gold); }
+.mini-diagram .node.ai    { color: var(--purple); border-color: var(--purple); }
+.mini-diagram .node.out   { color: var(--green);  border-color: var(--green); }
+.mini-diagram .node.aux   { color: var(--orange); border-color: var(--orange); }
+.mini-diagram .arr { color: var(--ink-4); font-weight: 700; font-size: 13px; padding: 0 2px; }
+.mini-diagram .stack { display: inline-flex; flex-direction: column; gap: 3px; }
+.mini-diagram .stack .node { font-size: 10px; padding: 3px 8px; }
 
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 14px 0 28px; }
 .pillar { padding: 14px 16px; background: var(--bg-1); border: 1px solid var(--line-1); border-left: 3px solid var(--teal); }
@@ -129,8 +155,6 @@ footer a:hover { color: var(--gold); }
     <div class="spacer"></div>
     <div class="actions">
       <a class="btn" href="dashboard_demo.html">← <span data-lang-text-ro="Înapoi la dashboard" data-lang-text-en="Back to dashboard">Înapoi la dashboard</span></a>
-      <button class="btn" onclick="window.print()"><span data-lang-text-ro="Tipărește" data-lang-text-en="Print">Tipărește</span></button>
-      <button class="btn" id="themeBtn">☾ <span data-lang-text-ro="Întunecat" data-lang-text-en="Dark">Întunecat</span></button>
     </div>
   </nav>
 
@@ -152,15 +176,50 @@ footer a:hover { color: var(--gold); }
 
     <h2>Fluxul, pe scurt</h2>
     <div class="flow">
-      <div class="flow-step"><div class="n">01 · INPUT</div><div class="name">Inboxuri + CSV</div><div class="what">Gmail/Outlook · Microsoft Graph · 3 CSV-uri sample_data/</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">02 · PARSE</div><div class="name">Ingest layer</div><div class="what">scripts/ingest_*.py — pandas + regex + OCR-ready</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">03 · COMPUTE</div><div class="name">Metrici + AI</div><div class="what">Per-team rollup · IsolationForest · KMeans · cert checker</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">04 · STORE</div><div class="name">JSON + CSV</div><div class="what">data/*.json · data/time_off.csv · data/time_off_audit.jsonl</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">05 · SERVE</div><div class="name">UI + MCP</div><div class="what">dashboard_demo.html · scripts/mcp_server.py</div></div>
+      <div class="flow-step input">
+        <div class="icon">📥</div>
+        <div class="n">01 · DE UNDE VIN DATELE</div>
+        <div class="name">Surse</div>
+        <div class="what">HR-ul nu introduce nimic manual. Pipeline-ul citește singur:</div>
+        <ul class="examples">
+          <li>Cereri de concediu din inbox</li>
+          <li>Evenimente din Outlook Calendar</li>
+          <li>Date angajați din fișierele HR</li>
+        </ul>
+      </div>
+      <div class="flow-step parse">
+        <div class="icon">⚙️</div>
+        <div class="n">02 · CE FACE PIPELINE-UL</div>
+        <div class="name">Procesare</div>
+        <div class="what">Fiecare email + eveniment + rând e citit, validat, și transformat într-o structură unitară:</div>
+        <ul class="examples">
+          <li>Regex + OCR pe atașamente</li>
+          <li>Cuvinte-cheie RO + EN</li>
+          <li>Match expeditor → angajat</li>
+        </ul>
+      </div>
+      <div class="flow-step ai">
+        <div class="icon">🤖</div>
+        <div class="n">03 · UNDE INTERVINE AI-UL</div>
+        <div class="name">Scorare</div>
+        <div class="what">Două modele rulează pe datele curățate, deterministe la fiecare rulare:</div>
+        <ul class="examples">
+          <li>Risc de plecare (IsolationForest)</li>
+          <li>Sănătate echipă (KMeans, k=3)</li>
+          <li>Conformitate certificate</li>
+        </ul>
+      </div>
+      <div class="flow-step output">
+        <div class="icon">📊</div>
+        <div class="n">04 · CE VEDE UTILIZATORUL</div>
+        <div class="name">Rezultate</div>
+        <div class="what">Aceleași date alimentează două canale, fără cod duplicat:</div>
+        <ul class="examples">
+          <li>Dashboard HTML pentru oameni</li>
+          <li>Server MCP pentru LLM-uri</li>
+          <li>PDF prin Print → pentru forward</li>
+        </ul>
+      </div>
     </div>
 
     <h2>Etapele automatizării</h2>
@@ -169,64 +228,95 @@ footer a:hover { color: var(--gold); }
       <article class="stage">
         <span class="tag">EMAIL · GMAIL / OUTLOOK</span>
         <h3>Ingestia cererilor de concediu</h3>
-        <p>Un job rulează la 5 minute, citește inboxul prin API, identifică emailurile cu cereri de concediu (medical, vacanță, training, personal). Pentru fiecare email matched:</p>
-        <ul>
-          <li>extrage tipul prin regex pe subiect + corp (cuvinte-cheie RO + EN)</li>
-          <li>extrage perioada (de la → până la) din text + atașament OCR-ready</li>
-          <li>matched expeditorul la un angajat din director</li>
-          <li>scrie un rând în <code>data/time_off.csv</code> + audit log JSONL</li>
-        </ul>
-        <p class="note">Idempotent — cheia primară e SHA-1 pe <code>message-id</code>, re-rulările nu dublează niciodată un email.</p>
-        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code><code>data/time_off_audit.jsonl</code></div>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📧</span>Inbox API</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🔍</span>Regex + OCR</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">👤</span>Match angajat</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out"><span class="ico">📄</span>time_off.csv</span>
+            <span class="node aux">audit.jsonl</span>
+          </span>
+        </div>
+        <p>Un job rulează la 5 minute, citește inboxul prin API, identifică cererile (medical, vacanță, training, personal), extrage perioada și expeditorul, apoi scrie un rând în CSV.</p>
+        <p class="note">Idempotent — cheia primară e SHA-1 pe <code>message-id</code>; re-rulările nu dublează niciodată un email.</p>
+        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">CALENDAR · MICROSOFT GRAPH</span>
         <h3>Sincronizarea calendarului partajat</h3>
-        <p>Sincronizează fereastra de 14 zile din calendarul HR partajat (training, all-hands, review cycles, concedii înregistrate). Pentru fiecare zi:</p>
-        <ul>
-          <li>numără evenimentele și clasifică categoria dominantă</li>
-          <li>calculează intensitatea (0–3) pentru heatmap-ul din sidebar</li>
-          <li>extinde evenimentele multi-day (ex: concediu de 5 zile) în ocurențe per zi</li>
-        </ul>
-        <p class="note">Provider pattern: <code>MockGraphProvider</code> pentru demo, <code>GraphCalendarProvider</code> documentat pentru OAuth + endpoint real.</p>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📅</span>Graph API</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">📆</span>14-day window</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🏷️</span>Categorii</span>
+          <span class="arr">→</span>
+          <span class="node out"><span class="ico">📄</span>calendar.json</span>
+        </div>
+        <p>Sincronizează fereastra de 14 zile din calendarul HR partajat (training, all-hands, review cycles, concedii). Numără evenimentele per zi și clasifică categoria dominantă pentru heatmap-ul din sidebar.</p>
+        <p class="note">Provider pattern: <code>MockGraphProvider</code> pentru demo, <code>GraphCalendarProvider</code> documentat pentru swap-ul cu endpoint real.</p>
         <div class="files"><code>scripts/sync_calendar.py</code><code>data/calendar.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">AI · MODEL DE ANOMALIE</span>
         <h3>Scor de risc de plecare</h3>
-        <p>IsolationForest nesupervizat antrenat pe 6 feature-uri inginerie: vechime, raport salariu vs piață, scor de performanță, zile de la ultimul review, număr de promovări, ore de training YTD.</p>
-        <ul>
-          <li>scor normalizat în <code>[0, 1]</code> per angajat</li>
-          <li>etichetă <code>low / medium / high</code> derivată din praguri</li>
-          <li>top trei semnale (z-score) pentru încadrarea conversației 1:1</li>
-        </ul>
-        <p class="note">Determinist via <code>random_state=42</code> și <code>contamination=0.2</code>.</p>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">👥</span>50 angajați</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🧮</span>6 features</span>
+          <span class="arr">→</span>
+          <span class="node ai"><span class="ico">🌲</span>IsolationForest</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out">scor 0–1</span>
+            <span class="node out">low/med/high</span>
+          </span>
+        </div>
+        <p>IsolationForest nesupervizat antrenat pe 6 feature-uri: vechime, raport salariu, scor performanță, zile de la review, promovări, ore training. Scor normalizat în [0, 1], plus top 3 semnale (z-score) pentru încadrarea conversației 1:1.</p>
+        <p class="note">Determinist via <code>random_state=42</code> · <code>contamination=0.2</code>.</p>
         <div class="files"><code>scripts/score_attrition_risk.py</code><code>data/ai_attrition.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">AI · CLUSTERIZARE</span>
         <h3>Sănătatea echipei</h3>
-        <p>KMeans cu k=3 peste 5 metrici de echipă: scor mediu de performanță, realizare KPI, procent de proiecte la timp, completare medie a proiectelor, raport mediu de salariu.</p>
-        <ul>
-          <li>etichete: <strong>Thriving · Steady · At-risk</strong></li>
-          <li>fiecare cluster mapat la un playbook concret de acțiuni</li>
-          <li>numirea clusterelor se face pe centroid (nu hard-coded)</li>
-        </ul>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">🏢</span>8 echipe</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">📊</span>5 metrici</span>
+          <span class="arr">→</span>
+          <span class="node ai"><span class="ico">🎯</span>KMeans k=3</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out">Thriving</span>
+            <span class="node out">Steady</span>
+            <span class="node out">At-risk</span>
+          </span>
+        </div>
+        <p>KMeans cu k=3 peste 5 metrici de echipă (perf mediu, realizare KPI, % proiecte la timp, completare medie, raport salariu). Numirea clusterelor se face pe centroid — nu hard-coded. Fiecare cluster mapat la un playbook de acțiuni.</p>
         <div class="files"><code>scripts/cluster_team_health.py</code><code>data/ai_recommendations.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">CONFORMITATE · LEGEA MUNCII RO</span>
         <h3>Verificarea certificărilor</h3>
-        <p>Citește datele de expirare pentru patru tipuri de certificări obligatorii și marchează ceea ce expiră în fereastra de avertizare:</p>
-        <ul>
-          <li>control medical periodic · protecția muncii (SSM) · prim ajutor · training management (pentru lead-uri)</li>
-          <li>flag separat pentru ore peste plafonul legal (1800h YTD)</li>
-          <li>output ordonat după urgență: expirate &gt; expiră &lt; 60 zile &gt; valide</li>
-        </ul>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📋</span>4 tipuri cert</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">⏰</span>vs azi</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out" style="color:var(--red);border-color:var(--red)">expirate</span>
+            <span class="node out" style="color:var(--orange);border-color:var(--orange)">≤60 zile</span>
+            <span class="node out">valide</span>
+          </span>
+        </div>
+        <p>Verifică expirarea pentru: control medical periodic · protecția muncii (SSM) · prim ajutor · training management. Flag separat pentru ore peste plafonul legal (1800h YTD). Sortare după urgență.</p>
         <div class="files"><code>scripts/check_compliance.py</code><code>data/compliance.json</code></div>
       </article>
 
@@ -311,15 +401,50 @@ footer a:hover { color: var(--gold); }
 
     <h2>The flow at a glance</h2>
     <div class="flow">
-      <div class="flow-step"><div class="n">01 · INPUT</div><div class="name">Inboxes + CSV</div><div class="what">Gmail/Outlook · Microsoft Graph · 3 CSVs in sample_data/</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">02 · PARSE</div><div class="name">Ingest layer</div><div class="what">scripts/ingest_*.py — pandas + regex + OCR-ready</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">03 · COMPUTE</div><div class="name">Metrics + AI</div><div class="what">Per-team rollup · IsolationForest · KMeans · cert checker</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">04 · STORE</div><div class="name">JSON + CSV</div><div class="what">data/*.json · data/time_off.csv · data/time_off_audit.jsonl</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="n">05 · SERVE</div><div class="name">UI + MCP</div><div class="what">dashboard_demo.html · scripts/mcp_server.py</div></div>
+      <div class="flow-step input">
+        <div class="icon">📥</div>
+        <div class="n">01 · WHERE DATA COMES FROM</div>
+        <div class="name">Sources</div>
+        <div class="what">HR enters nothing manually. The pipeline pulls everything on its own:</div>
+        <ul class="examples">
+          <li>Leave requests from the inbox</li>
+          <li>Events from Outlook Calendar</li>
+          <li>Employee data from HR files</li>
+        </ul>
+      </div>
+      <div class="flow-step parse">
+        <div class="icon">⚙️</div>
+        <div class="n">02 · WHAT THE PIPELINE DOES</div>
+        <div class="name">Processing</div>
+        <div class="what">Every email, event, and row is read, validated, and shaped into a single canonical structure:</div>
+        <ul class="examples">
+          <li>Regex + OCR on attachments</li>
+          <li>RO + EN keyword detection</li>
+          <li>Sender → employee matching</li>
+        </ul>
+      </div>
+      <div class="flow-step ai">
+        <div class="icon">🤖</div>
+        <div class="n">03 · WHERE AI STEPS IN</div>
+        <div class="name">Scoring</div>
+        <div class="what">Two models run over the cleaned data, deterministic on every run:</div>
+        <ul class="examples">
+          <li>Retention risk (IsolationForest)</li>
+          <li>Team health (KMeans, k=3)</li>
+          <li>Certification compliance</li>
+        </ul>
+      </div>
+      <div class="flow-step output">
+        <div class="icon">📊</div>
+        <div class="n">04 · WHAT THE USER SEES</div>
+        <div class="name">Outputs</div>
+        <div class="what">The same data feeds two channels without duplicated code:</div>
+        <ul class="examples">
+          <li>HTML dashboard for humans</li>
+          <li>MCP server for LLMs</li>
+          <li>PDF via Print → for forwarding</li>
+        </ul>
+      </div>
     </div>
 
     <h2>Automation stages</h2>
@@ -328,64 +453,95 @@ footer a:hover { color: var(--gold); }
       <article class="stage">
         <span class="tag">EMAIL · GMAIL / OUTLOOK</span>
         <h3>Leave-request inbox ingestion</h3>
-        <p>A job runs every 5 minutes, reads the inbox via API, and identifies leave-request emails (medical, vacation, training, personal). For each matched email it:</p>
-        <ul>
-          <li>extracts the type via regex on subject + body (RO + EN keywords)</li>
-          <li>extracts the date range from the body text + OCR-ready attachment</li>
-          <li>matches the sender to an employee in the directory</li>
-          <li>writes a row to <code>data/time_off.csv</code> + JSONL audit log</li>
-        </ul>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📧</span>Inbox API</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🔍</span>Regex + OCR</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">👤</span>Match employee</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out"><span class="ico">📄</span>time_off.csv</span>
+            <span class="node aux">audit.jsonl</span>
+          </span>
+        </div>
+        <p>A job runs every 5 minutes, reads the inbox via API, identifies leave requests (medical, vacation, training, personal), extracts the date range and sender, and writes one row to the CSV.</p>
         <p class="note">Idempotent — primary key is a SHA-1 of the <code>message-id</code>; re-runs never duplicate an email.</p>
-        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code><code>data/time_off_audit.jsonl</code></div>
+        <div class="files"><code>scripts/ingest_emails.py</code><code>data/time_off.csv</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">CALENDAR · MICROSOFT GRAPH</span>
         <h3>Shared calendar sync</h3>
-        <p>Syncs a 14-day window from the shared HR calendar (training, all-hands, review cycles, recorded leave). For each day it:</p>
-        <ul>
-          <li>counts events and classifies the dominant category</li>
-          <li>computes intensity (0–3) for the sidebar heatmap</li>
-          <li>expands multi-day events (e.g. 5-day leave) into per-day occurrences</li>
-        </ul>
-        <p class="note">Provider pattern: <code>MockGraphProvider</code> for the demo, <code>GraphCalendarProvider</code> documented for OAuth + real endpoint.</p>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📅</span>Graph API</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">📆</span>14-day window</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🏷️</span>Categorize</span>
+          <span class="arr">→</span>
+          <span class="node out"><span class="ico">📄</span>calendar.json</span>
+        </div>
+        <p>Syncs a 14-day window from the shared HR calendar (training, all-hands, review cycles, recorded leave). Counts events per day and classifies the dominant category for the sidebar heatmap.</p>
+        <p class="note">Provider pattern: <code>MockGraphProvider</code> for the demo, <code>GraphCalendarProvider</code> documented for swapping in the real endpoint.</p>
         <div class="files"><code>scripts/sync_calendar.py</code><code>data/calendar.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">AI · ANOMALY MODEL</span>
         <h3>Retention-risk scoring</h3>
-        <p>Unsupervised IsolationForest trained on 6 engineered features: tenure, comp ratio vs market, performance score, days since last review, promotion count, training hours YTD.</p>
-        <ul>
-          <li>score normalized in <code>[0, 1]</code> per employee</li>
-          <li>label <code>low / medium / high</code> derived from thresholds</li>
-          <li>top three signals (z-score) for framing the 1:1 conversation</li>
-        </ul>
-        <p class="note">Deterministic via <code>random_state=42</code> and <code>contamination=0.2</code>.</p>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">👥</span>50 employees</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">🧮</span>6 features</span>
+          <span class="arr">→</span>
+          <span class="node ai"><span class="ico">🌲</span>IsolationForest</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out">score 0–1</span>
+            <span class="node out">low/med/high</span>
+          </span>
+        </div>
+        <p>Unsupervised IsolationForest trained on 6 engineered features: tenure, comp ratio, performance score, days since last review, promotion count, training hours. Score normalized in [0, 1], plus top 3 signals (z-score) for framing the 1:1 conversation.</p>
+        <p class="note">Deterministic via <code>random_state=42</code> · <code>contamination=0.2</code>.</p>
         <div class="files"><code>scripts/score_attrition_risk.py</code><code>data/ai_attrition.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">AI · CLUSTERING</span>
         <h3>Team health</h3>
-        <p>KMeans with k=3 over 5 team-level metrics: average performance score, KPI attainment, on-track project rate, average completion, average comp ratio.</p>
-        <ul>
-          <li>labels: <strong>Thriving · Steady · At-risk</strong></li>
-          <li>each cluster maps to a concrete recommended-action playbook</li>
-          <li>cluster naming derives from centroid magnitude (not hard-coded)</li>
-        </ul>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">🏢</span>8 teams</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">📊</span>5 metrics</span>
+          <span class="arr">→</span>
+          <span class="node ai"><span class="ico">🎯</span>KMeans k=3</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out">Thriving</span>
+            <span class="node out">Steady</span>
+            <span class="node out">At-risk</span>
+          </span>
+        </div>
+        <p>KMeans with k=3 over 5 team-level metrics (avg performance, KPI attainment, on-track project rate, avg completion, avg comp ratio). Cluster naming derives from centroid — not hard-coded. Each cluster maps to an action playbook.</p>
         <div class="files"><code>scripts/cluster_team_health.py</code><code>data/ai_recommendations.json</code></div>
       </article>
 
       <article class="stage">
         <span class="tag">COMPLIANCE · LABOR LAW</span>
         <h3>Certification check</h3>
-        <p>Reads expiry dates for four mandatory certification types and flags anything expiring within the warning window:</p>
-        <ul>
-          <li>periodic medical check · occupational safety (SSM) · first aid · management training (for leads)</li>
-          <li>separate flag for hours over the legal cap (1800h YTD)</li>
-          <li>output ordered by urgency: expired &gt; expiring &lt; 60 days &gt; valid</li>
-        </ul>
+        <div class="mini-diagram">
+          <span class="node in"><span class="ico">📋</span>4 cert types</span>
+          <span class="arr">→</span>
+          <span class="node proc"><span class="ico">⏰</span>vs today</span>
+          <span class="arr">→</span>
+          <span class="stack">
+            <span class="node out" style="color:var(--red);border-color:var(--red)">expired</span>
+            <span class="node out" style="color:var(--orange);border-color:var(--orange)">≤60 days</span>
+            <span class="node out">valid</span>
+          </span>
+        </div>
+        <p>Checks expiry for: periodic medical check · occupational safety (SSM) · first aid · management training. Separate flag for hours over the legal cap (1800h YTD). Sorted by urgency.</p>
         <div class="files"><code>scripts/check_compliance.py</code><code>data/compliance.json</code></div>
       </article>
 
@@ -464,25 +620,11 @@ footer a:hover { color: var(--gold); }
 
 <script>
 (function(){
-  // Theme toggle
-  const root = document.documentElement;
-  const btn = document.getElementById("themeBtn");
+  // Honour the user's theme choice from dashboard_demo.html (read-only here).
   const savedTheme = localStorage.getItem("pa_theme");
-  if (savedTheme) root.setAttribute("data-theme", savedTheme);
-  function setThemeLabel(){
-    const t = root.getAttribute("data-theme") || "light";
-    const lbl = btn.querySelector("[data-lang-text-ro]");
-    const isDark = t === "dark";
-    btn.innerHTML = (isDark ? "☀ " : "☾ ") + `<span data-lang-text-ro="${isDark ? "Luminos" : "Întunecat"}" data-lang-text-en="${isDark ? "Light" : "Dark"}">${LANG === "ro" ? (isDark ? "Luminos" : "Întunecat") : (isDark ? "Light" : "Dark")}</span>`;
-  }
-  btn.addEventListener("click", () => {
-    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    localStorage.setItem("pa_theme", next);
-    setThemeLabel();
-  });
+  if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
 
-  // Language tabs
+  // Language tabs — RO is the default for this page.
   let LANG = localStorage.getItem("pa_lang") || "ro";
   function applyLang(lang) {
     LANG = lang;
@@ -493,7 +635,6 @@ footer a:hover { color: var(--gold); }
     document.querySelectorAll(`[data-lang-text-${lang}]`).forEach(el => {
       el.textContent = el.getAttribute(`data-lang-text-${lang}`);
     });
-    setThemeLabel();
   }
   document.querySelectorAll(".lang-btn").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
   applyLang(LANG);
