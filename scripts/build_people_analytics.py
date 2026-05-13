@@ -30,6 +30,7 @@ import cluster_team_health  # noqa: E402
 import compute_team_metrics  # noqa: E402
 import ingest_emails  # noqa: E402
 import score_attrition_risk  # noqa: E402
+import sync_calendar  # noqa: E402
 from ingest_hr import REFERENCE_TODAY, load_all  # noqa: E402
 
 
@@ -116,6 +117,7 @@ def main() -> None:
     reco = cluster_team_health.main()
     compliance = check_compliance.main()
     ingest_emails.main()
+    sync_calendar.main()
     _materialize_tables(data_dir)
     _build_overview(data_dir, kpis, attrition, reco, compliance)
     print("[build_people_analytics] done.")

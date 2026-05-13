@@ -1,0 +1,16 @@
+{
+  "org": "Acme Co · People Ops",
+  "defaults": {
+    "language": "en",
+    "theme": "light",
+    "calendar_window_days": 14,
+    "accent_color": "gold"
+  },
+  "feature_flags": {
+    "show_bench_panel": true,
+    "show_inbox_automation": true,
+    "show_legend": true,
+    "show_architecture": true
+  },
+  "version": 1
+}

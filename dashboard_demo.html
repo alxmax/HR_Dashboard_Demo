@@ -455,6 +455,56 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 .dw-signal { display: inline-block; font-size: 9px; padding: 2px 6px; margin: 2px 3px 0 0;
   border: 1px solid var(--line-2); color: var(--ink-2); letter-spacing: 0.06em; }
 
+/* Settings modal */
+.settings-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 110;
+  opacity: 0; pointer-events: none; transition: opacity 200ms; }
+.settings-ov.open { opacity: 1; pointer-events: auto; }
+.settings-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.96);
+  width: 420px; max-width: 92vw; max-height: 88vh; background: var(--bg-1);
+  border: 1px solid var(--gold); z-index: 120; opacity: 0; pointer-events: none;
+  transition: opacity 180ms, transform 180ms cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; }
+.settings-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.settings-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 18px 22px; border-bottom: 1px solid var(--line-2); }
+.settings-title { font-family: var(--ff-disp); font-size: 20px; font-weight: 700; color: var(--gold-2);
+  letter-spacing: 0.02em; }
+.settings-sub { font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+.settings-body { padding: 18px 22px 22px; overflow-y: auto; }
+.settings-row { display: flex; flex-direction: column; gap: 8px; padding: 12px 0;
+  border-bottom: 1px dotted var(--line-2); }
+.settings-label { font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3); font-weight: 500; }
+.settings-choice { display: flex; gap: 6px; }
+.seg { flex: 1; padding: 8px 12px; background: var(--bg-2); border: 1px solid var(--line-2);
+  color: var(--ink-2); cursor: pointer; transition: all 120ms; font-family: var(--ff-mono);
+  font-size: 12.5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.seg:hover { color: var(--ink-1); border-color: var(--ink-4); }
+.seg.active { background: var(--gold); border-color: var(--gold); color: var(--bg-0); font-weight: 700; }
+.settings-org { font-family: var(--ff-mono); font-size: 12.5px; color: var(--gold-2); padding: 6px 0; }
+.settings-foot { margin-top: 18px; padding-top: 12px; border-top: 1px dotted var(--line-2);
+  font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+
+/* Architecture tab */
+.arch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px; margin-bottom: 24px; }
+.arch-block { background: var(--bg-1); border: 1px solid var(--line-1); padding: 16px 18px;
+  position: relative; cursor: pointer; transition: border-color 120ms, transform 120ms; }
+.arch-block:hover { border-color: var(--gold); transform: translateY(-2px); }
+.arch-block::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold); opacity: 0.5; }
+.arch-block .ab-kind { font-family: var(--ff-mono); font-size: 10.5px; color: var(--gold);
+  letter-spacing: 0.08em; margin-bottom: 6px; }
+.arch-block .ab-title { font-family: var(--ff-disp); font-size: 18px; font-weight: 700;
+  color: var(--ink-1); letter-spacing: 0.02em; margin-bottom: 8px; }
+.arch-block .ab-desc { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.arch-block .ab-files { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.arch-block .ab-files code { font-family: var(--ff-mono); font-size: 10.5px; color: var(--teal);
+  background: rgba(45,212,191,0.08); padding: 2px 6px; border: 1px solid rgba(45,212,191,0.20); }
+.arch-flow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 0;
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3); flex-wrap: wrap; }
+.arch-flow .step { padding: 6px 12px; border: 1px solid var(--line-2); background: var(--bg-2); }
+.arch-flow .arrow { color: var(--gold); }
+
 /* Responsive */
 @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } .panel-row { grid-template-columns: 1fr; } }
 @media (max-width: 880px)  { .sidebar { display: none; } .kpi-row { grid-template-columns: repeat(2, 1fr); } }
@@ -471,9 +521,10 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab active" data-tab="overview" data-i18n="tab.overview">Overview</button>
-    <button class="tab" data-tab="employees" data-i18n="tab.people">People</button>
+    <button class="tab" data-tab="employees" data-i18n="tab.people">Colleagues</button>
     <button class="tab" data-tab="teams" data-i18n="tab.teams">Teams</button>
     <button class="tab" data-tab="inbox" data-i18n="tab.inbox">Inbox &amp; Automation</button>
+    <button class="tab" data-tab="architecture" data-i18n="tab.architecture">Architecture</button>
     <button class="tab" data-tab="legend" data-i18n="tab.legend">Legend</button>
   </nav>
   <div class="topbar-right">
@@ -483,6 +534,7 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
       <span id="langCur" class="lang-cur">EN</span><span class="lang-sep">/</span><span id="langOther" class="lang-other">RO</span>
     </button>
     <button id="themeToggle" class="hdr-btn" title="Toggle light/dark">☾ Dark</button>
+    <button id="settingsToggle" class="hdr-btn" title="Settings" aria-label="Settings">⚙</button>
   </div>
 </header>
 
@@ -630,7 +682,16 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 
     </section>
 
-    <!-- ──────────────── TAB 5: LEGEND ──────────────── -->
+    <!-- ──────────────── TAB 5: ARCHITECTURE ──────────────── -->
+    <section class="view" id="view-architecture">
+      <div class="section-head" data-i18n="sec.architecture">How this dashboard is built</div>
+      <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="arch.intro">
+        One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.
+      </div>
+      <div id="archBody"></div>
+    </section>
+
+    <!-- ──────────────── TAB 6: LEGEND ──────────────── -->
     <section class="view" id="view-legend">
       <div class="section-head" data-i18n="sec.legend">Legend &mdash; what each term means</div>
       <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="legend.intro">
@@ -657,11 +718,12 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
     </div>
 
     <div class="sb-section">
-      <div class="sb-head" data-i18n="sb.activity">30-day activity</div>
+      <div class="sb-head" data-i18n="sb.calendar">Outlook · next 14 days</div>
       <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-foot">
-        <span style="color:var(--green)">▲ <span data-i18n="legend.pos">positive</span></span>
-        <span style="color:var(--red)">▼ <span data-i18n="legend.neg">negative</span></span>
+      <div class="cal-foot" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:9.5px">
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--gold);display:inline-block"></span><span data-i18n="cal.cat.all_hands">All-hands</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--teal);display:inline-block"></span><span data-i18n="cal.cat.training">Training</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--red);display:inline-block"></span><span data-i18n="cal.cat.leave">Leave</span></span>
       </div>
     </div>
 
@@ -682,6 +744,42 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
     </div>
 
   </aside>
+</div>
+
+<!-- ──────────────── SETTINGS MODAL ──────────────── -->
+<div class="settings-ov" id="settingsOv"></div>
+<div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true">
+  <div class="settings-head">
+    <div>
+      <div class="settings-title" data-i18n="settings.title">Settings</div>
+      <div class="settings-sub" data-i18n="settings.sub">Defaults persist across sessions in your browser.</div>
+    </div>
+    <button class="dw-close" id="settingsClose">×</button>
+  </div>
+  <div class="settings-body">
+    <div class="settings-row">
+      <label class="settings-label" data-i18n="settings.language">Default language</label>
+      <div class="settings-choice" id="settingsLang">
+        <button class="seg" data-set-lang="en">English</button>
+        <button class="seg" data-set-lang="ro">Română</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label" data-i18n="settings.theme">Default theme</label>
+      <div class="settings-choice" id="settingsTheme">
+        <button class="seg" data-set-theme="light">☀ <span data-i18n="settings.light">Light</span></button>
+        <button class="seg" data-set-theme="dark">☾ <span data-i18n="settings.dark">Dark</span></button>
+      </div>
+    </div>
+    <div class="settings-row" style="border-bottom:none">
+      <label class="settings-label" data-i18n="settings.org">Organization</label>
+      <div class="settings-org" id="settingsOrg">—</div>
+    </div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line-2)">
+      <button id="settingsReset" class="hdr-btn" style="width:100%" data-i18n="settings.reset">Reset to organization defaults</button>
+    </div>
+    <div class="settings-foot" data-i18n="settings.note">Your choices are stored locally in this browser and survive pipeline re-runs.</div>
+  </div>
 </div>
 
 <!-- ──────────────── DRAWER ──────────────── -->
@@ -793,19 +891,47 @@ const BENCH_COUNTS = (function(){
   return c;
 })();
 
-// 30-day calendar — synthetic daily attainment percentages
-const CALENDAR = [
-  null,null,1,2,3,2,1,
-  -1,1,3,2,3,1,-1,
-  1,2,3,3,2,1,1,
-  -2,-1,1,2,3,2,1,
-  3,2
+// 14-day Outlook calendar window — synced from data/calendar.json via scripts/sync_calendar.py
+const CALENDAR_DAYS = [
+  {iso_date:"2026-05-14",weekday:"Thu",n_events:2,intensity:2,primary_category:"all_hands"},
+  {iso_date:"2026-05-15",weekday:"Fri",n_events:2,intensity:2,primary_category:"training"},
+  {iso_date:"2026-05-16",weekday:"Sat",n_events:0,intensity:0,primary_category:null},
+  {iso_date:"2026-05-17",weekday:"Sun",n_events:0,intensity:0,primary_category:null},
+  {iso_date:"2026-05-18",weekday:"Mon",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-19",weekday:"Tue",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-20",weekday:"Wed",n_events:4,intensity:3,primary_category:"leave"},
+  {iso_date:"2026-05-21",weekday:"Thu",n_events:2,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-22",weekday:"Fri",n_events:2,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-23",weekday:"Sat",n_events:1,intensity:1,primary_category:"leave"},
+  {iso_date:"2026-05-24",weekday:"Sun",n_events:1,intensity:1,primary_category:"leave"},
+  {iso_date:"2026-05-25",weekday:"Mon",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-26",weekday:"Tue",n_events:4,intensity:3,primary_category:"leave"},
+  {iso_date:"2026-05-27",weekday:"Wed",n_events:3,intensity:2,primary_category:"leave"},
 ];
+const CALENDAR_EVENTS_BY_DAY = {
+  "2026-05-14":[{title:"All-hands · May",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Q2 review kick-off",category:"review",organizer:"nicoleta.calin@company.ro",attendees:12}],
+  "2026-05-15":[{title:"Manager training — feedback skills",category:"training",organizer:"madalina.albu@company.ro",attendees:8},{title:"Onboarding day 1 — new hires",category:"onboarding",organizer:"dorina.petrescu@company.ro",attendees:3}],
+  "2026-05-18":[{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Engineering 1:1s (skip-level)",category:"review",organizer:"bogdan.radu@company.ro",attendees:6}],
+  "2026-05-19":[{title:"Senior engineer interview panel",category:"interview",organizer:"madalina.albu@company.ro",attendees:4},{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Andrei Cojanu — vacation",category:"leave",organizer:"system",attendees:1}],
+  "2026-05-20":[{title:"Compensation review — Q2",category:"review",organizer:"mihaela.bratu@company.ro",attendees:5},{title:"SSM annual refresher",category:"training",organizer:"sebastian.olaru@company.ro",attendees:42},{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Sergiu Marcu — vacation start",category:"leave",organizer:"system",attendees:1}],
+  "2026-05-25":[{title:"All-hands — Q2 results preview",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Hiring panel — Data Science lead",category:"interview",organizer:"andreea.tudor@company.ro",attendees:4}],
+  "2026-05-26":[{title:"Iulia Constantin — vacation",category:"leave",organizer:"system",attendees:1},{title:"Performance calibration session",category:"review",organizer:"nicoleta.calin@company.ro",attendees:8}],
+  "2026-05-27":[{title:"Quarterly skip-levels — Customer Success",category:"review",organizer:"carmen.dobre@company.ro",attendees:7}],
+};
+
+// Org-level defaults loaded by the dashboard. Pipeline writes data/settings.json;
+// the dashboard inlines the same shape here so it works without a server.
+const SETTINGS_DEFAULTS = {
+  org: "Acme Co · People Ops",
+  language: "en",
+  theme: "light",
+  calendar_window_days: 14,
+};
 
 // ════════════════════════════ I18N ════════════════════════════
 const I18N = {
   en: {
-    "tab.overview":"Overview","tab.people":"People","tab.teams":"Teams","tab.inbox":"Inbox & Automation",
+    "tab.overview":"Overview","tab.people":"Colleagues","tab.teams":"Teams","tab.inbox":"Inbox & Automation",
     "status.running":"Pipeline running","status.build":"Build",
     "filter.dept":"Department","filter.risk":"Retention risk","filter.range":"Time range","filter.all":"All",
     "dept.engineering":"Engineering","dept.product":"Product","dept.operations":"Operations","dept.hr":"HR","dept.finance":"Finance","dept.marketing":"Marketing",
@@ -884,6 +1010,31 @@ const I18N = {
     "lg.t.missing":"Missing time logs","lg.d.missing":"People whose total logged hours this week fall below 80% of expected, after subtracting recorded leave. The dashboard suggests a likely cause for each.","lg.w.missing":"Inbox tab · Missing time logs table",
     // Where shown labels
     "lg.where":"Where it appears:",
+    // Calendar
+    "sb.calendar":"Outlook · next 14 days",
+    "cal.outlook_sync":"Synced via Microsoft Graph API",
+    "cal.events_on":"event(s) on this day",
+    "cal.no_events":"No events scheduled.",
+    "cal.attendees":"attendees",
+    "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
+    "cal.cat.leave":"Leave","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interview",
+    // Architecture
+    "tab.architecture":"Architecture","sec.architecture":"How this dashboard is built",
+    "arch.intro":"One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.",
+    "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"APIs","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
+    "arch.kind.layer":"LAYER","arch.kind.service":"SERVICE","arch.kind.integration":"INTEGRATION","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
+    "arch.d.frontend":"Single self-contained HTML with vanilla CSS + JS. No framework, no build step. Inlines all data + i18n; works under file:// double-click. Drill-down drawer on every metric.",
+    "arch.d.backend":"Python pipeline (pandas + scikit-learn). Single orchestrator command rebuilds every artifact deterministically — fixed random_state, sort_keys, idempotent intake.",
+    "arch.d.api":"Two external integrations as Protocol abstractions: Gmail/Outlook IMAP for leave-request email parsing, and Microsoft Graph for shared calendar sync. Mock providers ship in the demo; real providers swap in by changing one line.",
+    "arch.d.mcp":"Model Context Protocol server stub — exposes the dashboard's data (employees, attrition risk, calendar, compliance) as MCP resources so a connected LLM can query them with the proper schema and tooling, without re-implementing the data layer.",
+    "arch.d.ai":"Two deterministic sklearn models: IsolationForest for retention-risk scoring and KMeans for team-health clustering. Designed to be replaced or augmented with an LLM-driven layer via the MCP server when needed.",
+    "arch.flow.input":"CSV inputs","arch.flow.pipeline":"Python pipeline","arch.flow.data":"JSON + CSV artifacts","arch.flow.html":"Dashboard","arch.flow.mcp":"MCP server",
+    // Settings
+    "settings.title":"Settings","settings.sub":"Defaults persist across sessions in your browser.",
+    "settings.language":"Default language","settings.theme":"Default theme","settings.org":"Organization",
+    "settings.light":"Light","settings.dark":"Dark",
+    "settings.reset":"Reset to organization defaults",
+    "settings.note":"Your choices are stored locally in this browser and survive pipeline re-runs. The 'Reset' button restores the values configured in data/settings.json.",
     // Bench
     "panel.bench":"Bench risk","badge.cross":"Cross-check",
     "foot.cross_checked":"Cross-checked against project roster + timesheets",
@@ -892,7 +1043,7 @@ const I18N = {
     "lg.t.bench":"Bench risk","lg.d.bench":"People with no current project assignment, or whose project ends within 30–60 days. Helps Resourcing plan reassignments before someone sits idle.","lg.w.bench":"Overview · Bench risk panel",
   },
   ro: {
-    "tab.overview":"Sumar","tab.people":"Oameni","tab.teams":"Echipe","tab.inbox":"Inbox & Automatizare",
+    "tab.overview":"Sumar","tab.people":"Colegi","tab.teams":"Echipe","tab.inbox":"Inbox & Automatizare",
     "status.running":"Pipeline activ","status.build":"Build",
     "filter.dept":"Departament","filter.risk":"Risc plecare","filter.range":"Interval","filter.all":"Toate",
     "dept.engineering":"Inginerie","dept.product":"Produs","dept.operations":"Operațiuni","dept.hr":"HR","dept.finance":"Financiar","dept.marketing":"Marketing",
@@ -964,6 +1115,31 @@ const I18N = {
     "lg.t.audit":"Pista de audit","lg.d.audit":"Fiecare intrare procesată adaugă o linie JSON în time_off_audit.jsonl cu timestamp și payload complet. Folosit pentru audituri de conformitate.","lg.w.audit":"data/time_off_audit.jsonl",
     "lg.t.missing":"Pontaje lipsă","lg.d.missing":"Persoane ale căror ore săptămânale logate sunt sub 80% din așteptat, după ce se scad concediile înregistrate. Dashboard-ul sugerează o cauză probabilă pentru fiecare.","lg.w.missing":"Tab Inbox · tabelul Pontaje lipsă",
     "lg.where":"Unde apare:",
+    // Calendar
+    "sb.calendar":"Outlook · următoarele 14 zile",
+    "cal.outlook_sync":"Sincronizat prin Microsoft Graph API",
+    "cal.events_on":"eveniment(e) în ziua asta",
+    "cal.no_events":"Niciun eveniment programat.",
+    "cal.attendees":"participanți",
+    "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
+    "cal.cat.leave":"Concediu","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interviu",
+    // Architecture
+    "tab.architecture":"Arhitectură","sec.architecture":"Cum e construit dashboard-ul",
+    "arch.intro":"Hartă de arhitectură pe o pagină. Fiecare strat al sistemului, ce face, ce fișiere îl implementează. Click pe un bloc pentru detalii.",
+    "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"API-uri","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
+    "arch.kind.layer":"STRAT","arch.kind.service":"SERVICIU","arch.kind.integration":"INTEGRARE","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
+    "arch.d.frontend":"Un singur fișier HTML self-contained cu vanilla CSS + JS. Fără framework, fără build step. Inline pe date + i18n; funcționează la dublu-click sub file://. Drawer de drill-down pe fiecare metrică.",
+    "arch.d.backend":"Pipeline Python (pandas + scikit-learn). O singură comandă reconstruiește totul determinist — random_state fix, sort_keys, intake idempotent.",
+    "arch.d.api":"Două integrări externe ca Protocol abstractions: Gmail/Outlook IMAP pentru parsarea emailurilor de concediu, și Microsoft Graph pentru sync-ul calendarului partajat. Mock providers livrate în demo; cei reali se swap-uiesc cu o singură linie.",
+    "arch.d.mcp":"Stub server Model Context Protocol — expune datele dashboard-ului (angajați, risc plecare, calendar, conformitate) ca resurse MCP, astfel încât un LLM conectat poate interoga datele cu schema + tooling-ul potrivit, fără să re-implementeze stratul de date.",
+    "arch.d.ai":"Două modele sklearn deterministe: IsolationForest pentru risc de plecare și KMeans pentru sănătatea echipei. Proiectate să fie înlocuite sau augmentate cu un strat LLM via serverul MCP la nevoie.",
+    "arch.flow.input":"CSV-uri de intrare","arch.flow.pipeline":"Pipeline Python","arch.flow.data":"Artefacte JSON + CSV","arch.flow.html":"Dashboard","arch.flow.mcp":"Server MCP",
+    // Settings
+    "settings.title":"Setări","settings.sub":"Preferințele se păstrează între sesiuni în browser.",
+    "settings.language":"Limba implicită","settings.theme":"Tema implicită","settings.org":"Organizație",
+    "settings.light":"Luminos","settings.dark":"Întunecat",
+    "settings.reset":"Resetează la setările organizației",
+    "settings.note":"Alegerile tale sunt stocate local în acest browser și supraviețuiesc rerulărilor pipeline-ului. Butonul 'Resetează' aduce înapoi valorile din data/settings.json.",
     // Bench
     "panel.bench":"Risc bench","badge.cross":"Cross-check",
     "foot.cross_checked":"Verificat cu rosterul de proiecte + pontaje",
@@ -1347,13 +1523,49 @@ function drillIntake(item) {
 }
 
 // ════════════════════════════ CALENDAR ════════════════════════════
+const CAL_CAT_COLOR = {
+  all_hands: "var(--gold)",
+  training: "var(--teal)",
+  review: "var(--gold-2)",
+  leave: "var(--red)",
+  onboarding: "var(--green)",
+  interview: "var(--orange)",
+};
 function renderCalendar() {
-  const map = { "-3":"r3", "-2":"r2", "-1":"r1", "1":"g1", "2":"g2", "3":"g3" };
-  $("#calGrid").innerHTML = CALENDAR.map((v, i) => {
-    if (v === null) return `<div class="cal-cell empty"></div>`;
-    const cls = map[String(v)] || "";
-    return `<div class="cal-cell ${cls}">${(i % 7) === 0 ? "M" : (i % 7) === 6 ? "S" : ""}</div>`;
+  const cells = CALENDAR_DAYS.map(d => {
+    const color = CAL_CAT_COLOR[d.primary_category] || "var(--ink-4)";
+    const opacity = d.intensity === 0 ? 0.12 : d.intensity === 1 ? 0.40 : d.intensity === 2 ? 0.70 : 1.0;
+    const isWeekend = d.weekday === "Sat" || d.weekday === "Sun";
+    return `<div class="cal-cell ${isWeekend ? "weekend" : ""}"
+      data-day="${d.iso_date}"
+      style="background:${color};opacity:${opacity};color:${d.intensity >= 2 ? "#0a0b0d" : "var(--ink-2)"}"
+      title="${d.weekday} ${d.iso_date} — ${d.n_events} event(s)">
+      ${parseInt(d.iso_date.slice(-2), 10)}
+    </div>`;
   }).join("");
+  $("#calGrid").innerHTML = cells;
+  $$('#calGrid .cal-cell[data-day]').forEach(el => el.addEventListener("click", () => {
+    const day = el.dataset.day;
+    const events = CALENDAR_EVENTS_BY_DAY[day] || [];
+    drillCalendarDay(day, events);
+  }));
+}
+
+function drillCalendarDay(day, events) {
+  const html = `
+    <div class="dw-section">${events.length} ${t("cal.events_on", {n: events.length})}</div>
+    ${events.length === 0
+      ? `<div style="color:var(--ink-3);padding:8px 0">${t("cal.no_events")}</div>`
+      : events.map(e => `
+          <div class="dw-item no-click">
+            <div class="ih">
+              <span class="nm">${e.title}</span>
+              <span class="pill" style="color:${CAL_CAT_COLOR[e.category]};border-color:${CAL_CAT_COLOR[e.category]}55;background:${CAL_CAT_COLOR[e.category]}1a">${t("cal.cat." + e.category)}</span>
+            </div>
+            <div class="mt">${e.organizer} · ${e.attendees} ${t("cal.attendees")}</div>
+          </div>`).join("")}
+  `;
+  openDrawer(day, t("cal.outlook_sync"), html);
 }
 
 // ════════════════════════════ DRAWER ════════════════════════════
@@ -1485,23 +1697,79 @@ $$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
   renderEmpTable("#empTableFull tbody", true);
 }));
 
-// ════════════════════════════ THEME TOGGLE ════════════════════════════
+// ════════════════════════════ THEME + LANG + SETTINGS ════════════════════════════
+// Persistence model: localStorage stores user overrides; SETTINGS_DEFAULTS holds
+// the org-level defaults from data/settings.json. Resolve order on init:
+//   1. localStorage (user choice)
+//   2. SETTINGS_DEFAULTS (org-level)
+//   3. hardcoded fallback (light + en)
+(function initThemeAndLang(){
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem("pa_theme") || SETTINGS_DEFAULTS.theme || "light";
+  root.setAttribute("data-theme", savedTheme);
+  LANG = localStorage.getItem("pa_lang") || SETTINGS_DEFAULTS.language || "en";
+})();
+
 (function(){
   const root = document.documentElement;
   const btn = document.getElementById("themeToggle");
-  const saved = localStorage.getItem("pa_theme");
-  if (saved) root.setAttribute("data-theme", saved);
   function setLabel() {
-    const th = root.getAttribute("data-theme") || "dark";
+    const th = root.getAttribute("data-theme") || "light";
     btn.textContent = th === "dark" ? "☾ Dark" : "☀ Light";
   }
   setLabel();
   btn.addEventListener("click", function () {
-    const cur = root.getAttribute("data-theme") || "dark";
+    const cur = root.getAttribute("data-theme") || "light";
     const next = cur === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("pa_theme", next);
     setLabel();
+  });
+  window._setThemeLabel = setLabel;
+})();
+
+// ════════════════════════════ SETTINGS MODAL ════════════════════════════
+(function(){
+  const ov = document.getElementById("settingsOv");
+  const modal = document.getElementById("settingsModal");
+  const open = () => { ov.classList.add("open"); modal.classList.add("open"); paintActive(); };
+  const close = () => { ov.classList.remove("open"); modal.classList.remove("open"); };
+  document.getElementById("settingsToggle").addEventListener("click", open);
+  document.getElementById("settingsClose").addEventListener("click", close);
+  ov.addEventListener("click", close);
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+  function paintActive() {
+    document.querySelectorAll("[data-set-lang]").forEach(b =>
+      b.classList.toggle("active", b.dataset.setLang === LANG));
+    const th = document.documentElement.getAttribute("data-theme") || "light";
+    document.querySelectorAll("[data-set-theme]").forEach(b =>
+      b.classList.toggle("active", b.dataset.setTheme === th));
+    document.getElementById("settingsOrg").textContent = SETTINGS_DEFAULTS.org;
+  }
+
+  document.querySelectorAll("[data-set-lang]").forEach(b => b.addEventListener("click", () => {
+    LANG = b.dataset.setLang;
+    localStorage.setItem("pa_lang", LANG);
+    applyI18n();
+    renderAll();
+    paintActive();
+  }));
+  document.querySelectorAll("[data-set-theme]").forEach(b => b.addEventListener("click", () => {
+    document.documentElement.setAttribute("data-theme", b.dataset.setTheme);
+    localStorage.setItem("pa_theme", b.dataset.setTheme);
+    window._setThemeLabel && window._setThemeLabel();
+    paintActive();
+  }));
+  document.getElementById("settingsReset").addEventListener("click", () => {
+    localStorage.removeItem("pa_lang");
+    localStorage.removeItem("pa_theme");
+    LANG = SETTINGS_DEFAULTS.language;
+    document.documentElement.setAttribute("data-theme", SETTINGS_DEFAULTS.theme);
+    window._setThemeLabel && window._setThemeLabel();
+    applyI18n();
+    renderAll();
+    paintActive();
   });
 })();
 
@@ -1542,6 +1810,30 @@ function renderLegend() {
   $("#legendBody").innerHTML = html;
 }
 
+function renderArchitecture() {
+  const layers = [
+    { id:"frontend", kind:"arch.kind.layer", files:["dashboard_demo.html"] },
+    { id:"backend",  kind:"arch.kind.service", files:["scripts/build_people_analytics.py","scripts/ingest_hr.py","scripts/compute_team_metrics.py"] },
+    { id:"api",      kind:"arch.kind.integration", files:["scripts/ingest_emails.py","scripts/sync_calendar.py"] },
+    { id:"mcp",      kind:"arch.kind.protocol", files:["scripts/mcp_server.py"] },
+    { id:"ai",       kind:"arch.kind.model", files:["scripts/score_attrition_risk.py","scripts/cluster_team_health.py"] },
+  ];
+  const flow = ["arch.flow.input","arch.flow.pipeline","arch.flow.data","arch.flow.html"];
+  const flowHtml = flow.map((k,i) => `<span class="step">${t(k)}</span>${i<flow.length-1?'<span class="arrow">→</span>':""}`).join("");
+  const blocksHtml = layers.map(l => `
+    <div class="arch-block" data-arch="${l.id}">
+      <div class="ab-kind">${t(l.kind)}</div>
+      <div class="ab-title">${t("arch.layer."+l.id)}</div>
+      <div class="ab-desc">${t("arch.d."+l.id)}</div>
+      <div class="ab-files">${l.files.map(f => `<code>${f}</code>`).join("")}</div>
+    </div>
+  `).join("");
+  $("#archBody").innerHTML = `
+    <div class="arch-flow">${flowHtml}</div>
+    <div class="arch-row">${blocksHtml}</div>
+  `;
+}
+
 function renderAll() {
   renderKpiRow();
   renderGauge();
@@ -1554,6 +1846,7 @@ function renderAll() {
   renderTeamGrid();
   renderCalendar();
   renderInbox();
+  renderArchitecture();
   renderLegend();
 }
 (function(){
