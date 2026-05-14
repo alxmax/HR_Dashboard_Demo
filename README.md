@@ -1,4 +1,9 @@
-# HR Dashboard
+# HR Analytics Pipeline
+
+**[Live demo →](https://alxmax.github.io/HR_Dashboard_Demo/)**  
+[Dashboard](https://alxmax.github.io/HR_Dashboard_Demo/dashboard_demo.html) · [Architecture](https://alxmax.github.io/HR_Dashboard_Demo/arhitectura.html) · [Source](https://github.com/alxmax/HR_Dashboard_Demo)
+
+---
 
 Self-contained HR analytics dashboard with a real Python pipeline behind it.
 Double-click `dashboard_demo.html` to open — no server, no build step.

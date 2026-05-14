@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -983,7 +983,7 @@ const CALENDAR_EVENTS_BY_DAY = {
 const SETTINGS_DEFAULTS = {
   org: "Acme Co · People Ops",
   language: "en",
-  theme: "light",
+  theme: "dark",
   calendar_window_days: 14,
 };
 
@@ -1845,7 +1845,7 @@ $$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
 //   3. hardcoded fallback (light + en)
 (function initThemeAndLang(){
   const root = document.documentElement;
-  const savedTheme = localStorage.getItem("pa_theme") || SETTINGS_DEFAULTS.theme || "light";
+  const savedTheme = localStorage.getItem("pa_theme") || SETTINGS_DEFAULTS.theme || "dark";
   root.setAttribute("data-theme", savedTheme);
   LANG = localStorage.getItem("pa_lang") || SETTINGS_DEFAULTS.language || "en";
 })();
