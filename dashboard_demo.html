@@ -32,10 +32,10 @@
   color-scheme: dark;
 }
 [data-theme="light"] {
-  --bg-0: #d8d4c8;
-  --bg-1: #e8e4d6;
-  --bg-2: #ddd9cb;
-  --bg-3: #cfcbbb;
+  --bg-0: #f5f4f0;
+  --bg-1: #faf9f5;
+  --bg-2: #f0ede6;
+  --bg-3: #e8e5dc;
   --line-1: #b8b3a2;
   --line-2: #9e9988;
   --line-3: #807b6a;
@@ -382,18 +382,19 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 }
 .cal-cell {
   aspect-ratio: 1; background: var(--bg-3);
-  display: grid; place-items: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
   font-family: var(--ff-mono); font-size: 8.5px;
   color: var(--ink-3); cursor: pointer; transition: opacity 100ms;
 }
 .cal-cell:hover { opacity: 0.7; }
-.cal-cell.g1 { background: rgba(48,209,88,0.18); color: var(--green); }
-.cal-cell.g2 { background: rgba(48,209,88,0.32); color: #ffffff; }
-.cal-cell.g3 { background: rgba(48,209,88,0.48); color: #ffffff; }
-.cal-cell.r1 { background: rgba(255,69,58,0.18); color: var(--red); }
-.cal-cell.r2 { background: rgba(255,69,58,0.32); color: #ffffff; }
-.cal-cell.r3 { background: rgba(255,69,58,0.48); color: #ffffff; }
 .cal-cell.empty { background: transparent; cursor: default; }
+.cal-badge { font-size: 6.5px; padding: 0 3px; border-radius: 2px; line-height: 1.5; }
+.cal-hdr { background: transparent; color: var(--ink-4); font-size: 8px; letter-spacing: 0.04em; font-weight: 600; cursor: default; aspect-ratio: auto; padding: 2px 0; }
+.cal-hdr:hover { opacity: 1; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 4px; }
+.cal-nav-btn { background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); font-size: 14px; width: 20px; height: 20px; cursor: pointer; display: grid; place-items: center; transition: border-color 100ms, color 100ms; line-height: 1; }
+.cal-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+#calMonthLabel { font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-1); font-weight: 600; letter-spacing: 0.02em; }
 .cal-foot {
   font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3);
   margin-top: 6px; display: flex; justify-content: space-between;
@@ -725,12 +726,17 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
     </div>
 
     <div class="sb-section">
-      <div class="sb-head" data-i18n="sb.calendar">Outlook · next 14 days</div>
+      <div class="sb-head" data-i18n="sb.calendar">Outlook · calendar</div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" id="calPrev">‹</button>
+        <span id="calMonthLabel"></span>
+        <button class="cal-nav-btn" id="calNext">›</button>
+      </div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-foot" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:9.5px">
-        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--gold);display:inline-block"></span><span data-i18n="cal.cat.all_hands">All-hands</span></span>
-        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--teal);display:inline-block"></span><span data-i18n="cal.cat.training">Training</span></span>
-        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:var(--red);display:inline-block"></span><span data-i18n="cal.cat.leave">Leave</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(13,125,114,0.55);display:inline-block"></span><span data-i18n="cal.cat.training">Training</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(160,111,28,0.65);display:inline-block"></span><span data-i18n="cal.busy">Busy day</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(160,111,28,0.30);display:inline-block"></span><span data-i18n="cal.light">Light day</span></span>
       </div>
     </div>
 
@@ -925,6 +931,11 @@ const CALENDAR_DAYS = [
   {iso_date:"2026-05-26",weekday:"Tue",n_events:4,intensity:3,primary_category:"leave"},
   {iso_date:"2026-05-27",weekday:"Wed",n_events:3,intensity:2,primary_category:"leave"},
 ];
+const CAL_DATA_BY_DATE = {};
+CALENDAR_DAYS.forEach(d => { CAL_DATA_BY_DATE[d.iso_date] = d; });
+const _calInit = CALENDAR_DAYS[0]?.iso_date || "2026-05-01";
+let calViewDate = new Date(+_calInit.slice(0,4), +_calInit.slice(5,7)-1, 1);
+
 // Per-employee upcoming meetings — also synced from Microsoft Graph
 // (real implementation: /users/{user}/calendar/events filtered by attendee).
 const MEETINGS_BY_EMP = {
@@ -939,6 +950,22 @@ const MEETINGS_BY_EMP = {
   "E042":[{when:"2026-05-20 13:00",title:"Compensation review — Q2",organizer:"E042"},{when:"2026-05-22 09:00",title:"Finance close",organizer:"E039"}],
   "E046":[{when:"2026-05-14 11:00",title:"All-hands · May",organizer:"E046"},{when:"2026-05-25 11:00",title:"All-hands — Q2 results preview",organizer:"E046"}],
 };
+
+const MEETINGS_BY_DATE = {};
+(function(){
+  const seen = new Set();
+  Object.values(MEETINGS_BY_EMP).forEach(list => {
+    list.forEach(m => {
+      const date = m.when.slice(0, 10);
+      const key = m.when + "|" + m.title;
+      if (!seen.has(key)) {
+        seen.add(key);
+        if (!MEETINGS_BY_DATE[date]) MEETINGS_BY_DATE[date] = [];
+        MEETINGS_BY_DATE[date].push(m);
+      }
+    });
+  });
+})();
 
 const CALENDAR_EVENTS_BY_DAY = {
   "2026-05-14":[{title:"All-hands · May",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Q2 review kick-off",category:"review",organizer:"nicoleta.calin@company.ro",attendees:12}],
@@ -1043,11 +1070,13 @@ const I18N = {
     // Where shown labels
     "lg.where":"Where it appears:",
     // Calendar
-    "sb.calendar":"Outlook · next 14 days",
+    "sb.calendar":"Outlook · calendar",
     "cal.outlook_sync":"Synced via Microsoft Graph API",
     "cal.events_on":"event(s) on this day",
     "cal.no_events":"No events scheduled.",
     "cal.attendees":"attendees",
+    "cal.meeting":"Meeting","cal.organizer":"Organizer",
+    "cal.busy":"Busy day","cal.light":"Light day",
     "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
     "cal.cat.leave":"Leave","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interview",
     // Architecture
@@ -1149,11 +1178,13 @@ const I18N = {
     "lg.t.missing":"Pontaje lipsă","lg.d.missing":"Persoane ale căror ore săptămânale logate sunt sub 80% din așteptat, după ce se scad concediile înregistrate. Dashboard-ul sugerează o cauză probabilă pentru fiecare.","lg.w.missing":"Tab Inbox · tabelul Pontaje lipsă",
     "lg.where":"Unde apare:",
     // Calendar
-    "sb.calendar":"Outlook · următoarele 14 zile",
+    "sb.calendar":"Outlook · calendar",
     "cal.outlook_sync":"Sincronizat prin Microsoft Graph API",
     "cal.events_on":"eveniment(e) în ziua asta",
     "cal.no_events":"Niciun eveniment programat.",
     "cal.attendees":"participanți",
+    "cal.meeting":"Ședință","cal.organizer":"Organizator",
+    "cal.busy":"Zi aglomerată","cal.light":"Zi ușoară",
     "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
     "cal.cat.leave":"Concediu","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interviu",
     // Architecture
@@ -1203,6 +1234,7 @@ function applyI18n() {
   const cur = document.getElementById("langCur"), other = document.getElementById("langOther");
   if (cur) cur.textContent = LANG.toUpperCase();
   if (other) other.textContent = LANG === "en" ? "RO" : "EN";
+  if (document.getElementById("calGrid")) renderCalendar();
 }
 
 // ════════════════════════════ STATE ════════════════════════════
@@ -1573,38 +1605,91 @@ const CAL_CAT_COLOR = {
   interview: "var(--orange)",
 };
 function renderCalendar() {
-  const cells = CALENDAR_DAYS.map(d => {
-    const color = CAL_CAT_COLOR[d.primary_category] || "var(--ink-4)";
-    const opacity = d.intensity === 0 ? 0.12 : d.intensity === 1 ? 0.40 : d.intensity === 2 ? 0.70 : 1.0;
-    const isWeekend = d.weekday === "Sat" || d.weekday === "Sun";
-    return `<div class="cal-cell ${isWeekend ? "weekend" : ""}"
-      data-day="${d.iso_date}"
-      style="background:${color};opacity:${opacity};color:${d.intensity >= 2 ? "#0a0b0d" : "var(--ink-2)"}"
-      title="${d.weekday} ${d.iso_date} — ${d.n_events} event(s)">
-      ${parseInt(d.iso_date.slice(-2), 10)}
-    </div>`;
-  }).join("");
-  $("#calGrid").innerHTML = cells;
+  const MONTH_NAMES = {
+    en: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+    ro: ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"]
+  };
+  const DAY_HDR = {
+    en: ["Mo","Tu","We","Th","Fr","Sa","Su"],
+    ro: ["Lu","Ma","Mi","Jo","Vi","Sâ","Du"]
+  };
+  const yr = calViewDate.getFullYear(), mo = calViewDate.getMonth();
+  const label = document.getElementById("calMonthLabel");
+  if (label) label.textContent = `${(MONTH_NAMES[LANG]||MONTH_NAMES.en)[mo]} ${yr}`;
+
+  const hdrCells = (DAY_HDR[LANG]||DAY_HDR.en)
+    .map(h => `<div class="cal-cell cal-hdr">${h}</div>`).join("");
+
+  const firstWd = (new Date(yr, mo, 1).getDay() + 6) % 7; // Mon=0
+  const daysInMonth = new Date(yr, mo + 1, 0).getDate();
+  const emptyCells = Array(firstWd).fill('<div class="cal-cell empty"></div>').join("");
+
+  const cells = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = `${yr}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const isWeekend = (firstWd + d - 1) % 7 >= 5;
+    const calEvents = CALENDAR_EVENTS_BY_DAY[iso] || [];
+    const calMeetings = MEETINGS_BY_DATE[iso] || [];
+    const total = calEvents.length + calMeetings.length;
+    const hasTraining = calEvents.some(e => e.category === "training");
+
+    if (total === 0) {
+      cells.push(`<div class="cal-cell${isWeekend?" weekend":""}" title="${iso}">${d}</div>`);
+    } else {
+      let bg, textColor, badgeBg;
+      if (hasTraining) {
+        const alpha = total <= 2 ? 0.35 : total <= 4 ? 0.58 : 0.82;
+        const isDark = total >= 5;
+        bg = `rgba(13,125,114,${alpha})`;
+        textColor = isDark ? "#fff" : "#0b6b61";
+        badgeBg = isDark ? "rgba(0,0,0,0.18)" : "rgba(13,125,114,0.22)";
+      } else {
+        const alpha = total === 1 ? 0.28 : total <= 2 ? 0.45 : total <= 4 ? 0.65 : 0.85;
+        const isDark = total >= 4;
+        bg = `rgba(160,111,28,${alpha})`;
+        textColor = isDark ? "#fff" : "var(--ink-1)";
+        badgeBg = isDark ? "rgba(0,0,0,0.20)" : "rgba(0,0,0,0.12)";
+      }
+      cells.push(`<div class="cal-cell${isWeekend?" weekend":""}" data-day="${iso}"
+        style="background:${bg};color:${textColor};" title="${iso} — ${total} event(s)">
+        <span style="font-weight:600;line-height:1;">${d}</span>
+        <span class="cal-badge" style="background:${badgeBg};color:${textColor};">${total}</span>
+      </div>`);
+    }
+  }
+
+  $("#calGrid").innerHTML = hdrCells + emptyCells + cells.join("");
   $$('#calGrid .cal-cell[data-day]').forEach(el => el.addEventListener("click", () => {
-    const day = el.dataset.day;
-    const events = CALENDAR_EVENTS_BY_DAY[day] || [];
-    drillCalendarDay(day, events);
+    drillCalendarDay(el.dataset.day);
   }));
 }
 
-function drillCalendarDay(day, events) {
+function drillCalendarDay(day) {
+  const events = CALENDAR_EVENTS_BY_DAY[day] || [];
+  const meetings = MEETINGS_BY_DATE[day] || [];
+  const total = events.length + meetings.length;
   const html = `
-    <div class="dw-section">${events.length} ${t("cal.events_on", {n: events.length})}</div>
-    ${events.length === 0
+    <div class="dw-section">${total} ${t("cal.events_on")}</div>
+    ${total === 0
       ? `<div style="color:var(--ink-3);padding:8px 0">${t("cal.no_events")}</div>`
-      : events.map(e => `
-          <div class="dw-item no-click">
-            <div class="ih">
-              <span class="nm">${e.title}</span>
-              <span class="pill" style="color:${CAL_CAT_COLOR[e.category]};border-color:${CAL_CAT_COLOR[e.category]}55;background:${CAL_CAT_COLOR[e.category]}1a">${t("cal.cat." + e.category)}</span>
-            </div>
-            <div class="mt">${e.organizer} · ${e.attendees} ${t("cal.attendees")}</div>
-          </div>`).join("")}
+      : [
+          ...events.map(e => `
+            <div class="dw-item no-click">
+              <div class="ih">
+                <span class="nm">${e.title}</span>
+                <span class="pill" style="color:${CAL_CAT_COLOR[e.category]};border-color:${CAL_CAT_COLOR[e.category]}55;background:${CAL_CAT_COLOR[e.category]}1a">${t("cal.cat." + e.category)}</span>
+              </div>
+              <div class="mt">${e.organizer} · ${e.attendees} ${t("cal.attendees")}</div>
+            </div>`),
+          ...meetings.map(m => `
+            <div class="dw-item no-click">
+              <div class="ih">
+                <span class="nm">${m.title}</span>
+                <span class="pill" style="color:var(--ink-3);border-color:var(--line-2);background:var(--bg-2)">${t("cal.meeting")}</span>
+              </div>
+              <div class="mt">${m.when} · ${t("cal.organizer")}: ${m.organizer}</div>
+            </div>`)
+        ].join("")}
   `;
   openDrawer(day, t("cal.outlook_sync"), html);
 }
@@ -1922,6 +2007,14 @@ function renderAll() {
     localStorage.setItem("pa_lang", LANG);
     applyI18n();
     renderAll();
+  });
+  document.getElementById("calPrev").addEventListener("click", () => {
+    calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
+    renderCalendar();
+  });
+  document.getElementById("calNext").addEventListener("click", () => {
+    calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
+    renderCalendar();
   });
 })();
 
