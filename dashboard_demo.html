@@ -32,10 +32,10 @@
   color-scheme: dark;
 }
 [data-theme="light"] {
-  --bg-0: #d8d4c8;
-  --bg-1: #e8e4d6;
-  --bg-2: #ddd9cb;
-  --bg-3: #cfcbbb;
+  --bg-0: #f5f4f0;
+  --bg-1: #faf9f5;
+  --bg-2: #f0ede6;
+  --bg-3: #e8e5dc;
   --line-1: #b8b3a2;
   --line-2: #9e9988;
   --line-3: #807b6a;
@@ -382,18 +382,19 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 }
 .cal-cell {
   aspect-ratio: 1; background: var(--bg-3);
-  display: grid; place-items: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
   font-family: var(--ff-mono); font-size: 8.5px;
   color: var(--ink-3); cursor: pointer; transition: opacity 100ms;
 }
 .cal-cell:hover { opacity: 0.7; }
-.cal-cell.g1 { background: rgba(48,209,88,0.18); color: var(--green); }
-.cal-cell.g2 { background: rgba(48,209,88,0.32); color: #ffffff; }
-.cal-cell.g3 { background: rgba(48,209,88,0.48); color: #ffffff; }
-.cal-cell.r1 { background: rgba(255,69,58,0.18); color: var(--red); }
-.cal-cell.r2 { background: rgba(255,69,58,0.32); color: #ffffff; }
-.cal-cell.r3 { background: rgba(255,69,58,0.48); color: #ffffff; }
 .cal-cell.empty { background: transparent; cursor: default; }
+.cal-badge { font-size: 6.5px; padding: 0 3px; border-radius: 2px; line-height: 1.5; }
+.cal-hdr { background: transparent; color: var(--ink-4); font-size: 8px; letter-spacing: 0.04em; font-weight: 600; cursor: default; aspect-ratio: auto; padding: 2px 0; }
+.cal-hdr:hover { opacity: 1; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 4px; }
+.cal-nav-btn { background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); font-size: 14px; width: 20px; height: 20px; cursor: pointer; display: grid; place-items: center; transition: border-color 100ms, color 100ms; line-height: 1; }
+.cal-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+#calMonthLabel { font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-1); font-weight: 600; letter-spacing: 0.02em; }
 .cal-foot {
   font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3);
   margin-top: 6px; display: flex; justify-content: space-between;
@@ -455,6 +456,61 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 .dw-signal { display: inline-block; font-size: 9px; padding: 2px 6px; margin: 2px 3px 0 0;
   border: 1px solid var(--line-2); color: var(--ink-2); letter-spacing: 0.06em; }
 
+/* Settings modal */
+.settings-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 110;
+  opacity: 0; pointer-events: none; transition: opacity 200ms; }
+.settings-ov.open { opacity: 1; pointer-events: auto; }
+.settings-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.96);
+  width: 420px; max-width: 92vw; max-height: 88vh; background: var(--bg-1);
+  border: 1px solid var(--gold); z-index: 120; opacity: 0; pointer-events: none;
+  transition: opacity 180ms, transform 180ms cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; }
+.settings-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.settings-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 18px 22px; border-bottom: 1px solid var(--line-2); }
+.settings-title { font-family: var(--ff-disp); font-size: 20px; font-weight: 700; color: var(--gold-2);
+  letter-spacing: 0.02em; }
+.settings-sub { font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+.settings-body { padding: 18px 22px 22px; overflow-y: auto; }
+.settings-row { display: flex; flex-direction: column; gap: 8px; padding: 12px 0;
+  border-bottom: 1px dotted var(--line-2); }
+.settings-label { font-family: var(--ff-mono); font-size: 11.5px; color: var(--ink-3); font-weight: 500; }
+.settings-choice { display: flex; gap: 6px; }
+.seg { flex: 1; padding: 8px 12px; background: var(--bg-2); border: 1px solid var(--line-2);
+  color: var(--ink-2); cursor: pointer; transition: all 120ms; font-family: var(--ff-mono);
+  font-size: 12.5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.seg:hover { color: var(--ink-1); border-color: var(--ink-4); }
+.seg.active { background: var(--gold); border-color: var(--gold); color: var(--bg-0); font-weight: 700; }
+.settings-org { font-family: var(--ff-mono); font-size: 12.5px; color: var(--gold-2); padding: 6px 0; }
+.settings-input { padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--line-2);
+  color: var(--ink-1); font-family: var(--ff-mono); font-size: 12px; outline: none;
+  transition: border-color 120ms; }
+.settings-input:focus { border-color: var(--gold); }
+.settings-hint { font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+.settings-foot { margin-top: 18px; padding-top: 12px; border-top: 1px dotted var(--line-2);
+  font-family: var(--ff-mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+
+/* Architecture tab */
+.arch-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px; margin-bottom: 24px; }
+.arch-block { background: var(--bg-1); border: 1px solid var(--line-1); padding: 16px 18px;
+  position: relative; cursor: pointer; transition: border-color 120ms, transform 120ms; }
+.arch-block:hover { border-color: var(--gold); transform: translateY(-2px); }
+.arch-block::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold); opacity: 0.5; }
+.arch-block .ab-kind { font-family: var(--ff-mono); font-size: 10.5px; color: var(--gold);
+  letter-spacing: 0.08em; margin-bottom: 6px; }
+.arch-block .ab-title { font-family: var(--ff-disp); font-size: 18px; font-weight: 700;
+  color: var(--ink-1); letter-spacing: 0.02em; margin-bottom: 8px; }
+.arch-block .ab-desc { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.arch-block .ab-files { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.arch-block .ab-files code { font-family: var(--ff-mono); font-size: 10.5px; color: var(--teal);
+  background: rgba(45,212,191,0.08); padding: 2px 6px; border: 1px solid rgba(45,212,191,0.20); }
+.arch-flow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 0;
+  font-family: var(--ff-mono); font-size: 11px; color: var(--ink-3); flex-wrap: wrap; }
+.arch-flow .step { padding: 6px 12px; border: 1px solid var(--line-2); background: var(--bg-2); }
+.arch-flow .arrow { color: var(--gold); }
+
 /* Responsive */
 @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } .panel-row { grid-template-columns: 1fr; } }
 @media (max-width: 880px)  { .sidebar { display: none; } .kpi-row { grid-template-columns: repeat(2, 1fr); } }
@@ -471,9 +527,10 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab active" data-tab="overview" data-i18n="tab.overview">Overview</button>
-    <button class="tab" data-tab="employees" data-i18n="tab.people">People</button>
+    <button class="tab" data-tab="employees" data-i18n="tab.people">Colleagues</button>
     <button class="tab" data-tab="teams" data-i18n="tab.teams">Teams</button>
     <button class="tab" data-tab="inbox" data-i18n="tab.inbox">Inbox &amp; Automation</button>
+    <button class="tab" data-tab="architecture" data-i18n="tab.architecture">Architecture</button>
     <button class="tab" data-tab="legend" data-i18n="tab.legend">Legend</button>
   </nav>
   <div class="topbar-right">
@@ -483,6 +540,7 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
       <span id="langCur" class="lang-cur">EN</span><span class="lang-sep">/</span><span id="langOther" class="lang-other">RO</span>
     </button>
     <button id="themeToggle" class="hdr-btn" title="Toggle light/dark">☾ Dark</button>
+    <button id="settingsToggle" class="hdr-btn" title="Settings" aria-label="Settings">⚙</button>
   </div>
 </header>
 
@@ -630,7 +688,18 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
 
     </section>
 
-    <!-- ──────────────── TAB 5: LEGEND ──────────────── -->
+    <!-- ──────────────── TAB 5: ARCHITECTURE ──────────────── -->
+    <section class="view" id="view-architecture">
+      <div class="section-head"><span data-i18n="sec.architecture">How this dashboard is built</span>
+        <a href="arhitectura.html" target="_blank" style="margin-left:auto;font-family:var(--ff-mono);font-size:11.5px;color:var(--gold-2);text-decoration:none;padding:4px 10px;border:1px solid var(--gold);" data-i18n="arch.open_full">→ Full architecture page</a>
+      </div>
+      <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="arch.intro">
+        One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.
+      </div>
+      <div id="archBody"></div>
+    </section>
+
+    <!-- ──────────────── TAB 6: LEGEND ──────────────── -->
     <section class="view" id="view-legend">
       <div class="section-head" data-i18n="sec.legend">Legend &mdash; what each term means</div>
       <div style="font-size:13px;color:var(--ink-3);max-width:62ch;margin-bottom:22px;line-height:1.6" data-i18n="legend.intro">
@@ -657,11 +726,17 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
     </div>
 
     <div class="sb-section">
-      <div class="sb-head" data-i18n="sb.activity">30-day activity</div>
+      <div class="sb-head" data-i18n="sb.calendar">Outlook · calendar</div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" id="calPrev">‹</button>
+        <span id="calMonthLabel"></span>
+        <button class="cal-nav-btn" id="calNext">›</button>
+      </div>
       <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-foot">
-        <span style="color:var(--green)">▲ <span data-i18n="legend.pos">positive</span></span>
-        <span style="color:var(--red)">▼ <span data-i18n="legend.neg">negative</span></span>
+      <div class="cal-foot" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:9.5px">
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(13,125,114,0.55);display:inline-block"></span><span data-i18n="cal.cat.training">Training</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(160,111,28,0.65);display:inline-block"></span><span data-i18n="cal.busy">Busy day</span></span>
+        <span style="display:inline-flex;align-items:center;gap:3px"><span style="width:8px;height:8px;background:rgba(160,111,28,0.30);display:inline-block"></span><span data-i18n="cal.light">Light day</span></span>
       </div>
     </div>
 
@@ -682,6 +757,52 @@ table.data .role { color: var(--ink-3); font-size: 10.5px; }
     </div>
 
   </aside>
+</div>
+
+<!-- ──────────────── SETTINGS MODAL ──────────────── -->
+<div class="settings-ov" id="settingsOv"></div>
+<div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true">
+  <div class="settings-head">
+    <div>
+      <div class="settings-title" data-i18n="settings.title">Settings</div>
+      <div class="settings-sub" data-i18n="settings.sub">Defaults persist across sessions in your browser.</div>
+    </div>
+    <button class="dw-close" id="settingsClose">×</button>
+  </div>
+  <div class="settings-body">
+    <div class="settings-row">
+      <label class="settings-label" data-i18n="settings.language">Default language</label>
+      <div class="settings-choice" id="settingsLang">
+        <button class="seg" data-set-lang="en">English</button>
+        <button class="seg" data-set-lang="ro">Română</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label" data-i18n="settings.theme">Default theme</label>
+      <div class="settings-choice" id="settingsTheme">
+        <button class="seg" data-set-theme="light">☀ <span data-i18n="settings.light">Light</span></button>
+        <button class="seg" data-set-theme="dark">☾ <span data-i18n="settings.dark">Dark</span></button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label" data-i18n="settings.org">Organization</label>
+      <div class="settings-org" id="settingsOrg">—</div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label" for="settingsEmail" data-i18n="settings.email">HR inbox email (Gmail/Outlook)</label>
+      <input id="settingsEmail" class="settings-input" type="email" placeholder="hr@company.ro" autocomplete="off" />
+      <div class="settings-hint" data-i18n="settings.email_hint">Used by scripts/ingest_emails.py to identify which inbox to poll for leave requests.</div>
+    </div>
+    <div class="settings-row" style="border-bottom:none">
+      <label class="settings-label" for="settingsApi" data-i18n="settings.api">Microsoft Graph endpoint</label>
+      <input id="settingsApi" class="settings-input" type="text" placeholder="https://graph.microsoft.com/v1.0/users/{cal}/calendarView" autocomplete="off" />
+      <div class="settings-hint" data-i18n="settings.api_hint">Calendar sync endpoint. Leave blank to keep the demo mock provider.</div>
+    </div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line-2)">
+      <button id="settingsReset" class="hdr-btn" style="width:100%" data-i18n="settings.reset">Reset to organization defaults</button>
+    </div>
+    <div class="settings-foot" data-i18n="settings.note">Your choices are stored locally in this browser and survive pipeline re-runs.</div>
+  </div>
 </div>
 
 <!-- ──────────────── DRAWER ──────────────── -->
@@ -793,19 +914,83 @@ const BENCH_COUNTS = (function(){
   return c;
 })();
 
-// 30-day calendar — synthetic daily attainment percentages
-const CALENDAR = [
-  null,null,1,2,3,2,1,
-  -1,1,3,2,3,1,-1,
-  1,2,3,3,2,1,1,
-  -2,-1,1,2,3,2,1,
-  3,2
+// 14-day Outlook calendar window — synced from data/calendar.json via scripts/sync_calendar.py
+const CALENDAR_DAYS = [
+  {iso_date:"2026-05-14",weekday:"Thu",n_events:2,intensity:2,primary_category:"all_hands"},
+  {iso_date:"2026-05-15",weekday:"Fri",n_events:2,intensity:2,primary_category:"training"},
+  {iso_date:"2026-05-16",weekday:"Sat",n_events:0,intensity:0,primary_category:null},
+  {iso_date:"2026-05-17",weekday:"Sun",n_events:0,intensity:0,primary_category:null},
+  {iso_date:"2026-05-18",weekday:"Mon",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-19",weekday:"Tue",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-20",weekday:"Wed",n_events:4,intensity:3,primary_category:"leave"},
+  {iso_date:"2026-05-21",weekday:"Thu",n_events:2,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-22",weekday:"Fri",n_events:2,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-23",weekday:"Sat",n_events:1,intensity:1,primary_category:"leave"},
+  {iso_date:"2026-05-24",weekday:"Sun",n_events:1,intensity:1,primary_category:"leave"},
+  {iso_date:"2026-05-25",weekday:"Mon",n_events:3,intensity:2,primary_category:"leave"},
+  {iso_date:"2026-05-26",weekday:"Tue",n_events:4,intensity:3,primary_category:"leave"},
+  {iso_date:"2026-05-27",weekday:"Wed",n_events:3,intensity:2,primary_category:"leave"},
 ];
+const CAL_DATA_BY_DATE = {};
+CALENDAR_DAYS.forEach(d => { CAL_DATA_BY_DATE[d.iso_date] = d; });
+const _calInit = CALENDAR_DAYS[0]?.iso_date || "2026-05-01";
+let calViewDate = new Date(+_calInit.slice(0,4), +_calInit.slice(5,7)-1, 1);
+
+// Per-employee upcoming meetings — also synced from Microsoft Graph
+// (real implementation: /users/{user}/calendar/events filtered by attendee).
+const MEETINGS_BY_EMP = {
+  "E001":[{when:"2026-05-15 10:00",title:"Backend platform sync",organizer:"E007"},{when:"2026-05-16 14:30",title:"API design review",organizer:"E003"}],
+  "E002":[{when:"2026-05-15 11:00",title:"Onboarding checkpoint",organizer:"E034"}],
+  "E003":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-19 10:00",title:"Code review with Vlad",organizer:"E007"}],
+  "E007":[{when:"2026-05-14 11:00",title:"Q2 review kick-off",organizer:"E037"},{when:"2026-05-18 09:30",title:"Engineering 1:1s (skip-level)",organizer:"E021"}],
+  "E008":[{when:"2026-05-15 09:00",title:"Onboarding day 1",organizer:"E034"},{when:"2026-05-18 14:00",title:"Buddy session — Andrei",organizer:"E001"}],
+  "E014":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-25 10:00",title:"Hiring panel — DS lead",organizer:"E037"}],
+  "E021":[{when:"2026-05-14 15:00",title:"Architecture council",organizer:"E021"},{when:"2026-05-25 11:00",title:"All-hands prep",organizer:"E046"}],
+  "E037":[{when:"2026-05-14 11:00",title:"Q2 review kick-off",organizer:"E037"},{when:"2026-05-20 13:00",title:"Compensation review",organizer:"E042"},{when:"2026-05-26 10:00",title:"Performance calibration",organizer:"E037"}],
+  "E042":[{when:"2026-05-20 13:00",title:"Compensation review — Q2",organizer:"E042"},{when:"2026-05-22 09:00",title:"Finance close",organizer:"E039"}],
+  "E046":[{when:"2026-05-14 11:00",title:"All-hands · May",organizer:"E046"},{when:"2026-05-25 11:00",title:"All-hands — Q2 results preview",organizer:"E046"}],
+};
+
+const MEETINGS_BY_DATE = {};
+(function(){
+  const seen = new Set();
+  Object.values(MEETINGS_BY_EMP).forEach(list => {
+    list.forEach(m => {
+      const date = m.when.slice(0, 10);
+      const key = m.when + "|" + m.title;
+      if (!seen.has(key)) {
+        seen.add(key);
+        if (!MEETINGS_BY_DATE[date]) MEETINGS_BY_DATE[date] = [];
+        MEETINGS_BY_DATE[date].push(m);
+      }
+    });
+  });
+})();
+
+const CALENDAR_EVENTS_BY_DAY = {
+  "2026-05-14":[{title:"All-hands · May",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Q2 review kick-off",category:"review",organizer:"nicoleta.calin@company.ro",attendees:12}],
+  "2026-05-15":[{title:"Manager training — feedback skills",category:"training",organizer:"madalina.albu@company.ro",attendees:8},{title:"Onboarding day 1 — new hires",category:"onboarding",organizer:"dorina.petrescu@company.ro",attendees:3}],
+  "2026-05-18":[{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Engineering 1:1s (skip-level)",category:"review",organizer:"bogdan.radu@company.ro",attendees:6}],
+  "2026-05-19":[{title:"Senior engineer interview panel",category:"interview",organizer:"madalina.albu@company.ro",attendees:4},{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Andrei Cojanu — vacation",category:"leave",organizer:"system",attendees:1}],
+  "2026-05-20":[{title:"Compensation review — Q2",category:"review",organizer:"mihaela.bratu@company.ro",attendees:5},{title:"SSM annual refresher",category:"training",organizer:"sebastian.olaru@company.ro",attendees:42},{title:"Diana Lupu — medical leave",category:"leave",organizer:"system",attendees:1},{title:"Sergiu Marcu — vacation start",category:"leave",organizer:"system",attendees:1}],
+  "2026-05-25":[{title:"All-hands — Q2 results preview",category:"all_hands",organizer:"alina.stoica@company.ro",attendees:50},{title:"Hiring panel — Data Science lead",category:"interview",organizer:"andreea.tudor@company.ro",attendees:4}],
+  "2026-05-26":[{title:"Iulia Constantin — vacation",category:"leave",organizer:"system",attendees:1},{title:"Performance calibration session",category:"review",organizer:"nicoleta.calin@company.ro",attendees:8}],
+  "2026-05-27":[{title:"Quarterly skip-levels — Customer Success",category:"review",organizer:"carmen.dobre@company.ro",attendees:7}],
+};
+
+// Org-level defaults loaded by the dashboard. Pipeline writes data/settings.json;
+// the dashboard inlines the same shape here so it works without a server.
+const SETTINGS_DEFAULTS = {
+  org: "Acme Co · People Ops",
+  language: "en",
+  theme: "light",
+  calendar_window_days: 14,
+};
 
 // ════════════════════════════ I18N ════════════════════════════
 const I18N = {
   en: {
-    "tab.overview":"Overview","tab.people":"People","tab.teams":"Teams","tab.inbox":"Inbox & Automation",
+    "tab.overview":"Overview","tab.people":"Colleagues","tab.teams":"Teams","tab.inbox":"Inbox & Automation",
     "status.running":"Pipeline running","status.build":"Build",
     "filter.dept":"Department","filter.risk":"Retention risk","filter.range":"Time range","filter.all":"All",
     "dept.engineering":"Engineering","dept.product":"Product","dept.operations":"Operations","dept.hr":"HR","dept.finance":"Finance","dept.marketing":"Marketing",
@@ -884,6 +1069,34 @@ const I18N = {
     "lg.t.missing":"Missing time logs","lg.d.missing":"People whose total logged hours this week fall below 80% of expected, after subtracting recorded leave. The dashboard suggests a likely cause for each.","lg.w.missing":"Inbox tab · Missing time logs table",
     // Where shown labels
     "lg.where":"Where it appears:",
+    // Calendar
+    "sb.calendar":"Outlook · calendar",
+    "cal.outlook_sync":"Synced via Microsoft Graph API",
+    "cal.events_on":"event(s) on this day",
+    "cal.no_events":"No events scheduled.",
+    "cal.attendees":"attendees",
+    "cal.meeting":"Meeting","cal.organizer":"Organizer",
+    "cal.busy":"Busy day","cal.light":"Light day",
+    "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
+    "cal.cat.leave":"Leave","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interview",
+    // Architecture
+    "tab.architecture":"Architecture","sec.architecture":"How this dashboard is built",
+    "arch.intro":"One-page architecture map. Every layer of the system, what it does, which files implement it. Click a block for details.",
+    "arch.open_full":"→ Full architecture page",
+    "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"APIs","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
+    "arch.kind.layer":"LAYER","arch.kind.service":"SERVICE","arch.kind.integration":"INTEGRATION","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
+    "arch.d.frontend":"Single self-contained HTML with vanilla CSS + JS. No framework, no build step. Inlines all data + i18n; works under file:// double-click. Drill-down drawer on every metric.",
+    "arch.d.backend":"Python pipeline (pandas + scikit-learn). Single orchestrator command rebuilds every artifact deterministically — fixed random_state, sort_keys, idempotent intake.",
+    "arch.d.api":"Two external integrations as Protocol abstractions: Gmail/Outlook IMAP for leave-request email parsing, and Microsoft Graph for shared calendar sync. Mock providers ship in the demo; real providers swap in by changing one line.",
+    "arch.d.mcp":"Model Context Protocol server stub — exposes the dashboard's data (employees, attrition risk, calendar, compliance) as MCP resources so a connected LLM can query them with the proper schema and tooling, without re-implementing the data layer.",
+    "arch.d.ai":"Two deterministic sklearn models: IsolationForest for retention-risk scoring and KMeans for team-health clustering. Designed to be replaced or augmented with an LLM-driven layer via the MCP server when needed.",
+    "arch.flow.input":"CSV inputs","arch.flow.pipeline":"Python pipeline","arch.flow.data":"JSON + CSV artifacts","arch.flow.html":"Dashboard","arch.flow.mcp":"MCP server",
+    // Settings
+    "settings.title":"Settings","settings.sub":"Defaults persist across sessions in your browser.",
+    "settings.language":"Default language","settings.theme":"Default theme","settings.org":"Organization",
+    "settings.light":"Light","settings.dark":"Dark",
+    "settings.reset":"Reset to organization defaults",
+    "settings.note":"Your choices are stored locally in this browser and survive pipeline re-runs. The 'Reset' button restores the values configured in data/settings.json.",
     // Bench
     "panel.bench":"Bench risk","badge.cross":"Cross-check",
     "foot.cross_checked":"Cross-checked against project roster + timesheets",
@@ -892,7 +1105,7 @@ const I18N = {
     "lg.t.bench":"Bench risk","lg.d.bench":"People with no current project assignment, or whose project ends within 30–60 days. Helps Resourcing plan reassignments before someone sits idle.","lg.w.bench":"Overview · Bench risk panel",
   },
   ro: {
-    "tab.overview":"Sumar","tab.people":"Oameni","tab.teams":"Echipe","tab.inbox":"Inbox & Automatizare",
+    "tab.overview":"Sumar","tab.people":"Colegi","tab.teams":"Echipe","tab.inbox":"Inbox & Automatizare",
     "status.running":"Pipeline activ","status.build":"Build",
     "filter.dept":"Departament","filter.risk":"Risc plecare","filter.range":"Interval","filter.all":"Toate",
     "dept.engineering":"Inginerie","dept.product":"Produs","dept.operations":"Operațiuni","dept.hr":"HR","dept.finance":"Financiar","dept.marketing":"Marketing",
@@ -964,6 +1177,41 @@ const I18N = {
     "lg.t.audit":"Pista de audit","lg.d.audit":"Fiecare intrare procesată adaugă o linie JSON în time_off_audit.jsonl cu timestamp și payload complet. Folosit pentru audituri de conformitate.","lg.w.audit":"data/time_off_audit.jsonl",
     "lg.t.missing":"Pontaje lipsă","lg.d.missing":"Persoane ale căror ore săptămânale logate sunt sub 80% din așteptat, după ce se scad concediile înregistrate. Dashboard-ul sugerează o cauză probabilă pentru fiecare.","lg.w.missing":"Tab Inbox · tabelul Pontaje lipsă",
     "lg.where":"Unde apare:",
+    // Calendar
+    "sb.calendar":"Outlook · calendar",
+    "cal.outlook_sync":"Sincronizat prin Microsoft Graph API",
+    "cal.events_on":"eveniment(e) în ziua asta",
+    "cal.no_events":"Niciun eveniment programat.",
+    "cal.attendees":"participanți",
+    "cal.meeting":"Ședință","cal.organizer":"Organizator",
+    "cal.busy":"Zi aglomerată","cal.light":"Zi ușoară",
+    "cal.cat.all_hands":"All-hands","cal.cat.training":"Training","cal.cat.review":"Review",
+    "cal.cat.leave":"Concediu","cal.cat.onboarding":"Onboarding","cal.cat.interview":"Interviu",
+    // Architecture
+    "tab.architecture":"Arhitectură","sec.architecture":"Cum e construit dashboard-ul",
+    "arch.intro":"Hartă de arhitectură pe o pagină. Fiecare strat al sistemului, ce face, ce fișiere îl implementează. Click pe un bloc pentru detalii.",
+    "arch.open_full":"→ Pagina completă de arhitectură",
+    "arch.layer.frontend":"Frontend","arch.layer.backend":"Backend","arch.layer.api":"API-uri","arch.layer.mcp":"MCP","arch.layer.ai":"AI / ML",
+    "arch.kind.layer":"STRAT","arch.kind.service":"SERVICIU","arch.kind.integration":"INTEGRARE","arch.kind.protocol":"PROTOCOL","arch.kind.model":"MODEL",
+    "arch.d.frontend":"Un singur fișier HTML self-contained cu vanilla CSS + JS. Fără framework, fără build step. Inline pe date + i18n; funcționează la dublu-click sub file://. Drawer de drill-down pe fiecare metrică.",
+    "arch.d.backend":"Pipeline Python (pandas + scikit-learn). O singură comandă reconstruiește totul determinist — random_state fix, sort_keys, intake idempotent.",
+    "arch.d.api":"Două integrări externe ca Protocol abstractions: Gmail/Outlook IMAP pentru parsarea emailurilor de concediu, și Microsoft Graph pentru sync-ul calendarului partajat. Mock providers livrate în demo; cei reali se swap-uiesc cu o singură linie.",
+    "arch.d.mcp":"Stub server Model Context Protocol — expune datele dashboard-ului (angajați, risc plecare, calendar, conformitate) ca resurse MCP, astfel încât un LLM conectat poate interoga datele cu schema + tooling-ul potrivit, fără să re-implementeze stratul de date.",
+    "arch.d.ai":"Două modele sklearn deterministe: IsolationForest pentru risc de plecare și KMeans pentru sănătatea echipei. Proiectate să fie înlocuite sau augmentate cu un strat LLM via serverul MCP la nevoie.",
+    "arch.flow.input":"CSV-uri de intrare","arch.flow.pipeline":"Pipeline Python","arch.flow.data":"Artefacte JSON + CSV","arch.flow.html":"Dashboard","arch.flow.mcp":"Server MCP",
+    // Settings
+    "settings.title":"Setări","settings.sub":"Preferințele se păstrează între sesiuni în browser.",
+    "settings.language":"Limba implicită","settings.theme":"Tema implicită","settings.org":"Organizație",
+    "settings.light":"Luminos","settings.dark":"Întunecat",
+    "settings.reset":"Resetează la setările organizației",
+    "settings.note":"Alegerile tale sunt stocate local în acest browser și supraviețuiesc rerulărilor pipeline-ului. Butonul 'Resetează' aduce înapoi valorile din data/settings.json.",
+    "settings.email":"Email HR (Gmail/Outlook)",
+    "settings.email_hint":"Folosit de scripts/ingest_emails.py pentru a identifica inboxul de polled pentru cererile de concediu.",
+    "settings.api":"Endpoint Microsoft Graph",
+    "settings.api_hint":"Endpoint sincronizare calendar. Lasă gol pentru a păstra mock-ul demo.",
+    "emp.upcoming_meetings":"Întâlniri viitoare",
+    "emp.organizer":"Organizator",
+    "emp.no_meetings":"Nu există întâlniri sincronizate pentru acest coleg.",
     // Bench
     "panel.bench":"Risc bench","badge.cross":"Cross-check",
     "foot.cross_checked":"Verificat cu rosterul de proiecte + pontaje",
@@ -986,6 +1234,7 @@ function applyI18n() {
   const cur = document.getElementById("langCur"), other = document.getElementById("langOther");
   if (cur) cur.textContent = LANG.toUpperCase();
   if (other) other.textContent = LANG === "en" ? "RO" : "EN";
+  if (document.getElementById("calGrid")) renderCalendar();
 }
 
 // ════════════════════════════ STATE ════════════════════════════
@@ -1347,13 +1596,102 @@ function drillIntake(item) {
 }
 
 // ════════════════════════════ CALENDAR ════════════════════════════
+const CAL_CAT_COLOR = {
+  all_hands: "var(--gold)",
+  training: "var(--teal)",
+  review: "var(--gold-2)",
+  leave: "var(--red)",
+  onboarding: "var(--green)",
+  interview: "var(--orange)",
+};
 function renderCalendar() {
-  const map = { "-3":"r3", "-2":"r2", "-1":"r1", "1":"g1", "2":"g2", "3":"g3" };
-  $("#calGrid").innerHTML = CALENDAR.map((v, i) => {
-    if (v === null) return `<div class="cal-cell empty"></div>`;
-    const cls = map[String(v)] || "";
-    return `<div class="cal-cell ${cls}">${(i % 7) === 0 ? "M" : (i % 7) === 6 ? "S" : ""}</div>`;
-  }).join("");
+  const MONTH_NAMES = {
+    en: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+    ro: ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"]
+  };
+  const DAY_HDR = {
+    en: ["Mo","Tu","We","Th","Fr","Sa","Su"],
+    ro: ["Lu","Ma","Mi","Jo","Vi","Sâ","Du"]
+  };
+  const yr = calViewDate.getFullYear(), mo = calViewDate.getMonth();
+  const label = document.getElementById("calMonthLabel");
+  if (label) label.textContent = `${(MONTH_NAMES[LANG]||MONTH_NAMES.en)[mo]} ${yr}`;
+
+  const hdrCells = (DAY_HDR[LANG]||DAY_HDR.en)
+    .map(h => `<div class="cal-cell cal-hdr">${h}</div>`).join("");
+
+  const firstWd = (new Date(yr, mo, 1).getDay() + 6) % 7; // Mon=0
+  const daysInMonth = new Date(yr, mo + 1, 0).getDate();
+  const emptyCells = Array(firstWd).fill('<div class="cal-cell empty"></div>').join("");
+
+  const cells = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = `${yr}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const isWeekend = (firstWd + d - 1) % 7 >= 5;
+    const calEvents = CALENDAR_EVENTS_BY_DAY[iso] || [];
+    const calMeetings = MEETINGS_BY_DATE[iso] || [];
+    const total = calEvents.length + calMeetings.length;
+    const hasTraining = calEvents.some(e => e.category === "training");
+
+    if (total === 0) {
+      cells.push(`<div class="cal-cell${isWeekend?" weekend":""}" title="${iso}">${d}</div>`);
+    } else {
+      let bg, textColor, badgeBg;
+      if (hasTraining) {
+        const alpha = total <= 2 ? 0.35 : total <= 4 ? 0.58 : 0.82;
+        const isDark = total >= 5;
+        bg = `rgba(13,125,114,${alpha})`;
+        textColor = isDark ? "#fff" : "#0b6b61";
+        badgeBg = isDark ? "rgba(0,0,0,0.18)" : "rgba(13,125,114,0.22)";
+      } else {
+        const alpha = total === 1 ? 0.28 : total <= 2 ? 0.45 : total <= 4 ? 0.65 : 0.85;
+        const isDark = total >= 4;
+        bg = `rgba(160,111,28,${alpha})`;
+        textColor = isDark ? "#fff" : "var(--ink-1)";
+        badgeBg = isDark ? "rgba(0,0,0,0.20)" : "rgba(0,0,0,0.12)";
+      }
+      cells.push(`<div class="cal-cell${isWeekend?" weekend":""}" data-day="${iso}"
+        style="background:${bg};color:${textColor};" title="${iso} — ${total} event(s)">
+        <span style="font-weight:600;line-height:1;">${d}</span>
+        <span class="cal-badge" style="background:${badgeBg};color:${textColor};">${total}</span>
+      </div>`);
+    }
+  }
+
+  $("#calGrid").innerHTML = hdrCells + emptyCells + cells.join("");
+  $$('#calGrid .cal-cell[data-day]').forEach(el => el.addEventListener("click", () => {
+    drillCalendarDay(el.dataset.day);
+  }));
+}
+
+function drillCalendarDay(day) {
+  const events = CALENDAR_EVENTS_BY_DAY[day] || [];
+  const meetings = MEETINGS_BY_DATE[day] || [];
+  const total = events.length + meetings.length;
+  const html = `
+    <div class="dw-section">${total} ${t("cal.events_on")}</div>
+    ${total === 0
+      ? `<div style="color:var(--ink-3);padding:8px 0">${t("cal.no_events")}</div>`
+      : [
+          ...events.map(e => `
+            <div class="dw-item no-click">
+              <div class="ih">
+                <span class="nm">${e.title}</span>
+                <span class="pill" style="color:${CAL_CAT_COLOR[e.category]};border-color:${CAL_CAT_COLOR[e.category]}55;background:${CAL_CAT_COLOR[e.category]}1a">${t("cal.cat." + e.category)}</span>
+              </div>
+              <div class="mt">${e.organizer} · ${e.attendees} ${t("cal.attendees")}</div>
+            </div>`),
+          ...meetings.map(m => `
+            <div class="dw-item no-click">
+              <div class="ih">
+                <span class="nm">${m.title}</span>
+                <span class="pill" style="color:var(--ink-3);border-color:var(--line-2);background:var(--bg-2)">${t("cal.meeting")}</span>
+              </div>
+              <div class="mt">${m.when} · ${t("cal.organizer")}: ${m.organizer}</div>
+            </div>`)
+        ].join("")}
+  `;
+  openDrawer(day, t("cal.outlook_sync"), html);
 }
 
 // ════════════════════════════ DRAWER ════════════════════════════
@@ -1396,6 +1734,17 @@ function drillEmployee(id) {
   if (!e) return;
   const riskClass = e.risk === "high" ? "high" : e.risk === "medium" ? "med" : "low";
   const status = e.score > 0.6 ? "INTERVENE THIS WEEK" : e.score > 0.35 ? "MONITOR" : "STABLE";
+  const meetings = MEETINGS_BY_EMP[e.id] || [];
+  const meetingsHtml = meetings.length === 0
+    ? `<div style="color:var(--ink-3);font-size:11.5px;padding:6px 0">${t("emp.no_meetings")}</div>`
+    : meetings.map(m => {
+        const org = EMPLOYEES.find(x => x.id === m.organizer);
+        const orgName = org ? org.name : m.organizer;
+        return `<div class="dw-item no-click" style="padding:8px 11px">
+          <div class="ih"><span class="nm" style="font-size:12.5px">${m.title}</span><span class="mt">${m.when}</span></div>
+          <div class="mt" style="font-size:10px">${t("emp.organizer")}: ${orgName}</div>
+        </div>`;
+      }).join("");
   const html = `
     <div class="dw-section">[ PROFILE ]</div>
     <div class="dw-kv"><span class="k">ID</span><span class="v">${e.id}</span></div>
@@ -1414,6 +1763,9 @@ function drillEmployee(id) {
 
     <div class="dw-section">[ TOP SIGNALS · N=${e.signals.length} ]</div>
     ${e.signals.length ? e.signals.map(s => `<span class="dw-signal">${s}</span>`).join("") : '<div style="color:var(--ink-3);font-size:11px">No anomalous signals</div>'}
+
+    <div class="dw-section">${t("emp.upcoming_meetings")} · ${meetings.length}</div>
+    ${meetingsHtml}
   `;
   openDrawer(e.name, `${e.id} · ${e.role}`, html);
 }
@@ -1485,23 +1837,90 @@ $$('.filter-pill').forEach(btn => btn.addEventListener("click", () => {
   renderEmpTable("#empTableFull tbody", true);
 }));
 
-// ════════════════════════════ THEME TOGGLE ════════════════════════════
+// ════════════════════════════ THEME + LANG + SETTINGS ════════════════════════════
+// Persistence model: localStorage stores user overrides; SETTINGS_DEFAULTS holds
+// the org-level defaults from data/settings.json. Resolve order on init:
+//   1. localStorage (user choice)
+//   2. SETTINGS_DEFAULTS (org-level)
+//   3. hardcoded fallback (light + en)
+(function initThemeAndLang(){
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem("pa_theme") || SETTINGS_DEFAULTS.theme || "light";
+  root.setAttribute("data-theme", savedTheme);
+  LANG = localStorage.getItem("pa_lang") || SETTINGS_DEFAULTS.language || "en";
+})();
+
 (function(){
   const root = document.documentElement;
   const btn = document.getElementById("themeToggle");
-  const saved = localStorage.getItem("pa_theme");
-  if (saved) root.setAttribute("data-theme", saved);
   function setLabel() {
-    const th = root.getAttribute("data-theme") || "dark";
+    const th = root.getAttribute("data-theme") || "light";
     btn.textContent = th === "dark" ? "☾ Dark" : "☀ Light";
   }
   setLabel();
   btn.addEventListener("click", function () {
-    const cur = root.getAttribute("data-theme") || "dark";
+    const cur = root.getAttribute("data-theme") || "light";
     const next = cur === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("pa_theme", next);
     setLabel();
+  });
+  window._setThemeLabel = setLabel;
+})();
+
+// ════════════════════════════ SETTINGS MODAL ════════════════════════════
+(function(){
+  const ov = document.getElementById("settingsOv");
+  const modal = document.getElementById("settingsModal");
+  const open = () => { ov.classList.add("open"); modal.classList.add("open"); paintActive(); };
+  const close = () => { ov.classList.remove("open"); modal.classList.remove("open"); };
+  document.getElementById("settingsToggle").addEventListener("click", open);
+  document.getElementById("settingsClose").addEventListener("click", close);
+  ov.addEventListener("click", close);
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+  function paintActive() {
+    document.querySelectorAll("[data-set-lang]").forEach(b =>
+      b.classList.toggle("active", b.dataset.setLang === LANG));
+    const th = document.documentElement.getAttribute("data-theme") || "light";
+    document.querySelectorAll("[data-set-theme]").forEach(b =>
+      b.classList.toggle("active", b.dataset.setTheme === th));
+    document.getElementById("settingsOrg").textContent = SETTINGS_DEFAULTS.org;
+    document.getElementById("settingsEmail").value = localStorage.getItem("pa_email") || "";
+    document.getElementById("settingsApi").value = localStorage.getItem("pa_api") || "";
+  }
+
+  document.getElementById("settingsEmail").addEventListener("input", e => {
+    localStorage.setItem("pa_email", e.target.value);
+  });
+  document.getElementById("settingsApi").addEventListener("input", e => {
+    localStorage.setItem("pa_api", e.target.value);
+  });
+
+  document.querySelectorAll("[data-set-lang]").forEach(b => b.addEventListener("click", () => {
+    LANG = b.dataset.setLang;
+    localStorage.setItem("pa_lang", LANG);
+    applyI18n();
+    renderAll();
+    paintActive();
+  }));
+  document.querySelectorAll("[data-set-theme]").forEach(b => b.addEventListener("click", () => {
+    document.documentElement.setAttribute("data-theme", b.dataset.setTheme);
+    localStorage.setItem("pa_theme", b.dataset.setTheme);
+    window._setThemeLabel && window._setThemeLabel();
+    paintActive();
+  }));
+  document.getElementById("settingsReset").addEventListener("click", () => {
+    localStorage.removeItem("pa_lang");
+    localStorage.removeItem("pa_theme");
+    localStorage.removeItem("pa_email");
+    localStorage.removeItem("pa_api");
+    LANG = SETTINGS_DEFAULTS.language;
+    document.documentElement.setAttribute("data-theme", SETTINGS_DEFAULTS.theme);
+    window._setThemeLabel && window._setThemeLabel();
+    applyI18n();
+    renderAll();
+    paintActive();
   });
 })();
 
@@ -1542,6 +1961,30 @@ function renderLegend() {
   $("#legendBody").innerHTML = html;
 }
 
+function renderArchitecture() {
+  const layers = [
+    { id:"frontend", kind:"arch.kind.layer", files:["dashboard_demo.html"] },
+    { id:"backend",  kind:"arch.kind.service", files:["scripts/build_people_analytics.py","scripts/ingest_hr.py","scripts/compute_team_metrics.py"] },
+    { id:"api",      kind:"arch.kind.integration", files:["scripts/ingest_emails.py","scripts/sync_calendar.py"] },
+    { id:"mcp",      kind:"arch.kind.protocol", files:["scripts/mcp_server.py"] },
+    { id:"ai",       kind:"arch.kind.model", files:["scripts/score_attrition_risk.py","scripts/cluster_team_health.py"] },
+  ];
+  const flow = ["arch.flow.input","arch.flow.pipeline","arch.flow.data","arch.flow.html"];
+  const flowHtml = flow.map((k,i) => `<span class="step">${t(k)}</span>${i<flow.length-1?'<span class="arrow">→</span>':""}`).join("");
+  const blocksHtml = layers.map(l => `
+    <div class="arch-block" data-arch="${l.id}">
+      <div class="ab-kind">${t(l.kind)}</div>
+      <div class="ab-title">${t("arch.layer."+l.id)}</div>
+      <div class="ab-desc">${t("arch.d."+l.id)}</div>
+      <div class="ab-files">${l.files.map(f => `<code>${f}</code>`).join("")}</div>
+    </div>
+  `).join("");
+  $("#archBody").innerHTML = `
+    <div class="arch-flow">${flowHtml}</div>
+    <div class="arch-row">${blocksHtml}</div>
+  `;
+}
+
 function renderAll() {
   renderKpiRow();
   renderGauge();
@@ -1554,6 +1997,7 @@ function renderAll() {
   renderTeamGrid();
   renderCalendar();
   renderInbox();
+  renderArchitecture();
   renderLegend();
 }
 (function(){
@@ -1563,6 +2007,14 @@ function renderAll() {
     localStorage.setItem("pa_lang", LANG);
     applyI18n();
     renderAll();
+  });
+  document.getElementById("calPrev").addEventListener("click", () => {
+    calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
+    renderCalendar();
+  });
+  document.getElementById("calNext").addEventListener("click", () => {
+    calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
+    renderCalendar();
   });
 })();
 

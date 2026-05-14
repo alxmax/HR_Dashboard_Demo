@@ -1,0 +1,387 @@
+{
+  "days": [
+    {
+      "events": [
+        {
+          "attendees": 50,
+          "category": "all_hands",
+          "event_id": "evt-001",
+          "organizer": "alina.stoica@company.ro",
+          "title": "All-hands · May"
+        },
+        {
+          "attendees": 12,
+          "category": "review",
+          "event_id": "evt-002",
+          "organizer": "nicoleta.calin@company.ro",
+          "title": "Q2 review kick-off"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-14",
+      "n_events": 2,
+      "primary_category": "all_hands",
+      "weekday": "Thu"
+    },
+    {
+      "events": [
+        {
+          "attendees": 8,
+          "category": "training",
+          "event_id": "evt-003",
+          "organizer": "madalina.albu@company.ro",
+          "title": "Manager training — feedback skills"
+        },
+        {
+          "attendees": 3,
+          "category": "onboarding",
+          "event_id": "evt-004",
+          "organizer": "dorina.petrescu@company.ro",
+          "title": "Onboarding day 1 — new hires"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-15",
+      "n_events": 2,
+      "primary_category": "training",
+      "weekday": "Fri"
+    },
+    {
+      "events": [],
+      "intensity": 0,
+      "iso_date": "2026-05-16",
+      "n_events": 0,
+      "primary_category": null,
+      "weekday": "Sat"
+    },
+    {
+      "events": [],
+      "intensity": 0,
+      "iso_date": "2026-05-17",
+      "n_events": 0,
+      "primary_category": null,
+      "weekday": "Sun"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-005",
+          "organizer": "system",
+          "title": "Diana Lupu — medical leave"
+        },
+        {
+          "attendees": 6,
+          "category": "review",
+          "event_id": "evt-006",
+          "organizer": "bogdan.radu@company.ro",
+          "title": "Engineering 1:1s (skip-level)"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-18",
+      "n_events": 2,
+      "primary_category": "leave",
+      "weekday": "Mon"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-005",
+          "organizer": "system",
+          "title": "Diana Lupu — medical leave"
+        },
+        {
+          "attendees": 4,
+          "category": "interview",
+          "event_id": "evt-007",
+          "organizer": "madalina.albu@company.ro",
+          "title": "Senior engineer interview panel"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-19",
+      "n_events": 3,
+      "primary_category": "leave",
+      "weekday": "Tue"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-005",
+          "organizer": "system",
+          "title": "Diana Lupu — medical leave"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 5,
+          "category": "review",
+          "event_id": "evt-009",
+          "organizer": "mihaela.bratu@company.ro",
+          "title": "Compensation review — Q2"
+        },
+        {
+          "attendees": 42,
+          "category": "training",
+          "event_id": "evt-010",
+          "organizer": "sebastian.olaru@company.ro",
+          "title": "SSM annual refresher"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        }
+      ],
+      "intensity": 3,
+      "iso_date": "2026-05-20",
+      "n_events": 5,
+      "primary_category": "leave",
+      "weekday": "Wed"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-005",
+          "organizer": "system",
+          "title": "Diana Lupu — medical leave"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-21",
+      "n_events": 3,
+      "primary_category": "leave",
+      "weekday": "Thu"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-005",
+          "organizer": "system",
+          "title": "Diana Lupu — medical leave"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-22",
+      "n_events": 3,
+      "primary_category": "leave",
+      "weekday": "Fri"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-23",
+      "n_events": 2,
+      "primary_category": "leave",
+      "weekday": "Sat"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-24",
+      "n_events": 2,
+      "primary_category": "leave",
+      "weekday": "Sun"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        },
+        {
+          "attendees": 50,
+          "category": "all_hands",
+          "event_id": "evt-012",
+          "organizer": "alina.stoica@company.ro",
+          "title": "All-hands — Q2 results preview"
+        },
+        {
+          "attendees": 4,
+          "category": "interview",
+          "event_id": "evt-013",
+          "organizer": "andreea.tudor@company.ro",
+          "title": "Hiring panel — Data Science lead"
+        }
+      ],
+      "intensity": 3,
+      "iso_date": "2026-05-25",
+      "n_events": 4,
+      "primary_category": "leave",
+      "weekday": "Mon"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-008",
+          "organizer": "system",
+          "title": "Andrei Cojanu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-014",
+          "organizer": "system",
+          "title": "Iulia Constantin — vacation"
+        },
+        {
+          "attendees": 8,
+          "category": "review",
+          "event_id": "evt-015",
+          "organizer": "nicoleta.calin@company.ro",
+          "title": "Performance calibration session"
+        }
+      ],
+      "intensity": 3,
+      "iso_date": "2026-05-26",
+      "n_events": 4,
+      "primary_category": "leave",
+      "weekday": "Tue"
+    },
+    {
+      "events": [
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-011",
+          "organizer": "system",
+          "title": "Sergiu Marcu — vacation"
+        },
+        {
+          "attendees": 1,
+          "category": "leave",
+          "event_id": "evt-014",
+          "organizer": "system",
+          "title": "Iulia Constantin — vacation"
+        },
+        {
+          "attendees": 7,
+          "category": "review",
+          "event_id": "evt-016",
+          "organizer": "carmen.dobre@company.ro",
+          "title": "Quarterly skip-levels — Customer Success"
+        }
+      ],
+      "intensity": 2,
+      "iso_date": "2026-05-27",
+      "n_events": 3,
+      "primary_category": "leave",
+      "weekday": "Wed"
+    }
+  ],
+  "summary": {
+    "categories": [
+      "training",
+      "review",
+      "all_hands",
+      "leave",
+      "onboarding",
+      "interview"
+    ],
+    "n_events": 16,
+    "provider": "MockGraphProvider",
+    "reference_today": "2026-05-14",
+    "window_days": 14
+  }
+}

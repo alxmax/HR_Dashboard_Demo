@@ -28,9 +28,12 @@ On Windows: `run_people_pipeline.bat` wraps both steps.
 ```
 sample_data/*.csv  →  scripts/*.py  →  data/*.json + data/time_off.csv  →  dashboard_demo.html
                                                                           (data inlined as JS constants)
+                                       scripts/mcp_server.py             →  MCP server stub
+                                                                             (exposes 6 resources + 7 tools)
 ```
 
 - **`dashboard_demo.html`** is intentionally **self-contained**. All data is hard-coded into the JS constants at the top of the `<script>` block. The Python pipeline maintains the CSVs and JSON artifacts in `data/`, but the dashboard does *not* fetch them at runtime. This is the "double-click works" requirement.
+- **`arhitectura.html`** is a bilingual (RO/EN) explainer page showing the full automated workflow — pipeline diagram, automation stages, MCP layer, and output nodes. It is a standalone file; it does not share JS or CSS with the dashboard.
 - The Python pipeline is still real and runs end-to-end. It exists for the engineering signal and so the demo can be updated by editing CSVs and re-running the orchestrator (which currently regenerates the JSON artifacts — wiring those back into the HTML is a future step).
 
 ## Conventions
@@ -124,7 +127,15 @@ In the `I18N` object: add the key to both `en` and `ro` blocks. Then either:
 
 ### Sidebar (always visible)
 
-Renders `Snapshot` (top-line stats), `30-day activity` calendar heatmap, and `Suggestions` (3 AI-insight cards). All hard-coded; not part of any render function.
+Renders `Snapshot` (top-line stats), a full-month **Outlook calendar** widget, and `Suggestions` (3 AI-insight cards). All hard-coded; not part of any render function.
+
+The calendar widget is driven by three JS constants:
+- `CALENDAR_DAYS` — 14-day window with `iso_date`, `intensity`, `primary_category`
+- `CALENDAR_EVENTS_BY_DAY` — per-date event list (title, category, organizer, attendees)
+- `MEETINGS_BY_EMP` — per-employee meeting list `{when, title, organizer}`
+- `MEETINGS_BY_DATE` — **derived at runtime** from `MEETINGS_BY_EMP`; deduplicates meetings by `when+title` key so the same meeting doesn't appear multiple times when multiple attendees share it
+
+Calendar color logic: teal (`rgba(13,125,114,α)`) if any event has `category:"training"`, otherwise gold (`rgba(160,111,28,α)`) with alpha driven by total event+meeting count. A numeric badge below the day number shows the total count. `renderCalendar()` must be called from `applyI18n()` so day-of-week headers re-render on language switch.
 
 ## Pipeline + dashboard handshake
 
