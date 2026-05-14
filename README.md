@@ -10,7 +10,10 @@ A people-operations dashboard built as a portfolio piece. It demonstrates:
 - A reproducible Python pipeline (pandas + scikit-learn)
 - Two AI modules — **attrition risk** (IsolationForest) and **team-health clustering** (KMeans)
 - An **email-automation workflow** — incoming leave requests are parsed and written to a CSV that the dashboard consumes
+- An **Outlook calendar sidebar** — full-month view with meeting integration; teal for training days, gold intensity gradient for busy/light days
+- An **MCP server stub** (`scripts/mcp_server.py`) — exposes 6 HR data resources + 7 tools (4 query + 3 action) following the Model Context Protocol standard
 - A **single-file dashboard** with full drill-down, light/dark theme, English/Romanian toggle, and zero external runtime dependencies
+- A bilingual **architecture explainer page** (`arhitectura.html`) — pipeline diagram, automation stages, and MCP layer in one page
 
 ## Open the dashboard
 
@@ -81,7 +84,8 @@ Python 3.11 · pandas · scikit-learn · vanilla HTML / CSS / JS (no framework, 
 
 ```
 .
-├── dashboard_demo.html             # self-contained dashboard (~100 KB)
+├── dashboard_demo.html             # self-contained dashboard
+├── arhitectura.html                # bilingual architecture / workflow explainer
 ├── run_people_pipeline.bat         # Windows launcher
 ├── README.md
 ├── CLAUDE.md                       # context for AI coding assistants
@@ -96,6 +100,7 @@ Python 3.11 · pandas · scikit-learn · vanilla HTML / CSS / JS (no framework, 
 │   ├── cluster_team_health.py
 │   ├── check_compliance.py
 │   ├── ingest_emails.py
+│   ├── mcp_server.py               # MCP server stub (6 resources + 7 tools)
 │   └── build_people_analytics.py
 └── data/                           # generated artifacts
     ├── employees.json
