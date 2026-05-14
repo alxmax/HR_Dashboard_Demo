@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -783,11 +783,11 @@ footer a:hover { color: var(--gold); }
 <script>
 (function(){
   // Honour the user's theme choice from dashboard_demo.html (read-only here).
-  const savedTheme = localStorage.getItem("pa_theme");
-  if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+  const savedTheme = localStorage.getItem("pa_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
 
-  // Language tabs — RO is the default for this page.
-  let LANG = localStorage.getItem("pa_lang") || "ro";
+  // Language tabs — EN is the default for this page.
+  let LANG = localStorage.getItem("pa_lang") || "en";
   function applyLang(lang) {
     LANG = lang;
     localStorage.setItem("pa_lang", lang);
