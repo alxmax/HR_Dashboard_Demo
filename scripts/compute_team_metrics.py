@@ -1,4 +1,5 @@
 """Per-team people-metric rollup feeding the KPIs tab of the dashboard."""
+# implements: PIPE-TEAM-METRICS-002
 from __future__ import annotations
 
 import json

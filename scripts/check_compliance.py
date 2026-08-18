@@ -13,6 +13,7 @@ flag (over 1800h = high overtime, signals burnout/labor-law risk).
 Output: ``data/compliance.json`` with summary + per-employee records.
 Deterministic — pure function of CSV input + ``REFERENCE_TODAY``.
 """
+# implements: PIPE-COMPLIANCE-005
 from __future__ import annotations
 
 import json

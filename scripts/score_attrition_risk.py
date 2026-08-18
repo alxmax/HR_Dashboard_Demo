@@ -7,6 +7,7 @@ For each employee, produces:
 
 Determinism: fixed ``random_state``, sorted output by ``emp_id``.
 """
+# implements: PIPE-ATTRITION-003
 from __future__ import annotations
 
 import json

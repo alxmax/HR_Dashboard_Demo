@@ -16,6 +16,7 @@ The provider abstraction (``InboxProvider`` protocol) keeps the parser
 unit-testable without network. Swap ``MockInboxProvider`` for
 ``GmailProvider`` / ``GraphProvider`` in production.
 """
+# implements: PIPE-EMAIL-INTAKE-006
 from __future__ import annotations
 
 import csv

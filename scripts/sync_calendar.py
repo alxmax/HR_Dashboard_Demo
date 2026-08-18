@@ -14,6 +14,7 @@ Architecture mirrors ``ingest_emails.py``:
 
 The protocol keeps the parser unit-testable without an Azure tenant.
 """
+# implements: PIPE-CALENDAR-007
 from __future__ import annotations
 
 import json
