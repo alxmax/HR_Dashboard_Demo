@@ -1,0 +1,16 @@
+# The vendored engine carries its own implements: self-tags — never scan it.
+scripts/reqmap.py
+scripts/_map_viewer.html
+
+# Python bytecode
+*__pycache__*
+
+# Skill scratch state, not project code
+.superpowers/*
+
+# Generated pipeline artifacts (rebuilt by build_people_analytics.py)
+data/*
+
+# Engine-generated viewer bundle - carries the plugin own requirement data,
+# whose literal role: strings would otherwise scan as phantom members.
+docs/map.html

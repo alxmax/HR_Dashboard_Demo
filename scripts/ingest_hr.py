@@ -4,6 +4,7 @@ Single entry point: ``load_all()`` returns three DataFrames (employees, teams,
 projects) with parsed dates and a few derived columns the downstream modules
 expect (``days_since_review``, project ``on_track`` flag, etc.).
 """
+# implements: PIPE-INGEST-HR-001
 from __future__ import annotations
 
 from dataclasses import dataclass

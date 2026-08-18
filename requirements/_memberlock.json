@@ -1,0 +1,32 @@
+{
+  "_schema": 1,
+  "members": {
+    "MCP-SERVER-009": {
+      "scripts/mcp_server.py": "12141f2abe472b42099125059471cfae732dc57f9fd7db95ab142116810a14fb"
+    },
+    "PIPE-ATTRITION-003": {
+      "scripts/score_attrition_risk.py": "7a8e09579950a466c510223298d5a4cd15d456d65557e33e290ec0715a04e92f"
+    },
+    "PIPE-CALENDAR-007": {
+      "scripts/sync_calendar.py": "27cd0b1fdab020f6e2926d7eeda1c3fdcabc62209e470773c96d80dfd211f6c9"
+    },
+    "PIPE-CLUSTER-004": {
+      "scripts/cluster_team_health.py": "f1ef21c594488289f266d255b824c905d9a20dc061c7ca51e5ea9287ff9ac4d5"
+    },
+    "PIPE-COMPLIANCE-005": {
+      "scripts/check_compliance.py": "3df71f5c0afe74cbe1c4a874f7ff4914d2bc0b796295fac3818fbd0285605772"
+    },
+    "PIPE-EMAIL-INTAKE-006": {
+      "scripts/ingest_emails.py": "d2f9103ec73a0174109e751f4e74ba90a6dea047260e25a5a0b542aa5d1367fd"
+    },
+    "PIPE-INGEST-HR-001": {
+      "scripts/ingest_hr.py": "54d1271475b95d4a1158dc59ecb4cd812c30f1fb40838bdbb5712484bc25624f"
+    },
+    "PIPE-ORCHESTRATOR-008": {
+      "scripts/build_people_analytics.py": "98d42ff3ff4334e17762e38847707865a169e1b6c1d73ed32999142d61ad0f10"
+    },
+    "PIPE-TEAM-METRICS-002": {
+      "scripts/compute_team_metrics.py": "80c20678d8ff5221b0156cad7a6d1e11e512efc0766b4082c2bf3935ef050c15"
+    }
+  }
+}

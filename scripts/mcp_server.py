@@ -15,6 +15,7 @@ then point an MCP client at the resulting stdio server.
 
 Reference: https://modelcontextprotocol.io
 """
+# implements: MCP-SERVER-009
 from __future__ import annotations
 
 import json

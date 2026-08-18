@@ -15,6 +15,7 @@ Determinism:
     (so reproducibility checks in CI compare byte-identical files); otherwise
     falls back to ``REFERENCE_TODAY`` from ``ingest_hr``.
 """
+# implements: PIPE-ORCHESTRATOR-008
 from __future__ import annotations
 
 import json

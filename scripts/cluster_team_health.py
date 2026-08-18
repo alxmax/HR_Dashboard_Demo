@@ -4,6 +4,7 @@ Groups teams into 3 health buckets (``thriving`` / ``steady`` / ``at_risk``)
 and emits a recommended next action per cluster. Deterministic via fixed
 ``random_state`` + ``n_init``.
 """
+# implements: PIPE-CLUSTER-004
 from __future__ import annotations
 
 import json
